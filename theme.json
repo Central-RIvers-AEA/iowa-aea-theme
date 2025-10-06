@@ -169,7 +169,7 @@
       "core/quote": {
         "border": {
           "left": {
-            "width": "4px",
+            "width": "2px",
             "style": "solid",
             "color": "var(--wp--preset--color--primary)"
           }
@@ -179,7 +179,7 @@
             "top": "12px",
             "right": "16px",
             "bottom": "12px",
-            "left": "16px"
+            "left": "30px"
           },
           "margin": {
             "top": "12px",
@@ -187,7 +187,7 @@
           }
         },
         "color": {
-          "background": "#f9f9f9"
+          "background": "#ffffff"
         },
         "elements": {
           "cite": {
@@ -341,7 +341,8 @@
       "alt-two-color": "var(--wp--preset--color--alt-two)",
       "alt-three-color": "var(--wp--preset--color--alt-three)",
       "alt-four-color": "var(--wp--preset--color--alt-four)",
-      "text-color": "var(--wp--preset--color--text-color)"
+      "text-color": "var(--wp--preset--color--text-color)",
+      "dot-pattern-url": "url('assets/images/dot-pattern.png')"
     },
     "blocks": {
       "core/button": {
