@@ -1,0 +1,73 @@
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.wp-block-iowa-aea-theme-accordion {
+	background-color: transparent;
+	color: var(--wp--preset--color--text-color);
+	border: 1px solid var(--wp--preset--color--primary);
+	border-radius: 19px 19px 0 0;
+	border-bottom: none;
+	
+}
+
+.accordion-section{
+	border-bottom: 15px solid var(--wp--preset--color--primary);
+
+	// nth-child border bottom adjustments
+	&:nth-child(2n) {
+		border-bottom: 15px solid var(--wp--preset--color--secondary);
+	}
+
+	&:nth-child(3n) {
+		border-bottom: 15px solid var(--wp--preset--color--alt-one);
+	}
+
+	&:nth-child(4n) {
+		border-bottom: 15px solid var(--wp--preset--color--alt-two);
+	}
+
+	&:nth-child(5n) {
+		border-bottom: 15px solid var(--wp--preset--color--alt-three);
+	}
+
+	&:nth-child(7n) {
+		border-bottom: 15px solid var(--wp--preset--color--alt-four);
+	}
+
+	h3{
+		font-size: 1.25rem;
+		margin: 0;
+		padding: 0.5rem 1.25rem;
+		color: var(--wp--preset--color--text-color);
+		opacity: 0.6;
+	}
+	p{
+		height: 0;
+		overflow: hidden;
+		margin: 0;
+		padding: 0;
+	}
+
+	&:hover {
+		h3{
+			opacity: 1;
+		}
+	}
+
+	&.open {
+		h3{
+			opacity: 1;
+			font-size: 1.5rem;
+		}
+		p{
+			height: auto;
+			overflow: visible;
+			margin: 0;
+			padding: 1rem 1.25rem;
+		}
+	}
+}

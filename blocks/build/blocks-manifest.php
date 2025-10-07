@@ -1,6 +1,47 @@
 <?php
 // This file is generated. Do not modify it manually.
 return array(
+	'accordion' => array(
+		'$schema' => 'https://schemas.wp.org/trunk/block.json',
+		'apiVersion' => 3,
+		'name' => 'iowa-aea-theme/accordion',
+		'version' => '0.1.0',
+		'title' => 'Accordion',
+		'category' => 'widgets',
+		'icon' => 'smiley',
+		'attributes' => array(
+			'sections' => array(
+				'type' => 'array',
+				'items' => array(
+					'type' => 'object',
+					'properties' => array(
+						'title' => array(
+							'type' => 'string',
+							'source' => 'html'
+						),
+						'content' => array(
+							'type' => 'string',
+							'source' => 'html',
+							'default' => '<p>Default content for section</p>'
+						)
+					)
+				)
+			)
+		),
+		'description' => 'Example block scaffolded with Create Block tool.',
+		'example' => array(
+			
+		),
+		'supports' => array(
+			'interactivity' => true
+		),
+		'textdomain' => 'accordion',
+		'editorScript' => 'file:./index.js',
+		'editorStyle' => 'file:./index.css',
+		'style' => 'file:./style-index.css',
+		'render' => 'file:./render.php',
+		'viewScript' => 'file:./view.js'
+	),
 	'interactive-map' => array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'apiVersion' => 3,

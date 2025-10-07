@@ -2,20 +2,20 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./src/interactive-map/block.json":
-/*!****************************************!*\
-  !*** ./src/interactive-map/block.json ***!
-  \****************************************/
+/***/ "./src/accordion/block.json":
+/*!**********************************!*\
+  !*** ./src/accordion/block.json ***!
+  \**********************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"iowa-aea-theme/interactive-map","version":"0.1.0","title":"Interactive Map","category":"widgets","icon":"smiley","description":"Example block scaffolded with Create Block tool.","example":{},"supports":{"html":false},"textdomain":"interactive-map","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScript":"file:./view.js"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"iowa-aea-theme/accordion","version":"0.1.0","title":"Accordion","category":"widgets","icon":"smiley","attributes":{"sections":{"type":"array","items":{"type":"object","properties":{"title":{"type":"string","source":"html"},"content":{"type":"string","source":"html","default":"<p>Default content for section</p>"}}}}},"description":"Example block scaffolded with Create Block tool.","example":{},"supports":{"interactivity":true},"textdomain":"accordion","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScript":"file:./view.js"}');
 
 /***/ }),
 
-/***/ "./src/interactive-map/edit.js":
-/*!*************************************!*\
-  !*** ./src/interactive-map/edit.js ***!
-  \*************************************/
+/***/ "./src/accordion/edit.js":
+/*!*******************************!*\
+  !*** ./src/accordion/edit.js ***!
+  \*******************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -26,7 +26,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./editor.scss */ "./src/interactive-map/editor.scss");
+/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./editor.scss */ "./src/accordion/editor.scss");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__);
 /**
@@ -61,19 +61,87 @@ __webpack_require__.r(__webpack_exports__);
  * @return {Element} Element to render.
  */
 
-function Edit() {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("p", {
-    ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps)(),
-    children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Interactive Map – hello from the editor!', 'interactive-map')
+function Edit(props) {
+  const sections = props.attributes.sections || [];
+  const addSection = () => {
+    const newSections = [...sections, {
+      title: `Section ${sections.length + 1}`,
+      content: `Content for section ${sections.length + 1}`
+    }];
+    props.setAttributes({
+      sections: newSections
+    });
+  };
+  const updateSection = (index, newContent) => {
+    const newSections = sections.map((section, i) => {
+      if (i === index) {
+        return {
+          ...section,
+          ...newContent
+        };
+      }
+      return section;
+    });
+    props.setAttributes({
+      sections: newSections
+    });
+  };
+  const removeSection = index => {
+    const newSections = sections.filter((_, i) => i !== index);
+    props.setAttributes({
+      sections: newSections
+    });
+  };
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+    class: "accordion-holder",
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+      ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps)(),
+      children: sections.map((section, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+        className: "accordion-section",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.RichText, {
+          identifier: `section-title-${index}`,
+          tagName: "h3",
+          className: `section-header-${index}`,
+          value: section.title,
+          onChange: value => updateSection(index, {
+            ...section,
+            title: value
+          }),
+          placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Enter heading text...', 'accordion'),
+          allowedFormats: ['core/italic']
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.RichText, {
+          identifier: `section-body-${index}`,
+          tagName: "p",
+          className: `section-content-${index}`,
+          value: section.content,
+          onChange: value => updateSection(index, {
+            ...section,
+            content: value
+          }),
+          placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Enter content text...', 'accordion'),
+          allowedFormats: ['core/italic', 'core/bold', 'core/link']
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("button", {
+          type: "button",
+          onClick: () => removeSection(index),
+          className: "btn",
+          children: "Remove Section"
+        })]
+      }, index))
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("button", {
+      type: "button",
+      className: "btn",
+      onClick: addSection,
+      children: "Add Section"
+    })]
   });
 }
 
 /***/ }),
 
-/***/ "./src/interactive-map/editor.scss":
-/*!*****************************************!*\
-  !*** ./src/interactive-map/editor.scss ***!
-  \*****************************************/
+/***/ "./src/accordion/editor.scss":
+/*!***********************************!*\
+  !*** ./src/accordion/editor.scss ***!
+  \***********************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -82,18 +150,18 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./src/interactive-map/index.js":
-/*!**************************************!*\
-  !*** ./src/interactive-map/index.js ***!
-  \**************************************/
+/***/ "./src/accordion/index.js":
+/*!********************************!*\
+  !*** ./src/accordion/index.js ***!
+  \********************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
 /* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./style.scss */ "./src/interactive-map/style.scss");
-/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./edit */ "./src/interactive-map/edit.js");
-/* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./block.json */ "./src/interactive-map/block.json");
+/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./style.scss */ "./src/accordion/style.scss");
+/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./edit */ "./src/accordion/edit.js");
+/* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./block.json */ "./src/accordion/block.json");
 /**
  * Registers a new block provided a unique name and an object defining its behavior.
  *
@@ -130,10 +198,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./src/interactive-map/style.scss":
-/*!****************************************!*\
-  !*** ./src/interactive-map/style.scss ***!
-  \****************************************/
+/***/ "./src/accordion/style.scss":
+/*!**********************************!*\
+  !*** ./src/accordion/style.scss ***!
+  \**********************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -292,8 +360,8 @@ module.exports = window["ReactJSXRuntime"];
 /******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
 /******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
 /******/ 		var installedChunks = {
-/******/ 			"interactive-map/index": 0,
-/******/ 			"interactive-map/style-index": 0
+/******/ 			"accordion/index": 0,
+/******/ 			"accordion/style-index": 0
 /******/ 		};
 /******/ 		
 /******/ 		// no chunk on demand loading
@@ -343,7 +411,7 @@ module.exports = window["ReactJSXRuntime"];
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["interactive-map/style-index"], () => (__webpack_require__("./src/interactive-map/index.js")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["accordion/style-index"], () => (__webpack_require__("./src/accordion/index.js")))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

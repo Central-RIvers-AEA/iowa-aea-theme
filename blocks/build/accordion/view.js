@@ -1,6 +1,6 @@
 /******/ (() => { // webpackBootstrap
 /*!*******************************!*\
-  !*** ./src/side-tabs/view.js ***!
+  !*** ./src/accordion/view.js ***!
   \*******************************/
 /**
  * Use this file for JavaScript code that you want to run in the front-end
@@ -25,22 +25,22 @@
  */
 
 /* eslint-disable no-console */
-console.log('Hello World! (from iowa-aea-theme-side-tabs block)');
+console.log('Hello World! (from iowa-aea-accordion block)');
 /* eslint-enable no-console */
 
-console.log('DOM fully loaded and parsed');
-const sideTabs = document.querySelector('.wp-block-iowa-aea-theme-side-tabs');
-// Add open to first tab
-let tabs = sideTabs.querySelectorAll('.impact-tab');
-if (tabs.length > 0) {
-  tabs[0].classList.add('open');
-}
+// Select accordion section
+const accordionSections = document.querySelectorAll('.accordion-section');
 
-// Click on tab Open it
-tabs.forEach(tab => {
-  tab.addEventListener('click', () => {
-    tabs.forEach(t => t.classList.remove('open'));
-    tab.classList.add('open');
+// Add click event listener to each section
+accordionSections.forEach(section => {
+  const header = section.querySelector('h3');
+  header.addEventListener('click', () => {
+    document.querySelectorAll('.accordion-section.open').forEach(openSection => {
+      if (openSection !== section) {
+        openSection.classList.remove('open');
+      }
+    });
+    section.classList.toggle('open');
   });
 });
 /******/ })()
