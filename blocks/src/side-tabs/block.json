@@ -1,0 +1,61 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "iowa-aea-theme/side-tabs",
+	"version": "0.1.0",
+	"title": "Side Tabs",
+	"category": "widgets",
+	"icon": "smiley",
+	"attributes": {
+		"titleOne": {
+			"type": "string",
+			"source": "html",
+			"selector": ".tab-header-one"
+		},
+		"tabContentOne": {
+			"type": "string",
+			"source": "html",
+			"selector": ".tab-content-one"
+		},
+		"titleTwo": {
+			"type": "string",
+			"source": "html",
+			"selector": ".tab-header-two"
+		},
+		"tabContentTwo": {
+			"type": "string",
+			"source": "html",
+			"selector": ".tab-content-two"
+		},
+		"titleThree": {
+			"type": "string",
+			"source": "html",
+			"selector": ".tab-header-three"
+		},
+		"tabContentThree": {
+			"type": "string",
+			"source": "html",
+			"selector": ".tab-content-three"
+		},
+		"titleFour": {
+			"type": "string",
+			"source": "html",
+			"selector": ".tab-header-four"
+		},
+		"tabContentFour": {
+			"type": "string",
+			"source": "html",
+			"selector": ".tab-content-four"
+		}
+	},
+	"description": "Example block scaffolded with Create Block tool.",
+	"example": {},
+	"supports": {
+		"interactivity": true
+	},
+	"textdomain": "side-tabs",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"viewScript": "file:./view.js"
+}

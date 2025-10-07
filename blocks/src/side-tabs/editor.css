@@ -1,0 +1,23 @@
+/**
+ * The following styles get applied inside the editor only.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+.wp-block-iowa-aea-theme-side-tabs {
+  background: transparent;
+  display: block;
+}
+
+.impact-tab {
+  margin-bottom: 1rem;
+  background: var(--tab-background, white);
+  border-radius: 0 19px 19px 0;
+  padding: 3rem;
+  width: 100%;
+}
+.impact-tab:nth-child(2), .impact-tab:nth-child(3), .impact-tab:nth-child(4) {
+  margin-left: 0;
+}
+.impact-tab * {
+  width: 100%;
+}/*# sourceMappingURL=editor.css.map */
