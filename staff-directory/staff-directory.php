@@ -1,6 +1,9 @@
 <?php
 
-/* Staff direcotry setup */
+/* Staff directory setup */
+
+// Include School Directory
+include_once __DIR__ . '/school-directory.php';
 
 class StaffDirectory
 {
