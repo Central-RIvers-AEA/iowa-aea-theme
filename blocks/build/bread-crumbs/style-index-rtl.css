@@ -7,8 +7,31 @@
  *
  * Replace them with your own styles or remove the file completely.
  */
-.wp-block-iowa-aea-theme-interactive-map {
-  background-color: #21759b;
-  color: #fff;
+.wp-block-iowa-aea-theme-bread-crumbs {
   padding: 2px;
+  color: var(--wp--preset--color--text-color);
+}
+.wp-block-iowa-aea-theme-bread-crumbs ol {
+  list-style-type: none;
+  padding: 0;
+}
+.wp-block-iowa-aea-theme-bread-crumbs .breadcrumb-item {
+  display: inline-block;
+  margin-left: 0.5rem;
+}
+.wp-block-iowa-aea-theme-bread-crumbs .breadcrumb-item:not(:last-child):after {
+  content: ">";
+  padding-inline: 0.5rem 0;
+  font-weight: bold;
+}
+.wp-block-iowa-aea-theme-bread-crumbs .breadcrumb-item a {
+  text-decoration: none;
+  font-weight: normal;
+  color: var(--wp--preset--color--text-color);
+}
+.wp-block-iowa-aea-theme-bread-crumbs .breadcrumb-item a:hover {
+  text-decoration: underline;
+}
+.wp-block-iowa-aea-theme-bread-crumbs .breadcrumb-item.active {
+  font-weight: bold;
 }

@@ -5,8 +5,37 @@
  * Replace them with your own styles or remove the file completely.
  */
 
-.wp-block-iowa-aea-theme-interactive-map {
-	background-color: #21759b;
-	color: #fff;
+.wp-block-iowa-aea-theme-bread-crumbs {
 	padding: 2px;
+	color: var(--wp--preset--color--text-color);
+
+	ol {
+		list-style-type: none;
+		padding: 0;
+	}
+
+	.breadcrumb-item {
+		display: inline-block;
+		margin-right: 0.5rem;
+
+		&:not(:last-child):after{
+			content: '>';
+			padding-inline: 0.5rem 0;
+			font-weight: bold;
+		}
+	}
+
+	.breadcrumb-item a {
+		text-decoration: none;
+		font-weight: normal;
+		color: var(--wp--preset--color--text-color);
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+
+	.breadcrumb-item.active {
+		font-weight: bold;
+	}
 }
+
