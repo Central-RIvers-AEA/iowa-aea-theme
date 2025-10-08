@@ -42,6 +42,50 @@ return array(
 		'render' => 'file:./render.php',
 		'viewScript' => 'file:./view.js'
 	),
+	'bread-crumbs' => array(
+		'$schema' => 'https://schemas.wp.org/trunk/block.json',
+		'apiVersion' => 3,
+		'name' => 'iowa-aea-theme/bread-crumbs',
+		'version' => '0.1.0',
+		'title' => 'Bread Crumbs',
+		'category' => 'widgets',
+		'icon' => 'smiley',
+		'description' => 'A block for displaying breadcrumb navigation.',
+		'example' => array(
+			
+		),
+		'supports' => array(
+			'html' => false
+		),
+		'textdomain' => 'bread-crumbs',
+		'editorScript' => 'file:./index.js',
+		'editorStyle' => 'file:./index.css',
+		'style' => 'file:./style-index.css',
+		'render' => 'file:./render.php',
+		'viewScript' => 'file:./view.js'
+	),
+	'important-contacts' => array(
+		'$schema' => 'https://schemas.wp.org/trunk/block.json',
+		'apiVersion' => 3,
+		'name' => 'iowa-aea-theme/important-contacts',
+		'version' => '0.1.0',
+		'title' => 'Important Contacts',
+		'category' => 'widgets',
+		'icon' => 'smiley',
+		'description' => 'A block for displaying important contacts.',
+		'example' => array(
+			
+		),
+		'supports' => array(
+			'html' => false
+		),
+		'textdomain' => 'important-contacts',
+		'editorScript' => 'file:./index.js',
+		'editorStyle' => 'file:./index.css',
+		'style' => 'file:./style-index.css',
+		'render' => 'file:./render.php',
+		'viewScript' => 'file:./view.js'
+	),
 	'interactive-map' => array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'apiVersion' => 3,
@@ -58,6 +102,28 @@ return array(
 			'html' => false
 		),
 		'textdomain' => 'interactive-map',
+		'editorScript' => 'file:./index.js',
+		'editorStyle' => 'file:./index.css',
+		'style' => 'file:./style-index.css',
+		'render' => 'file:./render.php',
+		'viewScript' => 'file:./view.js'
+	),
+	'page-children' => array(
+		'$schema' => 'https://schemas.wp.org/trunk/block.json',
+		'apiVersion' => 3,
+		'name' => 'iowa-aea-theme/page-children',
+		'version' => '0.1.0',
+		'title' => 'Page Children',
+		'category' => 'widgets',
+		'icon' => 'smiley',
+		'description' => 'A block for displaying page children.',
+		'example' => array(
+			
+		),
+		'supports' => array(
+			'html' => false
+		),
+		'textdomain' => 'page-children',
 		'editorScript' => 'file:./index.js',
 		'editorStyle' => 'file:./index.css',
 		'style' => 'file:./style-index.css',
