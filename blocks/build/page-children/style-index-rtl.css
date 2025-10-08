@@ -7,8 +7,85 @@
  *
  * Replace them with your own styles or remove the file completely.
  */
-.wp-block-iowa-aea-theme-interactive-map {
-  background-color: #21759b;
-  color: #fff;
-  padding: 2px;
+.wp-block-iowa-aea-theme-page-children .page-hierarchy .parent-pages {
+  list-style: none;
+  margin: 0;
+  padding: 0 1rem 0 0;
+}
+.wp-block-iowa-aea-theme-page-children .page-hierarchy .parent-pages .parent-page-item {
+  margin-bottom: 1rem;
+  padding-right: 1rem;
+}
+.wp-block-iowa-aea-theme-page-children .page-hierarchy .parent-pages .parent-page-item .parent-dropdown {
+  display: flex;
+  justify-content: space-between;
+}
+.wp-block-iowa-aea-theme-page-children .page-hierarchy .parent-pages .parent-page-item .parent-dropdown + ul {
+  display: none;
+}
+.wp-block-iowa-aea-theme-page-children .page-hierarchy .parent-pages .parent-page-item .parent-dropdown button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.wp-block-iowa-aea-theme-page-children .page-hierarchy .parent-pages .parent-page-item .parent-dropdown.open button {
+  content: "^";
+}
+.wp-block-iowa-aea-theme-page-children .page-hierarchy .parent-pages .parent-page-item .parent-dropdown.open + ul {
+  display: block;
+}
+.wp-block-iowa-aea-theme-page-children .page-hierarchy .parent-pages .parent-page-item .parent-page-link {
+  font-weight: normal;
+  text-decoration: none;
+  display: block;
+  padding: 0.5rem 0;
+  color: #333;
+}
+.wp-block-iowa-aea-theme-page-children .page-hierarchy .parent-pages .parent-page-item .parent-page-link.current-page {
+  color: var(--wp--preset--color--primary);
+  text-decoration: underline;
+  padding-right: 0.5rem;
+  margin-right: -0.5rem;
+  border-radius: 3px;
+}
+.wp-block-iowa-aea-theme-page-children .page-hierarchy .parent-pages .parent-page-item .parent-page-link:hover {
+  text-decoration: underline;
+}
+.wp-block-iowa-aea-theme-page-children .page-hierarchy .parent-pages .parent-page-item .child-pages {
+  list-style: none;
+  padding-right: 1rem;
+  margin: 0.5rem 0 0 0;
+}
+.wp-block-iowa-aea-theme-page-children .page-hierarchy .parent-pages .parent-page-item .child-pages .child-page-item {
+  margin-bottom: 0.25rem;
+}
+.wp-block-iowa-aea-theme-page-children .page-hierarchy .parent-pages .parent-page-item .child-pages .child-page-item .child-page-link {
+  text-decoration: none;
+  display: block;
+  padding: 0.25rem 0;
+  color: #666;
+  font-size: 0.9em;
+}
+.wp-block-iowa-aea-theme-page-children .page-hierarchy .parent-pages .parent-page-item .child-pages .child-page-item .child-page-link.current-page {
+  color: var(--wp--preset--color--primary);
+  text-decoration: underline;
+  padding-right: 0.5rem;
+  margin-right: -0.5rem;
+  border-radius: 3px;
+  font-weight: 500;
+}
+.wp-block-iowa-aea-theme-page-children .page-hierarchy .parent-pages .parent-page-item .child-pages .child-page-item .child-page-link:hover {
+  text-decoration: underline;
+  color: #333;
+}
+.wp-block-iowa-aea-theme-page-children .page-hierarchy .parent-pages .parent-page-item:hover {
+  border-right-color: #0073aa;
+}
+.wp-block-iowa-aea-theme-page-children .no-children {
+  font-style: italic;
+  color: #666;
+  margin: 0;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 3px;
 }

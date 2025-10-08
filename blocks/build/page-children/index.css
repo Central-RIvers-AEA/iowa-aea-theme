@@ -6,8 +6,48 @@
  *
  * Replace them with your own styles or remove the file completely.
  */
-.wp-block-iowa-aea-theme-interactive-map {
-  border: 1px dotted #f00;
+.wp-block-iowa-aea-theme-page-children .page-hierarchy .parent-pages {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.wp-block-iowa-aea-theme-page-children .page-hierarchy .parent-pages .parent-page-item {
+  margin-bottom: 1rem;
+}
+.wp-block-iowa-aea-theme-page-children .page-hierarchy .parent-pages .parent-page-item .parent-page-link {
+  font-weight: bold;
+  text-decoration: none;
+  display: block;
+  padding: 0.5rem 0;
+}
+.wp-block-iowa-aea-theme-page-children .page-hierarchy .parent-pages .parent-page-item .parent-page-link.current-page {
+  color: #0073aa;
+  background-color: #f0f6fc;
+  padding-left: 0.5rem;
+}
+.wp-block-iowa-aea-theme-page-children .page-hierarchy .parent-pages .parent-page-item .parent-page-link:hover {
+  text-decoration: underline;
+}
+.wp-block-iowa-aea-theme-page-children .page-hierarchy .parent-pages .parent-page-item .child-pages {
+  list-style: none;
+  padding-left: 1.5rem;
+  margin: 0;
+}
+.wp-block-iowa-aea-theme-page-children .page-hierarchy .parent-pages .parent-page-item .child-pages .child-page-item {
+  margin-bottom: 0.25rem;
+}
+.wp-block-iowa-aea-theme-page-children .page-hierarchy .parent-pages .parent-page-item .child-pages .child-page-item .child-page-link {
+  text-decoration: none;
+  display: block;
+  padding: 0.25rem 0;
+}
+.wp-block-iowa-aea-theme-page-children .page-hierarchy .parent-pages .parent-page-item .child-pages .child-page-item .child-page-link.current-page {
+  color: #0073aa;
+  background-color: #f0f6fc;
+  padding-left: 0.5rem;
+}
+.wp-block-iowa-aea-theme-page-children .page-hierarchy .parent-pages .parent-page-item .child-pages .child-page-item .child-page-link:hover {
+  text-decoration: underline;
 }
 
 /*# sourceMappingURL=index.css.map*/

@@ -132,6 +132,7 @@ function hide_unwanted_block_templates( $query_result, $query, $template_type ) 
         'privacy-policy',   // Privacy policy template
         'singular',         // Singular template
         'attachment'        // Attachment template
+        // Note: 'page' template is NOT hidden so it appears in the page editor
     );
     
     // Filter out unwanted templates

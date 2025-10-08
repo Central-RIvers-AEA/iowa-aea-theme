@@ -31,11 +31,11 @@ import './editor.scss';
  */
 export default function Edit() {
 	return (
-		<p { ...useBlockProps() }>
-			{ __(
-				'Interactive Map – hello from the editor!',
-				'interactive-map'
-			) }
-		</p>
+		<ul { ...useBlockProps() }>
+			<li>Child Page</li>
+			<li>Child Page</li>
+			<li>Child Page</li>
+			<li>Child Page</li>
+		</ul>
 	);
 }

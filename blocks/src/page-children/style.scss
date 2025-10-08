@@ -5,8 +5,107 @@
  * Replace them with your own styles or remove the file completely.
  */
 
-.wp-block-iowa-aea-theme-interactive-map {
-	background-color: #21759b;
-	color: #fff;
-	padding: 2px;
+.wp-block-iowa-aea-theme-page-children {
+	.page-hierarchy {
+		.parent-pages {
+			list-style: none;
+			margin: 0;
+			padding: 0 0 0 1rem;
+
+			.parent-page-item {
+				margin-bottom: 1rem;
+				padding-left: 1rem;
+
+				.parent-dropdown {
+					display: flex;
+					justify-content: space-between;
+
+					& + ul {
+						display: none;
+					}
+
+					button {
+						background: none;
+						border: none;
+						cursor: pointer;
+					}
+
+					&.open {
+						button {
+							content: '^';
+						}
+
+						& + ul {
+							display: block;
+						}
+					}
+				}
+
+				.parent-page-link {
+					font-weight: normal;
+					text-decoration: none;
+					display: block;
+					padding: 0.5rem 0;
+					color: #333;
+
+					&.current-page {
+						color: var(--wp--preset--color--primary);
+						text-decoration: underline;
+						padding-left: 0.5rem;
+						margin-left: -0.5rem;
+						border-radius: 3px;
+					}
+
+					&:hover {
+						text-decoration: underline;
+					}
+				}
+
+				.child-pages {
+					list-style: none;
+					padding-left: 1rem;
+					margin: 0.5rem 0 0 0;
+
+					.child-page-item {
+						margin-bottom: 0.25rem;
+
+						.child-page-link {
+							text-decoration: none;
+							display: block;
+							padding: 0.25rem 0;
+							color: #666;
+							font-size: 0.9em;
+
+							&.current-page {
+								color: var(--wp--preset--color--primary);
+								text-decoration: underline;
+								padding-left: 0.5rem;
+								margin-left: -0.5rem;
+								border-radius: 3px;
+								font-weight: 500;
+							}
+
+							&:hover {
+								text-decoration: underline;
+								color: #333;
+							}
+						}
+					}
+				}
+
+				&:hover {
+					border-left-color: #0073aa;
+				}
+			}
+		}
+	}
+
+	.no-children {
+		font-style: italic;
+		color: #666;
+		margin: 0;
+		padding: 1rem;
+		background-color: #f9f9f9;
+		border-radius: 3px;
+	}
 }
