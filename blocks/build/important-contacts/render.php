@@ -4,5 +4,5 @@
  */
 ?>
 <p <?php echo get_block_wrapper_attributes(); ?>>
-	<?php esc_html_e( 'Interactive Map – hello from a dynamic block!', 'interactive-map' ); ?>
+	<?php esc_html_e( 'Important Contacts – hello from a dynamic block!', 'important-contacts' ); ?>
 </p>

@@ -33,8 +33,8 @@ export default function Edit() {
 	return (
 		<p { ...useBlockProps() }>
 			{ __(
-				'Interactive Map – hello from the editor!',
-				'interactive-map'
+				'Important Contacts – hello from the editor!',
+				'important-contacts'
 			) }
 		</p>
 	);
