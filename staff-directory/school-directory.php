@@ -4,12 +4,25 @@ function create_district_posttype(){
   register_post_type( 
     'district', 
     array(
-      'labels' => array('name' => __('Districts'), 'singular' => __('District')),
+      'label' => 'Districts',
+      'labels' => array(
+        'name' => 'Districts',
+        'singular_name' => 'District',
+        'add_new' => _x('Add New', 'District', 'textdomain'),
+        'add_new_item' => 'Add New District',
+        'edit_item' => 'Edit District',
+        'new_item' => 'New District',
+        'view_item' => 'View District',
+        'not_found' => 'No districts found',
+        'not_found_in_trash' => 'No districts found in Trash',
+      ),
+      'description' => 'Districts',
       'public' => true,
       'has_archive' => false,
       'show_in_rest' => true,
       'show_in_admin' => true,
-      'show_in_menu' => true,
+      'show_in_menu' => 'edit.php?post_type=employee',
+      'exclude_from_search' => true,
       'supports' => array('title'),
       'rewrite' => array('slug' => 'districts', 'with_front' => false)
     )
@@ -23,12 +36,23 @@ function create_school_posttype(){
   register_post_type( 
     'school', 
     array(
-      'labels' => array('name' => __('Schools'), 'singular' => __('School')),
+      'label' => 'Schools',
+      'labels' => array(
+        'name' => 'Schools',
+        'singular_name' => 'School',
+        'add_new' => _x('Add New', 'School', 'textdomain'),
+        'add_new_item' => 'Add New School',
+        'edit_item' => 'Edit School',
+        'new_item' => 'New School',
+        'view_item' => 'View School',
+        'not_found' => 'No schools found',
+        'not_found_in_trash' => 'No schools found in Trash',
+      ),
       'public' => true,
       'has_archive' => false,
       'show_in_rest' => true,
       'show_in_admin' => false,
-      'show_in_menu' => false,
+      'show_in_menu' => 'edit.php?post_type=employee',
       'supports' => array('title'),
       'rewrite' => array('slug' => 'schools', 'with_front' => false)
     )
@@ -36,19 +60,6 @@ function create_school_posttype(){
 }
 
 add_action('init', 'create_school_posttype');
-
-
-function place_schools_under_districts(){
-  add_submenu_page( 
-    'edit.php?post_type=district', 
-    'Schools', 
-    'All Schools', 
-    'manage_options', 
-    'edit.php?post_type=school'
-  );
-}
-
-add_action('admin_menu', 'place_schools_under_districts');
 
 // Adding Meta Section
 add_action('add_meta_boxes_district', 'create_school_information_meta_box');

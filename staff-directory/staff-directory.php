@@ -27,15 +27,24 @@ class StaffDirectory
   // import employees page
   public function import_employees_page()
   {
-    add_menu_page(
+    add_submenu_page(
+      'edit.php?post_type=employee',
       'Import Employees',
       'Import Employees',
       'manage_options',
       'import-employees',
-      array($this, 'import_employees_page_callback'),
-      'dashicons-upload',
-      20
+      array($this, 'import_employees_page_callback')
     );
+
+    // add_menu_page(
+    //   'Import Employees',
+    //   'Import Employees',
+    //   'manage_options',
+    //   'import-employees',
+    //   array($this, 'import_employees_page_callback'),
+    //   'dashicons-upload',
+    //   20
+    // );
   }
 
   /* callback for import employees page */
