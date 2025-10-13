@@ -3,9 +3,6 @@
  *
  * Replace them with your own styles or remove the file completely.
  */
-
-.wp-block-iowa-aea-theme-important-contacts {
-	width: 100%;
-	margin: 0 !important;
-	padding: 1rem !important;
-}
+.wp-block-iowa-aea-theme-interactive-map {
+  border: 1px dotted #f00;
+}/*# sourceMappingURL=editor.css.map */

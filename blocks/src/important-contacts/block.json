@@ -6,6 +6,12 @@
 	"title": "Important Contacts",
 	"category": "widgets",
 	"icon": "smiley",
+	"attributes": {
+		"contacts": {
+			"type": "array",
+			"default": []
+		}
+	},
 	"description": "A block for displaying important contacts.",
 	"example": {},
 	"supports": {

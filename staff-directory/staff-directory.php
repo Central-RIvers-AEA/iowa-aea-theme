@@ -20,6 +20,8 @@ class StaffDirectory
     add_action('admin_menu', array($this, 'import_employees_page'));
 
     add_action('admin_enqueue_scripts', array($this, 'enqueue_assignment_script'));
+    
+    add_action('rest_api_init', array($this, 'register_staff_rest_routes'));
   }
 
   // import employees page
@@ -670,6 +672,210 @@ class StaffDirectory
     } else {
       return new WP_Error('invalid_file', 'Please upload a valid CSV file.');
     }
+  }
+
+  /**
+   * Register REST API routes for staff directory
+   */
+  public function register_staff_rest_routes() {
+    register_rest_route('staff-directory/v1', '/employees', array(
+      'methods' => 'GET',
+      'callback' => array($this, 'get_employees_rest'),
+      'permission_callback' => array($this, 'check_staff_directory_permissions'),
+      'args' => array(
+        'per_page' => array(
+          'default' => 100,
+          'sanitize_callback' => 'absint',
+        ),
+        'search' => array(
+          'sanitize_callback' => 'sanitize_text_field',
+        ),
+        'district' => array(
+          'sanitize_callback' => 'sanitize_text_field',
+        ),
+        'building' => array(
+          'sanitize_callback' => 'sanitize_text_field',
+        ),
+        'area' => array(
+          'sanitize_callback' => 'sanitize_text_field',
+        ),
+      ),
+    ));
+
+    register_rest_route('staff-directory/v1', '/employees/(?P<id>\d+)', array(
+      'methods' => 'GET',
+      'callback' => array($this, 'get_employee_rest'),
+      'permission_callback' => array($this, 'check_staff_directory_permissions'),
+      'args' => array(
+        'id' => array(
+          'validate_callback' => function($param, $request, $key) {
+            return is_numeric($param);
+          }
+        ),
+      ),
+    ));
+  }
+
+  /**
+   * Permission callback for staff directory REST endpoints
+   * 
+   * Choose one of the security levels below by uncommenting the desired option
+   */
+  public function check_staff_directory_permissions($request) {
+    // Option 1: Require user to be logged in (any authenticated user)
+    //return is_user_logged_in();
+    
+    // Option 2: Require specific capability (uncomment to use instead)
+    return current_user_can('edit_posts');
+    
+    // Option 3: Require administrator privileges (uncomment to use instead)
+    // return current_user_can('manage_options');
+    
+    // Option 4: Allow specific user roles (uncomment to use instead)
+    //$user = wp_get_current_user();
+    //$allowed_roles = array('administrator', 'editor', 'author');
+    //return !empty(array_intersect($allowed_roles, $user->roles));
+    
+    // Option 5: Check for specific nonce/API key (uncomment to use instead)
+    // $api_key = $request->get_header('X-API-Key');
+    // return $api_key === 'your-secret-api-key';
+    
+    // Option 6: IP address restriction (uncomment to use instead)
+    // $allowed_ips = array('127.0.0.1', '192.168.1.0/24');
+    // $user_ip = $_SERVER['REMOTE_ADDR'];
+    // return $this->ip_in_range($user_ip, $allowed_ips);
+  }
+
+  /**
+   * Helper method for IP range checking (for Option 6)
+   */
+  private function ip_in_range($ip, $allowed_ranges) {
+    foreach ($allowed_ranges as $range) {
+      if (strpos($range, '/') !== false) {
+        // CIDR notation
+        list($subnet, $mask) = explode('/', $range);
+        if ((ip2long($ip) & ~((1 << (32 - $mask)) - 1)) == ip2long($subnet)) {
+          return true;
+        }
+      } else {
+        // Single IP
+        if ($ip === $range) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  /**
+   * REST API callback to get all employees
+   */
+  public function get_employees_rest($request) {
+    $params = $request->get_params();
+    
+    $args = array(
+      'post_type' => 'employee',
+      'posts_per_page' => isset($params['per_page']) ? $params['per_page'] : 100,
+      'post_status' => 'publish',
+      'orderby' => 'title',
+      'order' => 'ASC',
+    );
+
+    // Add search functionality
+    if (!empty($params['search'])) {
+      $args['s'] = $params['search'];
+    }
+
+    // Add meta query for filtering
+    $meta_query = array();
+    
+    if (!empty($params['district'])) {
+      $meta_query[] = array(
+        'key' => 'district',
+        'value' => $params['district'],
+        'compare' => '='
+      );
+    }
+
+    if (!empty($params['building'])) {
+      $meta_query[] = array(
+        'key' => 'building',
+        'value' => $params['building'],
+        'compare' => '='
+      );
+    }
+
+    if (!empty($params['area'])) {
+      $meta_query[] = array(
+        'key' => 'area',
+        'value' => $params['area'],
+        'compare' => '='
+      );
+    }
+
+    if (!empty($meta_query)) {
+      $args['meta_query'] = $meta_query;
+    }
+
+    $employees = get_posts($args);
+    $formatted_employees = array();
+
+    foreach ($employees as $employee) {
+      $formatted_employees[] = $this->format_employee_data($employee);
+    }
+
+    return new WP_REST_Response($formatted_employees, 200);
+  }
+
+  /**
+   * REST API callback to get a single employee
+   */
+  public function get_employee_rest($request) {
+    $id = (int) $request['id'];
+    $employee = get_post($id);
+
+    if (empty($employee) || $employee->post_type !== 'employee') {
+      return new WP_Error('employee_not_found', 'Employee not found.', array('status' => 404));
+    }
+
+    return new WP_REST_Response($this->format_employee_data($employee), 200);
+  }
+
+  /**
+   * Format employee data for REST API response
+   */
+  private function format_employee_data($employee) {
+    $meta_fields = array(
+      'first_name', 'last_name', 'district', 'building', 'area', 
+      'position', 'email', 'phone', 'photo', 'location'
+    );
+
+    $employee_data = array(
+      'id' => $employee->ID,
+      'title' => $employee->post_title,
+      'slug' => $employee->post_name,
+    );
+
+    // Add all meta fields
+    foreach ($meta_fields as $field) {
+      $employee_data[$field] = get_post_meta($employee->ID, $field, true);
+    }
+
+    // Get assignments (if any)
+    $assignments = get_post_meta($employee->ID, 'assignments', true);
+    if ($assignments) {
+      $employee_data['assignments'] = maybe_unserialize($assignments);
+    }
+
+    // Create full name for convenience
+    $employee_data['full_name'] = trim($employee_data['first_name'] . ' ' . $employee_data['last_name']);
+    
+    // Format for important contacts block compatibility
+    $employee_data['name'] = $employee_data['full_name'];
+    $employee_data['jobTitle'] = $employee_data['position'];
+    $employee_data['image'] = $employee_data['photo'] ?: get_stylesheet_directory_uri() . '/assets/images/default-profile.png';
+
+    return $employee_data;
   }
 }
 

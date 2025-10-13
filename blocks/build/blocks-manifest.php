@@ -72,6 +72,14 @@ return array(
 		'title' => 'Important Contacts',
 		'category' => 'widgets',
 		'icon' => 'smiley',
+		'attributes' => array(
+			'contacts' => array(
+				'type' => 'array',
+				'default' => array(
+					
+				)
+			)
+		),
 		'description' => 'A block for displaying important contacts.',
 		'example' => array(
 			
