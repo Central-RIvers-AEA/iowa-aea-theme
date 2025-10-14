@@ -220,4 +220,4 @@ add_action( 'init', 'iowa_aea_theme_custom_blocks_init' );
 
 
 /* Staff / School Directory */
-include_once __DIR__ . '/staff-directory/staff-directory.php';
+include_once __DIR__ . '/directory/staff-directory.php';

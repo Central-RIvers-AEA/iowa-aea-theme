@@ -21,6 +21,8 @@ import { useBlockProps } from '@wordpress/block-editor';
  */
 import './editor.scss';
 
+import iowaMap from '../../images/iowa-map.png' 
+
 /**
  * The edit function describes the structure of your block in the context of the
  * editor. This represents what the editor will render when the block is used.
@@ -31,11 +33,17 @@ import './editor.scss';
  */
 export default function Edit() {
 	return (
-		<p { ...useBlockProps() }>
-			{ __(
-				'Interactive Map – hello from the editor!',
-				'interactive-map'
-			) }
-		</p>
+		<div { ...useBlockProps() }>
+			<div>
+				<select disabled>
+					<option value="">Select your School District</option>
+				</select>
+
+				<button type='button' className='btn'>Contact My AEA</button>
+			</div>
+			<div className='img-block'>
+				<img src={ iowaMap } alt={ __( 'Iowa Map', 'interactive-map' ) } />
+			</div>
+		</div>
 	);
 }
