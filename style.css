@@ -199,6 +199,11 @@
     stroke: var(--card-color);
   }
 
+  p {
+    font-weight: normal;
+    color: var(--wp--preset--color--text-color);
+  }
+
   &:hover {
     background: var(--card-color);
     svg {
@@ -207,6 +212,10 @@
     span {
       color: white;
       text-decoration: none;
+    }
+
+    p {
+      color: white;
     }
   }
 }

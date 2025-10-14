@@ -20,7 +20,7 @@ export default function save({ attributes }) {
 
 	return (
 		<div {...useBlockProps.save()}>
-      <div className='impact-tab'  style={{ '--tab-background': '#9B2246' }} data-tab-num="1">
+      <div className='impact-tab'  style={{ '--tab-background': 'var(--wp--preset--color--primary)' }} data-tab-num="1">
         {titleOne && (
           <RichText.Content
             tagName="h3"
@@ -36,7 +36,7 @@ export default function save({ attributes }) {
           />
         )}
       </div>
-      <div className='impact-tab' style={{ '--tab-background': '#D17829' }} data-tab-num="2">
+      <div className='impact-tab' style={{ '--tab-background': 'var(--wp--preset--color--alt-four)' }} data-tab-num="2">
 			{titleTwo && (
 				<RichText.Content
 					tagName="h3"
@@ -52,7 +52,7 @@ export default function save({ attributes }) {
 				/>
 			)}
       </div>
-      <div className='impact-tab' style={{ '--tab-background': '#001777' }} data-tab-num="3">
+      <div className='impact-tab' style={{ '--tab-background': 'var(--wp--preset--color--alt-one)' }} data-tab-num="3">
 			{titleThree && (
 				<RichText.Content
 					tagName="h3"
@@ -68,7 +68,7 @@ export default function save({ attributes }) {
 				/>
 			)}
       </div>
-      <div className='impact-tab' style={{ '--tab-background': '#00826E' }} data-tab-num="4">
+      <div className='impact-tab' style={{ '--tab-background': 'var(--wp--preset--color--alt-three)' }} data-tab-num="4">
 			{titleFour && (
 				<RichText.Content
 					tagName="h3"
