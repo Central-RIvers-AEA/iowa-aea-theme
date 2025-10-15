@@ -224,3 +224,6 @@ include_once __DIR__ . '/directory/staff-directory.php';
 
 /* Include News */
 include_once __DIR__ . '/news/news.php';
+
+/* Include Events */
+include_once __DIR__ . '/events/events.php';
