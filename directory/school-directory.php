@@ -256,11 +256,11 @@ function sd_enqueue_front_css_js(){
     $districts[$key]->link = get_post_permalink($district);
   }
 
-  wp_enqueue_script( 'sd-front-js', plugin_dir_url(__FILE__) . '/school-directory-front.js', array(), '1.2', true );
+  wp_enqueue_script( 'sd-front-js', get_stylesheet_directory_uri(). '/assets/js/school-directory-front.js', array(), '1.2', true );
 
   wp_localize_script( 'sd-front-js', 'sd_districts', $districts );
 
-  wp_enqueue_style( 'sd-front-css', plugin_dir_url( __FILE__ ) . '/school-directory-front.css', array(), '1.1' );
+  wp_enqueue_style( 'sd-front-css', get_stylesheet_directory_uri(). '/assets/css/school-directory-front.css', array(), '1.1' );
 }
 
 // Handle Saving of District and School Information

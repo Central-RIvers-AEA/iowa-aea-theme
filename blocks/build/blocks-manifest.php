@@ -77,14 +77,14 @@ return array(
 			
 		),
 		'supports' => array(
-			'html' => false
+			'interactivity' => true
 		),
 		'textdomain' => 'events-list',
 		'editorScript' => 'file:./index.js',
 		'editorStyle' => 'file:./index.css',
 		'style' => 'file:./style-index.css',
 		'render' => 'file:./render.php',
-		'viewScript' => 'file:./view.js'
+		'viewScriptModule' => 'file:./view.js'
 	),
 	'important-contacts' => array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',

@@ -21,7 +21,7 @@
  */
 
 /* eslint-disable no-console */
-console.log( 'Hello World! (from iowa-aea-theme-side-tabs block)' );
+// console.log( 'Hello World! (from iowa-aea-theme-side-tabs block)' );
 /* eslint-enable no-console */
 
 console.log( 'DOM fully loaded and parsed' );

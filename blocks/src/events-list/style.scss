@@ -6,6 +6,50 @@
  */
 
 .wp-block-iowa-aea-theme-events-list {
-	
+	min-width: 300px;
+
+  border: 1px solid var(--wp--preset--color--primary);
+  border-radius: 19px 19px 0 0;
+
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .event-item {
+    border-bottom: 1px solid #eee;
+    padding: 12px 0;
+    display: grid;
+    grid-template-columns: auto 1fr;
+  }
+
+  .event-date {
+    min-width: 80px;
+    text-align: center;
+    font-size: 0.9em;
+    color: #666;
+    * {
+      display: block;
+    }
+
+    strong {
+      font-size: 1.2rem;
+    }
+  }
+
+  .event-details {
+    margin-top: 4px;
+    strong {
+      display: block;
+    }
+  }
+
+  .event-title {
+    font-weight: bold;
+  }
+
+  .event-time {
+    font-style: italic;
+  }
 }
 

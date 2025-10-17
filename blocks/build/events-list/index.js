@@ -8,7 +8,7 @@
   \************************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"iowa-aea-theme/events-list","version":"0.1.0","title":"Events List","category":"widgets","icon":"smiley","description":"A block for displaying a list of events.","example":{},"supports":{"html":false},"textdomain":"events-list","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScript":"file:./view.js"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"iowa-aea-theme/events-list","version":"0.1.0","title":"Events List","category":"widgets","icon":"smiley","description":"A block for displaying a list of events.","example":{},"supports":{"interactivity":true},"textdomain":"events-list","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScriptModule":"file:./view.js"}');
 
 /***/ }),
 
@@ -62,10 +62,63 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 function Edit() {
+  const events = [{
+    id: 1,
+    title: 'Event 1',
+    date: '2023-09-01',
+    time: '10:00 AM'
+  }, {
+    id: 2,
+    title: 'Event 2',
+    date: '2023-09-02',
+    time: '11:00 AM'
+  }, {
+    id: 3,
+    title: 'Event 3',
+    date: '2023-09-03',
+    time: '12:00 PM'
+  }];
+  const formatDate = dateString => {
+    const month = new Intl.DateTimeFormat('en-US', {
+      month: 'short'
+    }).format(new Date(dateString));
+    const day = new Intl.DateTimeFormat('en-US', {
+      day: 'numeric'
+    }).format(new Date(dateString));
+    const year = new Intl.DateTimeFormat('en-US', {
+      year: 'numeric'
+    }).format(new Date(dateString));
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.Fragment, {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("small", {
+        children: month
+      }), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("strong", {
+        children: day
+      }), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("small", {
+        children: year
+      })]
+    });
+  };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
     ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps)(),
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("p", {
-      children: "Hello From Events List"
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("ul", {
+      children: events.map(event => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("li", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+          className: "event-item",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+            className: "event-date",
+            children: formatDate(event.date)
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+            className: "event-details",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("strong", {
+              className: "event-title",
+              children: event.title
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
+              className: "event-time",
+              children: event.time
+            })]
+          })]
+        })
+      }, event.id))
     })
   });
 }
