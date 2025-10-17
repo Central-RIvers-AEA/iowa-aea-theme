@@ -5,7 +5,7 @@
     Author: Iowa AEAs
     Author URI: https://example.com/
     Template: twentytwentyfive
-    Version: 1.0.1.23
+    Version: 1.0.1.25
     License: GNU General Public License v2 or later
     License URI: http://www.gnu.org/licenses/gpl-2.0.html
     Text Domain: iowa-aea-theme
@@ -240,9 +240,28 @@
 
   &.beside-picture {
     &:before {
-      content: url('data:image/svg+xml,<svg width="85" height="58" viewBox="0 0 85 58" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(%23clip0_493_1537)"><path d="M34.8307 2.51931C35.9993 4.47083 30.6287 7.40743 29.2146 9.23001C28.3244 10.3831 26.3335 13.7051 26.3706 15.0185C26.4242 16.6862 29.1225 17.0148 30.3024 17.8264C55.8881 35.3896 22.7387 68.576 5.48294 46.6045C-4.26548 34.1885 3.19296 16.8494 14.6992 8.44832C17.5401 6.37764 32.5662 -1.24324 34.8193 2.51874L34.8307 2.51931Z" fill="%23A12041"/><path d="M78.2032 4.68454C79.414 6.70659 73.3652 9.97428 71.9545 11.9567C66.789 19.2373 71.963 18.1841 76.4689 22.0585C94.6577 37.6786 70.7098 66.8195 51.7912 51.8815C37.7995 40.8389 45.5944 19.7302 58.0945 10.6147C60.9354 8.54401 75.9614 0.923126 78.2146 4.68511L78.2032 4.68454Z" fill="%23A12041"/></g><defs><clipPath id="clip0_493_1537"><rect width="82" height="53" fill="white" transform="translate(81.8979 57.0227) rotate(-177.142)"/></clipPath></defs></svg>');
+      content: "";
+      background-color: var(--wp--preset--color--primary, red);
+      mask: url('data:image/svg+xml,<svg width="85" height="58" viewBox="0 0 85 58" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(%23clip0_493_1537)"><path d="M34.8307 2.51931C35.9993 4.47083 30.6287 7.40743 29.2146 9.23001C28.3244 10.3831 26.3335 13.7051 26.3706 15.0185C26.4242 16.6862 29.1225 17.0148 30.3024 17.8264C55.8881 35.3896 22.7387 68.576 5.48294 46.6045C-4.26548 34.1885 3.19296 16.8494 14.6992 8.44832C17.5401 6.37764 32.5662 -1.24324 34.8193 2.51874L34.8307 2.51931Z" fill="black"/><path d="M78.2032 4.68454C79.414 6.70659 73.3652 9.97428 71.9545 11.9567C66.789 19.2373 71.963 18.1841 76.4689 22.0585C94.6577 37.6786 70.7098 66.8195 51.7912 51.8815C37.7995 40.8389 45.5944 19.7302 58.0945 10.6147C60.9354 8.54401 75.9614 0.923126 78.2146 4.68511L78.2032 4.68454Z" fill="black"/></g><defs><clipPath id="clip0_493_1537"><rect width="82" height="53" fill="white" transform="translate(81.8979 57.0227) rotate(-177.142)"/></clipPath></defs></svg>')
+        no-repeat;
+      mask-size: contain;
+      -webkit-mask: url('data:image/svg+xml,<svg width="85" height="58" viewBox="0 0 85 58" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(%23clip0_493_1537)"><path d="M34.8307 2.51931C35.9993 4.47083 30.6287 7.40743 29.2146 9.23001C28.3244 10.3831 26.3335 13.7051 26.3706 15.0185C26.4242 16.6862 29.1225 17.0148 30.3024 17.8264C55.8881 35.3896 22.7387 68.576 5.48294 46.6045C-4.26548 34.1885 3.19296 16.8494 14.6992 8.44832C17.5401 6.37764 32.5662 -1.24324 34.8193 2.51874L34.8307 2.51931Z" fill="black"/><path d="M78.2032 4.68454C79.414 6.70659 73.3652 9.97428 71.9545 11.9567C66.789 19.2373 71.963 18.1841 76.4689 22.0585C94.6577 37.6786 70.7098 66.8195 51.7912 51.8815C37.7995 40.8389 45.5944 19.7302 58.0945 10.6147C60.9354 8.54401 75.9614 0.923126 78.2146 4.68511L78.2032 4.68454Z" fill="black"/></g><defs><clipPath id="clip0_493_1537"><rect width="82" height="53" fill="white" transform="translate(81.8979 57.0227) rotate(-177.142)"/></clipPath></defs></svg>')
+        no-repeat;
+      -webkit-mask-size: contain;
       position: absolute;
       top: -3.5rem;
+      height: 58px;
+      width: 85px;
     }
+  }
+}
+
+.home-news-links {
+  .wp-block-post.news {
+    border: 1px solid var(--wp--preset--color--primary);
+    border-bottom-width: 15px;
+    border-radius: 19px 19px 0 0;
+    text-align: center;
+    overflow: hidden;
   }
 }
