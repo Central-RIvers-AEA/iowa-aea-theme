@@ -8,9 +8,13 @@
  * Replace them with your own styles or remove the file completely.
  */
 .wp-block-iowa-aea-theme-events-list {
-  min-width: 300px;
+  min-width: 341px;
   border: 1px solid var(--wp--preset--color--primary);
   border-radius: 19px 19px 0 0;
+  height: 300px;
+  padding-inline: 1rem;
+  position: relative;
+  padding-bottom: 1.5rem;
 }
 .wp-block-iowa-aea-theme-events-list ul {
   list-style: none;
@@ -39,12 +43,44 @@
 }
 .wp-block-iowa-aea-theme-events-list .event-details strong {
   display: block;
+  color: var(--wp--preset--color--primary);
 }
 .wp-block-iowa-aea-theme-events-list .event-title {
   font-weight: bold;
 }
 .wp-block-iowa-aea-theme-events-list .event-time {
   font-style: italic;
+}
+.wp-block-iowa-aea-theme-events-list .btn-control {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  border: 1px solid var(--wp--preset--color--primary);
+  height: 3rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.wp-block-iowa-aea-theme-events-list .btn-control svg {
+  height: 1.5rem;
+  width: 1.5rem;
+}
+.wp-block-iowa-aea-theme-events-list .btn-control:hover, .wp-block-iowa-aea-theme-events-list .btn-control:focus, .wp-block-iowa-aea-theme-events-list .btn-control:active {
+  background: var(--wp--preset--color--primary);
+  color: white;
+}
+.wp-block-iowa-aea-theme-events-list .load-previous {
+  top: -1.25rem;
+}
+.wp-block-iowa-aea-theme-events-list .load-previous:disabled {
+  visibility: hidden;
+}
+.wp-block-iowa-aea-theme-events-list .load-next {
+  bottom: -1.25rem;
 }
 
 /*# sourceMappingURL=style-index.css.map*/

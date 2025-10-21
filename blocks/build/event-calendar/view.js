@@ -53,9 +53,9 @@ module.exports = __WEBPACK_EXTERNAL_MODULE__wordpress_interactivity_8e89b257__;
 var __webpack_exports__ = {};
 // This entry needs to be wrapped in an IIFE because it needs to be isolated against other modules in the chunk.
 (() => {
-/*!*********************************!*\
-  !*** ./src/events-list/view.js ***!
-  \*********************************/
+/*!************************************!*\
+  !*** ./src/event-calendar/view.js ***!
+  \************************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/interactivity */ "@wordpress/interactivity");
 
@@ -109,7 +109,8 @@ const fetchGoogleCalendarEvents = async (start_date, end_date) => {
         rendered: gEvent.summary
       },
       event_date: gEvent.start.date || gEvent.start.dateTime.split('T')[0],
-      event_time: gEvent.start.dateTime ? formatTime(gEvent.start.dateTime.split('T')[1]) : 'All Day'
+      event_time: gEvent.start.dateTime ? formatTime(gEvent.start.dateTime.split('T')[1]) : 'All Day',
+      details: gEvent.description || ''
     };
     return event;
   });
@@ -124,35 +125,29 @@ const fetchEvents = async () => {
   lastOfMonth.setDate(0);
   let start_date = firstOfMonth.toISOString().split('T')[0];
   let end_date = lastOfMonth.toISOString().split('T')[0];
-  const response = await fetch(`/wp-json/wp/v2/event?start_date=${start_date}&end_date=${end_date}`);
+  const response = await fetch(`/wp-json/wp/v2/event?event_date_after=${start_date}&event_date_before=${end_date}`);
   const localEvents = await response.json();
 
   // Fetch events from google calendar API
   const googleCalendarEvents = await fetchGoogleCalendarEvents(start_date, end_date);
   const allEvents = [...localEvents, ...googleCalendarEvents];
-  allEvents.forEach(event => {
-    if (!state.events.find(e => e.id === event.id)) {
-      state.events.push(event);
-    }
-  });
+  state.events = allEvents;
   state.events.sort((a, b) => new Date(a.event_date) - new Date(b.event_date));
 };
 const {
   state,
   actions,
   callbacks
-} = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.store)('iowa-aea-theme/events-list', {
+} = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.store)('iowa-aea-theme/events-calendar', {
   state: {
     events: [],
-    visibleEvents: 3,
+    visibleEvents: 100,
     topEventId: null,
     currentDate: new Date().toISOString().split('T')[0],
     currentMonth: new Date().toISOString().split('T')[0].slice(0, 7)
   },
   actions: {
     loadEvents: async () => {
-      console.log(state);
-      console.log('Loading events...');
       await fetchEvents();
       if (state.topEventId === null) {
         let currentDate = state.currentDate;
@@ -162,23 +157,99 @@ const {
       actions.updateEventsView();
     },
     updateEventsView: () => {
-      let eventsList = document.querySelector('.events-list');
+      let eventsList = document.querySelector('.event-calendar-list');
       if (!eventsList) return;
 
       // Load chunk of events
-      let chunkStart = state.events.map(event => event.id).indexOf(state.topEventId);
-      const chunk = state.events.slice(chunkStart, chunkStart + state.visibleEvents);
+      const chunk = state.events.slice(0, state.visibleEvents);
       eventsList.innerHTML = chunk.map(event => `
-        <li>
-          <div class='event-item'>
-            <div class='event-date'>${formatDate(event.event_date)}</div>
-            <div class='event-details'>
-              <strong class='event-title'>${event.title.rendered}</strong>
-              <span class='event-time'>${formatTime(event.event_time)}</span>
-              </div>
+        <div class='event-calendar-list-item' aria-expanded='false'>
+          <div class='event-calendar-list-item-date'>${formatDate(event.event_date)}</div>
+          <div class='event-calendar-list-item-details'>
+            <strong class='event-calendar-list-item-title'>${event.title.rendered}</strong>
+            <span class='event-calendar-list-item-time'>${formatTime(event.event_time)}</span>
           </div>
-        </li>
+          ${event.details ? `<div class='event-calendar-list-item-details-long'>${event.details}</div>` : ''}
+        </div>
       `).join('');
+      if (state.events.length == 0) {
+        eventsList.innerHTML = '<div class="event-calendar-list-item">No events found</div>';
+      }
+      eventsList.querySelectorAll('.event-calendar-list-item').forEach(item => {
+        item.addEventListener('click', () => {
+          if (item.getAttribute('aria-expanded') === 'false') {
+            item.setAttribute('aria-expanded', 'true');
+          } else {
+            item.setAttribute('aria-expanded', 'false');
+          }
+        });
+      });
+      actions.loadCalendar();
+    },
+    loadCalendar: () => {
+      let firstOfMonth = new Date(state.currentDate);
+      firstOfMonth.setDate(1);
+      let lastOfMonth = new Date(firstOfMonth);
+      lastOfMonth.setMonth(lastOfMonth.getMonth() + 1);
+      lastOfMonth.setDate(0);
+      let firstDayOfWeek = lastOfMonth.getDay();
+      let days = [];
+      for (let i = 1; i < firstDayOfWeek - 1; i++) {
+        days.push(null);
+      }
+      for (let i = 1; i <= lastOfMonth.getDate(); i++) {
+        days.push(i);
+      }
+      for (let i = 1; i < days.length % 7; i++) {
+        days.push(null);
+      }
+
+      // Generate Calendar
+      let calendar = document.querySelector('.event-calendar');
+      if (!calendar) return;
+      let calendarHeader = calendar.querySelector('.event-calendar-header h3');
+      calendarHeader.innerHTML = `${firstOfMonth.toLocaleString('default', {
+        month: 'long'
+      })} ${firstOfMonth.getFullYear()}`;
+      let calendarDays = calendar.querySelector('.event-calendar-days');
+      calendarDays.innerHTML = `
+        <div class='calendar-header'>Sun</div>
+        <div class='calendar-header'>Mon</div>
+        <div class='calendar-header'>Tue</div>
+        <div class='calendar-header'>Wed</div>
+        <div class='calendar-header'>Thu</div>
+        <div class='calendar-header'>Fri</div>
+        <div class='calendar-header'>Sat</div>
+      `;
+      days.forEach(day => {
+        let dayEl = document.createElement('div');
+        dayEl.classList.add('event-calendar-day');
+        dayEl.innerHTML = day || '';
+        if (day) {
+          let date = new Date(state.currentDate + 'T00:00:00');
+          date.setDate(day);
+
+          // check for events
+          let eventsForDay = state.events.filter(event => new Date(`${event.event_date}T00:00:00`).toLocaleString() === date.toLocaleString());
+          if (eventsForDay.length > 0) {
+            dayEl.classList.add('has-events');
+          }
+        }
+        calendarDays.appendChild(dayEl);
+      });
+      calendar.appendChild(calendarDays);
+    },
+    nextMonth: () => {
+      let currentDate = new Date(state.currentDate);
+      currentDate.setMonth(currentDate.getMonth() + 1);
+      state.currentDate = currentDate.toISOString().split('T')[0];
+      actions.loadEvents();
+    },
+    previousMonth: () => {
+      let currentDate = new Date(state.currentDate);
+      currentDate.setMonth(currentDate.getMonth() - 1);
+      state.currentDate = currentDate.toISOString().split('T')[0];
+      actions.loadEvents();
     }
   },
   callbacks: {

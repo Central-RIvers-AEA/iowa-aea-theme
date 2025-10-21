@@ -5,15 +5,6 @@
 function register_events_post_type() {
   $supports = array(
     'title', // post title
-    'editor', // post content
-    'author', // post author
-    'thumbnail', // featured images
-    'excerpt', // post excerpt
-    'custom-fields', // custom fields
-    'revisions', // post revisions
-    'post-formats', // post formats
-    'page-attributes', // post page attributes
-    'trackbacks', 
 	);
 
 
@@ -141,5 +132,137 @@ function register_events_settings() {
 
 add_action('admin_init', 'register_events_settings');
 
+// Add metaboxes for events
+function add_events_metaboxes() {
+  add_meta_box(
+    'event_details',
+    'Event Details',
+    'render_event_details_metabox',
+    'event',
+    'normal',
+    'high'
+  );
+}
+
+add_action('add_meta_boxes', 'add_events_metaboxes');
+
+function render_event_details_metabox($post) {
+  // Add nonce for security
+  wp_nonce_field('event_details_nonce', 'event_details_nonce_field');
+
+  // Retrieve existing event details
+  $event_date = get_post_meta($post->ID, 'event_date', true);
+  $event_time = get_post_meta($post->ID, 'event_time', true);
+  ?>
+  <label for="event_date">Date:</label>
+  <input type="date" id="event_date" name="event_date" value="<?php echo esc_attr($event_date); ?>" />
+
+  <label for="event_time">Time:</label>
+  <input type="time" id="event_time" name="event_time" value="<?php echo esc_attr($event_time); ?>" />
+  <?php
+}
+
+// Save metabox data
+function save_event_details_metabox($post_id) {
+  // Check nonce for security
+  if (!isset($_POST['event_details_nonce_field']) || !wp_verify_nonce($_POST['event_details_nonce_field'], 'event_details_nonce')) {
+    return;
+  }
+
+  // Save event date
+  if (isset($_POST['event_date'])) {
+    update_post_meta($post_id, 'event_date', sanitize_text_field($_POST['event_date']));
+  }
+
+  // Save event time
+  if (isset($_POST['event_time'])) {
+    update_post_meta($post_id, 'event_time', sanitize_text_field($_POST['event_time']));
+  }
+}
+
+add_action('save_post', 'save_event_details_metabox');
+
+add_action('rest_api_init', function(){
+  $meta_fields = array(
+    'event_date' => 'Event Date',
+    'event_time' => 'Event Time'
+  );
+
+  foreach($meta_fields as $field_name => $description) {
+    register_rest_field('event', $field_name, array(
+      'get_callback' => function($post) use ($field_name) {
+        $value = get_post_meta($post['id'], $field_name, true);
+        return $value;
+      },
+      'update_callback' => function($value, $post) use ($field_name) {
+        return update_post_meta($post->ID, $field_name, $value);
+      },
+      'schema' => array(
+        'description' => $description,
+        'type' => 'string'
+      ),
+      
+    ));
+  }
 
 
+  // Add custom query parameters for filtering
+  add_filter('rest_event_collection_params', function($params) {
+    $params['event_date'] = array(
+      'description' => 'Filter events by event date',
+      'type' => 'string',
+      'sanitize_callback' => 'sanitize_text_field',
+    );
+    
+    $params['event_date_after'] = array(
+      'description' => 'Filter events after a specific date',
+      'type' => 'string',
+      'sanitize_callback' => 'sanitize_text_field',
+    );
+    
+    $params['event_date_before'] = array(
+      'description' => 'Filter events before a specific date',
+      'type' => 'string',
+      'sanitize_callback' => 'sanitize_text_field',
+    );
+    
+    return $params;
+  });
+
+  // Handle the custom query parameters
+  add_filter('rest_event_query', function($args, $request) {
+    // Filter by exact event date
+    if ($request->get_param('event_date')) {
+      $args['meta_query'][] = array(
+        'key' => 'event_date',
+        'value' => $request->get_param('event_date'),
+        'compare' => '='
+      );
+    }
+    
+    // Filter by events after a date
+    if ($request->get_param('event_date_after')) {
+      $args['meta_query'][] = array(
+        'key' => 'event_date',
+        'value' => $request->get_param('event_date_after'),
+        'compare' => '>='
+      );
+    }
+    
+    // Filter by events before a date
+    if ($request->get_param('event_date_before')) {
+      $args['meta_query'][] = array(
+        'key' => 'event_date',
+        'value' => $request->get_param('event_date_before'),
+        'compare' => '<='
+      );
+    }
+    
+    // Ensure proper meta_query structure
+    if (isset($args['meta_query']) && count($args['meta_query']) > 1) {
+      $args['meta_query']['relation'] = 'AND';
+    }
+    
+    return $args;
+  }, 10, 2);
+});

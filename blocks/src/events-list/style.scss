@@ -6,10 +6,14 @@
  */
 
 .wp-block-iowa-aea-theme-events-list {
-	min-width: 300px;
+	min-width: 341px;
 
   border: 1px solid var(--wp--preset--color--primary);
   border-radius: 19px 19px 0 0;
+  height: 300px;
+  padding-inline: 1rem;
+  position: relative;
+  padding-bottom: 1.5rem;
 
   ul {
     list-style: none;
@@ -41,6 +45,7 @@
     margin-top: 4px;
     strong {
       display: block;
+      color: var(--wp--preset--color--primary);
     }
   }
 
@@ -50,6 +55,41 @@
 
   .event-time {
     font-style: italic;
+  }
+
+  .btn-control {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    border: 1px solid var(--wp--preset--color--primary);
+    height: 3rem;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    svg {
+      height: 1.5rem;
+      width: 1.5rem;
+    }
+
+    &:hover, &:focus, &:active {
+      background: var(--wp--preset--color--primary);
+      color: white;
+    }
+  }
+
+  .load-previous {
+    top: -1.25rem;
+    &:disabled {
+      visibility: hidden;
+    };
+  }
+
+  .load-next {
+    bottom: -1.25rem;
   }
 }
 

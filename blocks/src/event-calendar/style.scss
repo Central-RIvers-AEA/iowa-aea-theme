@@ -1,0 +1,232 @@
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.wp-block-iowa-aea-theme-event-calendar {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  gap: 2rem;
+
+  .event-calendar-list {
+    min-width: 341px;
+    border-right: 1px solid var(--wp--preset--color--primary);
+    padding-inline: 1rem;
+    position: relative;
+    padding-bottom: 1.5rem;
+    flex-grow: 1;
+  }
+
+  @media (max-width: 1056px) {
+    justify-content: center;
+    align-items: center;
+    flex-direction: column-reverse;
+
+    .event-calendar-list {
+      min-width: 100%;
+      border-right: none;
+    }
+  }
+
+  .event-calendar-list-item{
+    border-bottom: 1px solid var(--wp--preset--color--primary);
+    padding: 12px 0;
+    display: grid;
+    grid-template-columns: auto 1fr;
+
+    .event-calendar-list-item-date {
+      min-width: 80px;
+      text-align: center;
+      font-size: 0.9em;
+      color: #666;
+      * {
+        display: block;
+      }
+
+      strong {
+        font-size: 1.2rem;
+      }
+    }
+
+    .event-calendar-list-item-details {
+      margin-top: 4px;
+
+      strong {
+        display: block;
+        color: var(--wp--preset--color--primary);
+      }
+    }
+
+    .event-calendar-list-item-title {
+      font-weight: bold;
+    }
+
+    .event-calendar-list-item-time {
+      font-style: italic;
+    }
+
+    .event-calendar-list-item-details-long {
+      display: none;
+      grid-column: span 2;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-top: 1px solid black;
+      background: var(--wp--preset--color--primary);
+      margin-top: 12px;
+    }
+
+    &:hover:has(.event-calendar-list-item-details-long) {
+      background: var(--wp--preset--color--secondary);
+    }
+
+    &:has(.event-calendar-list-item-details-long) {
+      cursor: pointer;
+      position: relative;
+
+      &:after {
+        position: absolute;
+        content: 'Click for more details';
+        top: 50%;
+        right: 1rem;
+        transform: translateY(-50%);
+        background: black;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        white-space: nowrap;
+        z-index: 10;
+      }
+    }
+
+    &:has(.event-calendar-list-item-details-long)[aria-expanded='true'] {
+      padding: 12px 0 0;
+      &:after{
+        display: none;
+      }
+      .event-calendar-list-item-details-long {
+        display: block;
+      }
+    }
+  }
+
+  .event-calendar {
+    width: fit-content;
+    height: fit-content;
+    position: relative;
+    
+    border-radius: 9px;
+    .event-calendar-header{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 0 0 0.5rem 0;
+      h3 {
+        font-size: 1.5rem;
+        text-align: center;
+        margin: 0;
+      }
+
+      button {
+        border: 1px solid var(--wp--preset--color--primary);
+        background: white;
+        border-radius: 1000px;
+        padding: 0.5rem .75rem;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+
+        &:hover, &:focus, &:active {
+          background: var(--wp--preset--color--primary);
+          color: white;
+        }
+      }
+    }
+    .event-calendar-days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 0;
+      border: 1px solid var(--wp--preset--color--primary);
+      border-radius: 9px;
+      
+      :nth-child(1){
+        border-top-left-radius: 8px;
+      }
+
+      :nth-child(7){
+        border-top-right-radius: 8px;
+      }
+
+      :nth-child(36){
+        border-bottom-left-radius: 8px;
+      }
+      
+      :nth-child(42){
+        border-bottom-right-radius: 8px;
+      }
+
+      .calendar-header{
+        background: var(--wp--preset--color--primary);
+        font-weight: bold;
+        text-align: center;
+        color: white;
+        padding: 0.5rem;
+      }
+      .event-calendar-day {
+        border: 1px solid #eee;
+        padding: 0.5rem;
+        text-align: center;
+        
+        &.has-events {
+          background: var(--wp--preset--color--primary);
+          color: white;
+        }
+  
+        .event-calendar-day-number {
+          font-weight: bold;
+        }
+      }
+    }
+  }
+
+
+  .btn-control {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    border: 1px solid var(--wp--preset--color--primary);
+    height: 3rem;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    svg {
+      height: 1.5rem;
+      width: 1.5rem;
+    }
+
+    &:hover, &:focus, &:active {
+      background: var(--wp--preset--color--primary);
+      color: white;
+    }
+  }
+
+  .load-previous {
+    top: -1.25rem;
+    &:disabled {
+      visibility: hidden;
+    };
+  }
+
+  .load-next {
+    bottom: -1.25rem;
+  }
+}
+
