@@ -68,10 +68,19 @@ const fetchEvents = async () => {
 
   const response = await fetch(`/wp-json/wp/v2/event?event_date_after=${start_date}&event_date_before=${end_date}`);
   const localEvents = await response.json();
-  
+
+  console.log(localEvents);
+
+  let fixedEvents = localEvents.map(event => {
+    return {
+      ...event,
+      details: event.event_html_info
+    };
+  });
+
   // Fetch events from google calendar API
   const googleCalendarEvents = await fetchGoogleCalendarEvents(start_date, end_date);
-  const allEvents = [...localEvents, ...googleCalendarEvents];
+  const allEvents = [...fixedEvents, ...googleCalendarEvents];
 
   state.events = allEvents;
 
