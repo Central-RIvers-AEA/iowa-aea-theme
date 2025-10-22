@@ -188,6 +188,7 @@ const {
             <strong class='event-calendar-list-item-title'>${event.title.rendered}</strong>
             <span class='event-calendar-list-item-time'>${formatTime(event.event_time)}</span>
             ${event.event_end_time ? `- <span class='event-calendar-list-item-end-time'>${formatTime(event.event_end_time)}</span>` : ''}
+            ${event.registration_link ? `<br /><a href='${event.registration_link}' class='event-calendar-list-item-registration' aria-label='Register for ${event.title.rendered}'>Registion Link</a>` : ''}
           </div>
           ${event.details ? `<div class='event-calendar-list-item-details-long'>${event.details}</div>` : ''}
         </div>

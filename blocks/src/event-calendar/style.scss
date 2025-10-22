@@ -10,6 +10,7 @@
   flex-wrap: wrap;
   flex-direction: row;
   gap: 2rem;
+  
 
   .event-calendar-list {
     min-width: 341px;
@@ -36,6 +37,7 @@
     padding: 12px 0;
     display: grid;
     grid-template-columns: auto 1fr;
+    align-items: center;
 
     .event-calendar-list-item-date {
       min-width: 80px;
@@ -75,6 +77,7 @@
       border-top: 1px solid black;
       background: var(--wp--preset--color--primary);
       margin-top: 12px;
+      color: white;
 
       * {
         color: white !important;
@@ -86,7 +89,7 @@
     }
 
     &:hover:has(.event-calendar-list-item-details-long) {
-      background: var(--wp--preset--color--secondary);
+      background: #eee;
     }
 
     &:has(.event-calendar-list-item-details-long) {
