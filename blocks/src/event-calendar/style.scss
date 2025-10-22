@@ -71,11 +71,18 @@
     .event-calendar-list-item-details-long {
       display: none;
       grid-column: span 2;
-      color: white;
       padding: 0.5rem 1rem;
       border-top: 1px solid black;
       background: var(--wp--preset--color--primary);
       margin-top: 12px;
+
+      * {
+        color: white !important;
+      }
+
+      a {
+        text-decoration: underline;
+      }
     }
 
     &:hover:has(.event-calendar-list-item-details-long) {
@@ -184,6 +191,11 @@
         &.has-events {
           background: var(--wp--preset--color--primary);
           color: white;
+
+          a {
+            color: white;
+            text-decoration: underline;
+          }
         }
   
         .event-calendar-day-number {

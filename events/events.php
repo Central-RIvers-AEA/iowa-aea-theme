@@ -5,6 +5,7 @@
 function register_events_post_type() {
   $supports = array(
     'title', // post title
+    'editor', // post content
 	);
 
 
@@ -142,15 +143,6 @@ function add_events_metaboxes() {
     'normal',
     'high'
   );
-  
-  add_meta_box(
-    'event_html_info',
-    'Details',
-    'render_event_html_info_metabox',
-    'event',
-    'normal',
-    'high'
-  );
 }
 
 add_action('add_meta_boxes', 'add_events_metaboxes');
@@ -162,79 +154,24 @@ function render_event_details_metabox($post) {
   // Retrieve existing event details
   $event_date = get_post_meta($post->ID, 'event_date', true);
   $event_time = get_post_meta($post->ID, 'event_time', true);
+  $event_end_time = get_post_meta($post->ID, 'event_end_time', true);
+  $registration_link = get_post_meta($post->ID, 'registration_link', true);
+
   ?>
   <label for="event_date">Date:</label>
   <input type="date" id="event_date" name="event_date" value="<?php echo esc_attr($event_date); ?>" />
 
   <label for="event_time">Time:</label>
   <input type="time" id="event_time" name="event_time" value="<?php echo esc_attr($event_time); ?>" />
+
+  <label for="event_end_time">End Time:</label>
+  <input type="time" id="event_end_time" name="event_end_time" value="<?php echo esc_attr($event_end_time); ?>" />
+
+  <label for="registration_link">Registration Link:</label>
+  <input type="url" id="registration_link" name="registration_link" value="<?php echo esc_attr($registration_link); ?>" />
   <?php
 }
 
-function render_event_html_info_metabox($post) {
-  // Add nonce for security (we'll check for this in the save function)
-  wp_nonce_field('event_html_info_nonce', 'event_html_info_nonce_field');
-
-  // Retrieve existing HTML info
-  $event_html_info = get_post_meta($post->ID, 'event_html_info', true);
-  
-  ?>
-  <style>
-    .event-html-description {
-      margin-bottom: 10px;
-      color: #666;
-      font-style: italic;
-    }
-    .wp-editor-wrap {
-      margin-top: 10px;
-    }
-  </style>
-  
-  <div class="event-html-description">
-    Use the editor below to create rich content for this event. You can add formatting, links, images, and more.
-  </div>
-  
-  <?php
-  // WordPress WYSIWYG editor settings
-  $editor_settings = array(
-    'textarea_name' => 'event_html_info',
-    'textarea_rows' => 10,
-    'media_buttons' => true,
-    'teeny' => false,
-    'dfw' => false,
-    'tinymce' => array(
-      'resize' => true,
-      'wordpress_adv_hidden' => false,
-      'add_unload_trigger' => false,
-      'relative_urls' => false,
-      'remove_script_host' => false,
-      'convert_urls' => false,
-      'browser_spellcheck' => true,
-      'fix_list_elements' => true,
-      'entities' => '38,amp,60,lt,62,gt',
-      'entity_encoding' => 'raw',
-      'keep_styles' => true,
-      'paste_webkit_styles' => 'font-weight font-style color',
-      'preview_styles' => 'font-family font-size font-weight font-style text-decoration text-transform',
-      'wpeditimage_disable_captions' => true,
-      'plugins' => 'charmap,hr,media,paste,tabfocus,textcolor,fullscreen,wordpress,wpeditimage,wpgallery,wplink,wpdialogs,wpview',
-      'toolbar1' => 'bold,italic,underline,strikethrough,|,bullist,numlist,|,blockquote,hr,alignleft,aligncenter,alignright,|,link,unlink,|,fullscreen',
-      'toolbar2' => 'formatselect,forecolor,|,pastetext,removeformat,|,charmap,|,outdent,indent,|,undo,redo'
-    ),
-    'quicktags' => array(
-      'buttons' => 'strong,em,link,block,del,ins,img,ul,ol,li,code,more,close'
-    )
-  );
-
-  // Output the WYSIWYG editor
-  wp_editor($event_html_info, 'event_html_info_editor', $editor_settings);
-  ?>
-  
-  <div style="margin-top: 10px; color: #666; font-size: 12px;">
-    <strong>Note:</strong> Content will be safely filtered when saved and displayed on the frontend.
-  </div>
-  <?php
-}
 
 // Save metabox data
 function save_event_details_metabox($post_id) {
@@ -257,43 +194,31 @@ function save_event_details_metabox($post_id) {
   if (isset($_POST['event_date'])) {
     update_post_meta($post_id, 'event_date', sanitize_text_field($_POST['event_date']));
   }
+  
 
   // Save event time
   if (isset($_POST['event_time'])) {
     update_post_meta($post_id, 'event_time', sanitize_text_field($_POST['event_time']));
   }
-}
-
-// Separate save function for HTML content
-function save_event_html_info_metabox($post_id) {
-  // Check if this is an autosave
-  if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
-    return;
+  // Save event time
+  if (isset($_POST['event_end_time'])) {
+    update_post_meta($post_id, 'event_end_time', sanitize_text_field($_POST['event_end_time']));
   }
 
-  // Check user permissions
-  if (!current_user_can('edit_post', $post_id)) {
-    return;
-  }
-  
-  // Save HTML info (separate nonce check for HTML content)
-  if (isset($_POST['event_html_info_nonce_field']) && wp_verify_nonce($_POST['event_html_info_nonce_field'], 'event_html_info_nonce')) {
-    if (isset($_POST['event_html_info'])) {
-      // Use wp_kses_post to allow safe HTML tags while removing potentially dangerous ones
-      $html_content = wp_kses_post($_POST['event_html_info']);
-      update_post_meta($post_id, 'event_html_info', $html_content);
-    }
+  // Save registration link
+  if (isset($_POST['registration_link'])) {
+    update_post_meta($post_id, 'registration_link', sanitize_text_field($_POST['registration_link']));
   }
 }
 
 add_action('save_post', 'save_event_details_metabox');
-add_action('save_post', 'save_event_html_info_metabox');
 
 add_action('rest_api_init', function(){
   $meta_fields = array(
     'event_date' => 'Event Date',
-    'event_time' => 'Event Time',
-    'event_html_info' => 'Event HTML Info'
+    'event_time' => 'Event Start Time',
+    'event_end_time' => 'Event End Time',
+    'registration_link' => 'Event Registration Link',
   );
 
   foreach($meta_fields as $field_name => $description) {

@@ -28,33 +28,39 @@ const formatTime = ( timeString ) => {
   return `${hours}:${minutes} ${modifier}`;
 }
 
-const fetchGoogleCalendarEvents = async (start_date, end_date) => {
-  // Simulate fetching events from Google Calendar API
-  let calendarID = 'c_b84675c9e32f1f13cf8f8c51952bc13f927182c1bebb70c77572db5211472993@group.calendar.google.com';
-  let apiKey = 'AIzaSyAHRHplEzIo3lIQnXD0Q7m_3uWJxj2Zssg';
-  let calendarURL = `https://www.googleapis.com/calendar/v3/calendars/${calendarID}/events?key=${apiKey}&timeMin=${start_date}T00:00:00Z&timeMax=${end_date}T23:59:59Z`;
+const fetchGoogleCalendarEvents = async (start_date, end_date, google_calendar_ids, google_calendar_api_key) => {
+  // Simulate fetching events from Google Calendar APIs
+  let events = [];
 
-  // Fetch events from Google Calendar API
-  const response = await fetch(calendarURL);
-  const data = await response.json();
+  for (let i = 0; i < google_calendar_ids.length; i++) {
+    let calendarID = google_calendar_ids[i];
+    let calendarURL = `https://www.googleapis.com/calendar/v3/calendars/${calendarID}/events?key=${google_calendar_api_key}&timeMin=${start_date}T00:00:00Z&timeMax=${end_date}T23:59:59Z`;
+    
+    // Fetch events from Google Calendar API
+    const response = await fetch(calendarURL);
+    const data = await response.json();
+
+    console.log(data.items)
+
+    data.items.forEach(gEvent => {
+      let event = {
+        id: gEvent.id,
+        title: { rendered: gEvent.summary },
+        event_date: gEvent.start.date || gEvent.start.dateTime.split('T')[0],
+        event_time: gEvent.start.dateTime ? formatTime(gEvent.start.dateTime.split('T')[1]) : 'All Day',
+        event_end_time: gEvent.end.dateTime ? formatTime(gEvent.end.dateTime.split('T')[1]) : '',
+        details: gEvent.description || ''
+      }
+
+      events.push(event);
+    });
+  }
 
   // Convert Google Calendar events to local format
-  const events = data.items.map(gEvent => {
-    let event = {
-      id: gEvent.id,
-      title: { rendered: gEvent.summary },
-      event_date: gEvent.start.date || gEvent.start.dateTime.split('T')[0],
-      event_time: gEvent.start.dateTime ? formatTime(gEvent.start.dateTime.split('T')[1]) : 'All Day',
-      details: gEvent.description || ''
-    }
-
-    return event;
-  });
-
   return events;
 };
 
-const fetchEvents = async () => {
+const fetchEvents = async (google_calendar_ids, google_calendar_api_key) => {
   // fetch from events api
   let firstOfMonth = new Date(state.currentDate);
   firstOfMonth.setDate(1);
@@ -74,12 +80,12 @@ const fetchEvents = async () => {
   let fixedEvents = localEvents.map(event => {
     return {
       ...event,
-      details: event.event_html_info
+      details: event.content?.rendered
     };
   });
 
   // Fetch events from google calendar API
-  const googleCalendarEvents = await fetchGoogleCalendarEvents(start_date, end_date);
+  const googleCalendarEvents = await fetchGoogleCalendarEvents(start_date, end_date, google_calendar_ids, google_calendar_api_key);
   const allEvents = [...fixedEvents, ...googleCalendarEvents];
 
   state.events = allEvents;
@@ -97,7 +103,8 @@ const { state, actions, callbacks } = store( 'iowa-aea-theme/events-calendar', {
   },
   actions: {
     loadEvents: async () => {
-      await fetchEvents();
+      let { google_calendar_ids, google_calendar_api_key } = getContext();
+      await fetchEvents(google_calendar_ids, google_calendar_api_key);
 
       if(state.topEventId === null) {
         let currentDate = state.currentDate;
@@ -114,15 +121,21 @@ const { state, actions, callbacks } = store( 'iowa-aea-theme/events-calendar', {
 
       if(!eventsList) return;
 
-      // Load chunk of events
-      const chunk = state.events.slice(0, state.visibleEvents);
+      // Load all_events
+      let events = state.events
 
-      eventsList.innerHTML = chunk.map(event => `
+      let params = new URLSearchParams(location.search);
+      if(params.has('date')) {
+        events = events.filter(event => event.event_date === params.get('date'));
+      }
+
+      eventsList.innerHTML = events.map(event => `
         <div class='event-calendar-list-item' aria-expanded='false'>
           <div class='event-calendar-list-item-date'>${ formatDate( event.event_date ) }</div>
           <div class='event-calendar-list-item-details'>
             <strong class='event-calendar-list-item-title'>${ event.title.rendered }</strong>
             <span class='event-calendar-list-item-time'>${ formatTime(event.event_time) }</span>
+            ${ event.event_end_time ? `- <span class='event-calendar-list-item-end-time'>${ formatTime(event.event_end_time) }</span>` : '' }
           </div>
           ${ event.details ? `<div class='event-calendar-list-item-details-long'>${ event.details }</div>` : '' }
         </div>
@@ -199,6 +212,7 @@ const { state, actions, callbacks } = store( 'iowa-aea-theme/events-calendar', {
           // check for events
           let eventsForDay = state.events.filter(event => new Date(`${event.event_date}T00:00:00`).toLocaleString() === date.toLocaleString());
           if (eventsForDay.length > 0) {
+            dayEl.innerHTML = `<a href='/events?date=${date.toISOString().split('T')[0]}' class='event-calendar-day-link'>${day}</a>`;
             dayEl.classList.add('has-events');
           }
         }
