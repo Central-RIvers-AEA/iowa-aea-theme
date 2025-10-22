@@ -7,6 +7,18 @@
  *
  * Replace them with your own styles or remove the file completely.
  */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .wp-block-iowa-aea-theme-event-calendar {
   display: flex;
   flex-wrap: wrap;
@@ -38,6 +50,25 @@
   display: grid;
   grid-template-columns: auto 1fr;
   align-items: center;
+}
+.wp-block-iowa-aea-theme-event-calendar .event-calendar-list-item:focus {
+  outline: 2px solid var(--wp--preset--color--primary);
+  outline-offset: 2px;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+.wp-block-iowa-aea-theme-event-calendar .event-calendar-list-item[role=button] {
+  background: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+.wp-block-iowa-aea-theme-event-calendar .event-calendar-list-item[role=button]:hover {
+  background: #eee;
+}
+.wp-block-iowa-aea-theme-event-calendar .event-calendar-list-item[role=button]:focus {
+  outline: 2px solid var(--wp--preset--color--primary);
+  outline-offset: 2px;
+  background-color: rgba(0, 0, 0, 0.05);
 }
 .wp-block-iowa-aea-theme-event-calendar .event-calendar-list-item .event-calendar-list-item-date {
   min-width: 80px;
@@ -142,6 +173,10 @@
   background: var(--wp--preset--color--primary);
   color: white;
 }
+.wp-block-iowa-aea-theme-event-calendar .event-calendar .event-calendar-header button:focus {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
 .wp-block-iowa-aea-theme-event-calendar .event-calendar .event-calendar-days {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -180,6 +215,13 @@
 .wp-block-iowa-aea-theme-event-calendar .event-calendar .event-calendar-days .event-calendar-day.has-events a {
   color: white;
   text-decoration: underline;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.wp-block-iowa-aea-theme-event-calendar .event-calendar .event-calendar-days .event-calendar-day.has-events a:focus {
+  outline: 2px solid #fff;
+  outline-offset: -2px;
 }
 .wp-block-iowa-aea-theme-event-calendar .event-calendar .event-calendar-days .event-calendar-day .event-calendar-day-number {
   font-weight: bold;

@@ -181,29 +181,63 @@ const {
       if (params.has('date')) {
         events = events.filter(event => event.event_date === params.get('date'));
       }
-      eventsList.innerHTML = events.map(event => `
-        <div class='event-calendar-list-item' aria-expanded='false'>
-          <div class='event-calendar-list-item-date'>${formatDate(event.event_date)}</div>
+      eventsList.innerHTML = events.map((event, index) => `
+        <div class='event-calendar-list-item' 
+             ${event.details ? `role='button' aria-expanded='false' tabindex='0' aria-describedby='event-details-${event.id}' aria-label='${event.title.rendered}, ${formatTime(event.event_time)} on ${formatDate(event.event_date).replace(/<[^>]*>/g, '')}. Press Enter or Space to view details.'` : `role='article' aria-label='${event.title.rendered}, ${formatTime(event.event_time)} on ${formatDate(event.event_date).replace(/<[^>]*>/g, '')}'`}>
+          <div class='event-calendar-list-item-date' aria-hidden='true'>${formatDate(event.event_date)}</div>
           <div class='event-calendar-list-item-details'>
             <strong class='event-calendar-list-item-title'>${event.title.rendered}</strong>
             <span class='event-calendar-list-item-time'>${formatTime(event.event_time)}</span>
             ${event.event_end_time ? `- <span class='event-calendar-list-item-end-time'>${formatTime(event.event_end_time)}</span>` : ''}
-            ${event.registration_link ? `<br /><a href='${event.registration_link}' class='event-calendar-list-item-registration' aria-label='Register for ${event.title.rendered}'>Registion Link</a>` : ''}
+            ${event.registration_link ? `<br /><a href='${event.registration_link}' class='event-calendar-list-item-registration' aria-label='Register for ${event.title.rendered}'>Registration Link</a>` : ''}
           </div>
-          ${event.details ? `<div class='event-calendar-list-item-details-long'>${event.details}</div>` : ''}
+          ${event.details ? `<div class='event-calendar-list-item-details-long' id='event-details-${event.id}' role='region' aria-label='Event details for ${event.title.rendered}'>${event.details}</div>` : ''}
         </div>
       `).join('');
       if (state.events.length == 0) {
         eventsList.innerHTML = '<div class="event-calendar-list-item">No events found</div>';
       }
       eventsList.querySelectorAll('.event-calendar-list-item').forEach(item => {
-        item.addEventListener('click', () => {
-          if (item.getAttribute('aria-expanded') === 'false') {
-            item.setAttribute('aria-expanded', 'true');
-          } else {
-            item.setAttribute('aria-expanded', 'false');
-          }
-        });
+        // Only add interaction for items with details
+        if (item.getAttribute('role') === 'button') {
+          const handleToggle = () => {
+            const isExpanded = item.getAttribute('aria-expanded') === 'true';
+            const newState = !isExpanded;
+            item.setAttribute('aria-expanded', newState.toString());
+
+            // Announce state change to screen readers
+            const eventTitle = item.querySelector('.event-calendar-list-item-title').textContent;
+            const announcement = newState ? `${eventTitle} details expanded` : `${eventTitle} details collapsed`;
+
+            // Create temporary live region for announcement
+            const announcement_el = document.createElement('div');
+            announcement_el.setAttribute('aria-live', 'polite');
+            announcement_el.setAttribute('aria-atomic', 'true');
+            announcement_el.className = 'sr-only';
+            announcement_el.textContent = announcement;
+            document.body.appendChild(announcement_el);
+            setTimeout(() => {
+              document.body.removeChild(announcement_el);
+            }, 1000);
+          };
+
+          // Click handler
+          item.addEventListener('click', handleToggle);
+
+          // Keyboard handler
+          item.addEventListener('keydown', e => {
+            // Enter or Space to toggle
+            if ((e.key === 'Enter' || e.key === ' ') && e.target === item) {
+              e.preventDefault();
+              handleToggle();
+            }
+            // Escape to collapse if expanded
+            else if (e.key === 'Escape' && item.getAttribute('aria-expanded') === 'true') {
+              item.setAttribute('aria-expanded', 'false');
+              item.focus(); // Maintain focus
+            }
+          });
+        }
       });
       actions.loadCalendar();
     },
@@ -234,28 +268,43 @@ const {
       })} ${firstOfMonth.getFullYear()}`;
       let calendarDays = calendar.querySelector('.event-calendar-days');
       calendarDays.innerHTML = `
-        <div class='calendar-header'>Sun</div>
-        <div class='calendar-header'>Mon</div>
-        <div class='calendar-header'>Tue</div>
-        <div class='calendar-header'>Wed</div>
-        <div class='calendar-header'>Thu</div>
-        <div class='calendar-header'>Fri</div>
-        <div class='calendar-header'>Sat</div>
+        <div class='calendar-header' role='columnheader'>Sun</div>
+        <div class='calendar-header' role='columnheader'>Mon</div>
+        <div class='calendar-header' role='columnheader'>Tue</div>
+        <div class='calendar-header' role='columnheader'>Wed</div>
+        <div class='calendar-header' role='columnheader'>Thu</div>
+        <div class='calendar-header' role='columnheader'>Fri</div>
+        <div class='calendar-header' role='columnheader'>Sat</div>
       `;
-      days.forEach(day => {
+      days.forEach((day, index) => {
         let dayEl = document.createElement('div');
         dayEl.classList.add('event-calendar-day');
-        dayEl.innerHTML = day || '';
+        dayEl.setAttribute('role', 'gridcell');
         if (day) {
           let date = new Date(state.currentDate + 'T00:00:00');
           date.setDate(day);
+          const formattedDate = date.toISOString().split('T')[0];
+          const dayOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][date.getDay()];
 
-          // check for events
+          // Check for events
           let eventsForDay = state.events.filter(event => new Date(`${event.event_date}T00:00:00`).toLocaleString() === date.toLocaleString());
           if (eventsForDay.length > 0) {
-            dayEl.innerHTML = `<a href='/events?date=${date.toISOString().split('T')[0]}' class='event-calendar-day-link'>${day}</a>`;
+            dayEl.innerHTML = `<a href='/events?date=${formattedDate}' 
+                                  class='event-calendar-day-link' 
+                                  aria-label='${dayOfWeek}, ${firstOfMonth.toLocaleString('default', {
+              month: 'long'
+            })} ${day}, ${firstOfMonth.getFullYear()}. ${eventsForDay.length} event${eventsForDay.length > 1 ? 's' : ''} scheduled.'
+                                  tabindex='0'>${day}</a>`;
             dayEl.classList.add('has-events');
+          } else {
+            dayEl.innerHTML = day;
+            dayEl.setAttribute('aria-label', `${dayOfWeek}, ${firstOfMonth.toLocaleString('default', {
+              month: 'long'
+            })} ${day}, ${firstOfMonth.getFullYear()}`);
           }
+        } else {
+          dayEl.innerHTML = '';
+          dayEl.setAttribute('aria-hidden', 'true');
         }
         calendarDays.appendChild(dayEl);
       });
