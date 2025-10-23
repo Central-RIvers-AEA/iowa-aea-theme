@@ -58,6 +58,15 @@ class StaffDirectory
 ?>
     <div class="wrap">
       <h1>Import Employees from CSV</h1>
+      <p>Please upload a CSV file containing employee data. The columns should be as below</p>
+      <ul>
+        <li>first_name</li>
+        <li>last_name</li>
+        <li>position</li>
+        <li>email</li>
+        <li>phone</li>
+        <li>photo url (if applicable)</li>
+      </ul>
       <form method="post" enctype="multipart/form-data">
         <input type="file" name="employee_csv" accept=".csv" required />
         <input type="hidden" name="action" value="import_employees_from_csv">
@@ -659,31 +668,29 @@ class StaffDirectory
         $first_name = trim($row['first_name']);
         $last_name = trim($row['last_name']);
         $name = $first_name . ' ' . $last_name;
-        $district = trim($row['district']);
-        $building = trim($row['building']);
-        $area = trim($row['area']);
         $position = trim($row['position']);
         $email = trim($row['email']);
         $phone = trim($row['phone']);
         $photo = trim($row['photo']);
 
+        $meta_data = array(
+          'position' => $position,
+          'email' => $email,
+          'phone' => $phone,
+          'first_name' => $first_name,
+          'last_name' => $last_name
+        );
+
+        if(!empty($photo)){
+          $meta_data['photo'] = $photo;
+        }
 
         $postArray = array(
           'post_title' => $name,
           'post_content' => '',
           'post_type' => 'employee',
           'post_status' => 'publish',
-          'meta_input' => array(
-            'district' => $district,
-            'building' => $building,
-            'area' => $area,
-            'position' => $position,
-            'email' => $email,
-            'phone' => $phone,
-            'photo' => $photo,
-            'first_name' => $first_name,
-            'last_name' => $last_name
-          )
+          'meta_input' => $meta_data
         );
         wp_insert_post($postArray);
       }
