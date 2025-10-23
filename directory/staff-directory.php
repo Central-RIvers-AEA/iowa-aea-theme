@@ -104,7 +104,7 @@ class StaffDirectory
       'show_in_rest' => true,
       'menu_position' => 10,
       'exclude_from_search' => true,
-      'supports' => array('title'),
+      'supports' => array('title', 'thumbnail'),
       'register_meta_box_cb' => array($this, 'employee_meta_boxes')
     );
 
@@ -241,25 +241,29 @@ class StaffDirectory
 
     $districts = get_posts(array(
       'post_type' => 'district',
-      'numberposts' => -1
+      'numberposts' => -1,
+      'orderby' => 'title',
+      'order' => 'ASC'
     ));
 
     $buildings = get_posts(array(
       'post_type' => 'school',
-      'numberposts' => -1
+      'numberposts' => -1,
+      'orderby' => 'title',
+      'order' => 'ASC'
     ));
 
     foreach ($buildings as $id => $building) {
-      $district = get_posts(array(
-        'connected_type' => 'posts_to_pages',
-        'connected_items' => $building,
-        'nopaging' => true,
-        'suppress_filters' => false
-      ))[0];
+      // $district = get_posts(array(
+      //   'connected_type' => 'posts_to_pages',
+      //   'connected_items' => $building,
+      //   'nopaging' => true,
+      //   'suppress_filters' => false
+      // ))[0];
 
-      if ($district) {
-        $buildings[$id]->district_id = $district->ID;
-      }
+      // if ($district) {
+        $buildings[$id]->district_id = get_post_meta($building->ID, 'district', true);
+      // }
     }
 
     /*
@@ -318,46 +322,48 @@ class StaffDirectory
       </thead>
       <tbody>
         <?php
-        foreach ($assignments as $id => $assignment) {
-          echo ('<tr>');
-          echo ('<td><input type="text" value="' . $assignment['content_area'] . '" name="assignment[' . $id . '][content_area]"/></td>');
-          echo ('<td><select name="assignment[' . $id . '][district]">');
-          echo ('<option value="">Select A District</option>');
-          foreach ($districts as $district) {
-            $district_id = $district->ID;
-            $selected = $district_id == $assignment['district'] ? 'selected=selected' : '';
-            echo ('<option value="' . $district_id . '" ' . $selected . '>');
-            echo (get_the_title($district_id));
-            echo ('</option>');
-          }
-          echo ('</select></td>');
-          $dist_wide_checked = $assignment['district_wide'] == 'true' ? 'checked=checked' : '';
-          echo ('<td><input type="checkbox" ' . $dist_wide_checked . ' name="assignment[' . $id . '][district_wide]" value="true"/></td>');
-          echo ('<td><select name="assignment[' . $id . '][building]">');
-          echo ('<option value="">Select A Building</option>');
-
-          $filtered_buildings = array();
-
-          foreach ($buildings as $building) {
-            if ($building->district_id == $assignment['district']) {
-              array_push($filtered_buildings, $building);
+        if($assignments){
+          foreach ($assignments as $id => $assignment) {
+            echo ('<tr>');
+            echo ('<td><input type="text" value="' . $assignment['content_area'] . '" name="assignment[' . $id . '][content_area]"/></td>');
+            echo ('<td><select name="assignment[' . $id . '][district]">');
+            echo ('<option value="">Select A District</option>');
+            foreach ($districts as $district) {
+              $district_id = $district->ID;
+              $selected = $district_id == $assignment['district'] ? 'selected=selected' : '';
+              echo ('<option value="' . $district_id . '" ' . $selected . '>');
+              echo (get_the_title($district_id));
+              echo ('</option>');
             }
-          };
-
-          foreach ($filtered_buildings as $building) {
-            $selected = $building->ID == $assignment['building'] ? 'selected=selected' : '';
-            echo ('<option value="' . $building->ID . '" ' . $selected . '>');
-            echo (get_the_title($building->ID));
-            echo ('</option>');
+            echo ('</select></td>');
+            $dist_wide_checked = isset($assignment['district_wide']) && $assignment['district_wide'] == 'true' ? 'checked=checked' : '';
+            echo ('<td><input type="checkbox" ' . $dist_wide_checked . ' name="assignment[' . $id . '][district_wide]" value="true"/></td>');
+            echo ('<td><select name="assignment[' . $id . '][building]">');
+            echo ('<option value="">Select A Building</option>');
+  
+            $filtered_buildings = array();
+  
+            foreach ($buildings as $building) {
+              if ($building->district_id == $assignment['district']) {
+                array_push($filtered_buildings, $building);
+              }
+            };
+  
+            foreach ($filtered_buildings as $building) {
+              $selected = $building->ID == $assignment['building'] ? 'selected=selected' : '';
+              echo ('<option value="' . $building->ID . '" ' . $selected . '>');
+              echo (get_the_title($building->ID));
+              echo ('</option>');
+            }
+  
+            echo ('</select></td>');
+  
+            $agency_wide_checked = isset($assignment['agency_wide']) && $assignment['agency_wide'] == 'true' ? 'checked=checked' : '';
+            echo ('<td><input type="checkbox" ' . $agency_wide_checked . '" name="assignment[' . $id . '][agency_wide]" value="true"/></td>');
+            echo ('<td><input type="number" value="' . $assignment['search_priority'] . '" name="assignment[' . $id . '][search_priority]"/></td>');
+            echo ('<td><button type="button" class="button" onclick="this.parentNode.parentNode.remove()">X</button></td>');
+            echo ('</tr>');
           }
-
-          echo ('</select></td>');
-
-          $agency_wide_checked = $assignment['agency_wide'] == 'true' ? 'checked=checked' : '';
-          echo ('<td><input type="checkbox" ' . $agency_wide_checked . '" name="assignment[' . $id . '][agency_wide]" value="true"/></td>');
-          echo ('<td><input type="number" value="' . $assignment['search_priority'] . '" name="assignment[' . $id . '][search_priority]"/></td>');
-          echo ('<td><button type="button" class="button" onclick="this.parentNode.parentNode.remove()">X</button></td>');
-          echo ('</tr>');
         }
 
         ?>
@@ -376,28 +382,32 @@ class StaffDirectory
 
     $districts = get_posts(array(
       'post_type' => 'district',
-      'numberposts' => -1
+      'numberposts' => -1,
+      'orderby' => 'title',
+      'order' => 'ASC'
     ));
 
     $buildings = get_posts(array(
       'post_type' => 'school',
-      'numberposts' => -1
+      'numberposts' => -1,
+      'orderby' => 'title',
+      'order' => 'ASC'
     ));
 
     foreach ($buildings as $id => $building) {
-      $district = get_posts(array(
-        'connected_type' => 'posts_to_pages',
-        'connected_items' => $building,
-        'nopaging' => true,
-        'suppress_filters' => false
-      ))[0];
+      // $district = get_posts(array(
+      //   'connected_type' => 'posts_to_pages',
+      //   'connected_items' => $building,
+      //   'nopaging' => true,
+      //   'suppress_filters' => false
+      // ))[0];
 
-      if ($district) {
-        $buildings[$id]->district_id = $district->ID;
-      }
+      // if ($district) {
+      $buildings[$id]->district_id = get_post_meta($building->ID, 'district', true);
+      // }
     }
 
-    wp_enqueue_script('assignments', get_template_directory_uri(__FILE__) . '/assets/js/employee_assignment.js', array(), fileatime(get_template_directory(__FILE__) . '/assets/js/employee_assignment.js'));
+    wp_enqueue_script('assignments', get_stylesheet_directory_uri(__FILE__) . '/assets/js/employee_assignment.js', array(), fileatime(get_stylesheet_directory(__FILE__) . '/assets/js/employee_assignment.js'));
     wp_localize_script('assignments', 'assignment_vars', array(
       'districts' => $districts,
       'buildings' => $buildings
@@ -709,6 +719,9 @@ class StaffDirectory
         'area' => array(
           'sanitize_callback' => 'sanitize_text_field',
         ),
+        'position' => array(
+          'sanitize_callback' => 'sanitize_text_field',
+        ),
       ),
     ));
 
@@ -736,7 +749,9 @@ class StaffDirectory
     //return is_user_logged_in();
     
     // Option 2: Require specific capability (uncomment to use instead)
-    return current_user_can('edit_posts');
+    // return current_user_can('edit_posts');
+
+    return true;
     
     // Option 3: Require administrator privileges (uncomment to use instead)
     // return current_user_can('manage_options');
@@ -798,27 +813,11 @@ class StaffDirectory
 
     // Add meta query for filtering
     $meta_query = array();
-    
-    if (!empty($params['district'])) {
-      $meta_query[] = array(
-        'key' => 'district',
-        'value' => $params['district'],
-        'compare' => '='
-      );
-    }
 
-    if (!empty($params['building'])) {
+    if (!empty($params['position'])) {
       $meta_query[] = array(
-        'key' => 'building',
-        'value' => $params['building'],
-        'compare' => '='
-      );
-    }
-
-    if (!empty($params['area'])) {
-      $meta_query[] = array(
-        'key' => 'area',
-        'value' => $params['area'],
+        'key' => 'position',
+        'value' => $params['position'],
         'compare' => '='
       );
     }
@@ -854,7 +853,7 @@ class StaffDirectory
   /**
    * Format employee data for REST API response
    */
-  private function format_employee_data($employee) {
+  public static function format_employee_data($employee) {
     $meta_fields = array(
       'first_name', 'last_name', 'district', 'building', 'area', 
       'position', 'email', 'phone', 'photo', 'location'
@@ -864,6 +863,7 @@ class StaffDirectory
       'id' => $employee->ID,
       'title' => $employee->post_title,
       'slug' => $employee->post_name,
+      'image' => get_the_post_thumbnail_url($employee->ID, 'full')
     );
 
     // Add all meta fields
@@ -875,6 +875,8 @@ class StaffDirectory
     $assignments = get_post_meta($employee->ID, 'assignments', true);
     if ($assignments) {
       $employee_data['assignments'] = maybe_unserialize($assignments);
+    } else {
+      $employee_data['assignments'] = [];
     }
 
     // Create full name for convenience
@@ -883,9 +885,34 @@ class StaffDirectory
     // Format for important contacts block compatibility
     $employee_data['name'] = $employee_data['full_name'];
     $employee_data['jobTitle'] = $employee_data['position'];
-    $employee_data['image'] = $employee_data['photo'] ?: get_stylesheet_directory_uri() . '/assets/images/default-profile.png';
+    $employee_data['image'] = $employee_data['image'] ?:  $employee_data['photo'] ?: get_stylesheet_directory_uri() . '/assets/images/default-profile.png';
 
     return $employee_data;
+  }
+
+  /** Staff Directory Employee Positions */
+  public static function get_positions() {
+    global $wpdb;
+    $results = $wpdb->get_results("SELECT DISTINCT meta_value FROM $wpdb->postmeta WHERE meta_key = 'position'");
+    return wp_list_pluck($results, 'meta_value');
+  }
+
+  /** Staff Directory Employee Content Areas */
+  public static function get_content_areas() {
+    global $wpdb;
+    $results = $wpdb->get_results("SELECT DISTINCT meta_value FROM $wpdb->postmeta WHERE meta_key = 'assignments'");
+
+    $unserialized_assignments = array_map('maybe_unserialize', wp_list_pluck($results, 'meta_value'));
+    $unArrayed_assignments = array_map('maybe_unserialize', $unserialized_assignments);
+    $flattened_assignments = array_merge(...$unArrayed_assignments);
+
+    $assignments = [];
+
+    foreach($flattened_assignments as $key => $assignment) {
+      $assignments[] = $assignment['content_area'];
+    }
+
+    return $assignments;
   }
 }
 

@@ -1,5 +1,3 @@
-console.log(sd_districts)
-
 document.addEventListener('DOMContentLoaded', () => {
   const schoolDirectoryList = document.querySelector('.school-directory--list')
 
@@ -70,7 +68,6 @@ function displayDistricts(districts){
   schoolDirectoryList.innerHTML = ''
 
   filteredDistricts.forEach(district => {
-    console.log(district)
 
     // Create Cards
     const districtCard = document.createElement('li')

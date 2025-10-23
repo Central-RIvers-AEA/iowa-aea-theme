@@ -244,5 +244,27 @@ return array(
 		'editorStyle' => 'file:./index.css',
 		'style' => 'file:./style-index.css',
 		'viewScript' => 'file:./view.js'
+	),
+	'staff-directory-search' => array(
+		'$schema' => 'https://schemas.wp.org/trunk/block.json',
+		'apiVersion' => 3,
+		'name' => 'iowa-aea-theme/staff-directory-search',
+		'version' => '0.1.0',
+		'title' => 'Staff Directory Search',
+		'category' => 'widgets',
+		'icon' => 'smiley',
+		'description' => 'A block for displaying a staff directory search.',
+		'example' => array(
+			
+		),
+		'supports' => array(
+			'interactivity' => true
+		),
+		'textdomain' => 'staff-directory-search',
+		'editorScript' => 'file:./index.js',
+		'editorStyle' => 'file:./index.css',
+		'style' => 'file:./style-index.css',
+		'render' => 'file:./render.php',
+		'viewScriptModule' => 'file:./view.js'
 	)
 );

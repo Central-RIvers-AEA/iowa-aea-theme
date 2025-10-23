@@ -87,7 +87,9 @@ function get_district_options() {
   $districts = get_posts(array(
     'post_type' => 'district',
     'numberposts' => -1,
-    'post_status' => 'publish'
+    'post_status' => 'publish',
+    'orderby' => 'title',
+    'order' => 'ASC'
   ));
 
   $options = array();
@@ -256,11 +258,11 @@ function sd_enqueue_front_css_js(){
     $districts[$key]->link = get_post_permalink($district);
   }
 
-  wp_enqueue_script( 'sd-front-js', get_stylesheet_directory_uri(). '/assets/js/school-directory-front.js', array(), '1.2', true );
+  wp_enqueue_script( 'sd-front-js', get_stylesheet_directory_uri(). '/assets/js/school-directory-front.js', array(), fileatime( get_stylesheet_directory() . '/assets/js/school-directory-front.js'), true );
 
   wp_localize_script( 'sd-front-js', 'sd_districts', $districts );
 
-  wp_enqueue_style( 'sd-front-css', get_stylesheet_directory_uri(). '/assets/css/school-directory-front.css', array(), '1.1' );
+  wp_enqueue_style( 'sd-front-css', get_stylesheet_directory_uri(). '/assets/css/school-directory-front.css', array(), fileatime( get_stylesheet_directory() . '/assets/css/school-directory-front.css') );
 }
 
 // Handle Saving of District and School Information
