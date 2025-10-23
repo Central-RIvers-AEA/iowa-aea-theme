@@ -227,3 +227,16 @@ include_once __DIR__ . '/news/news.php';
 
 /* Include Events */
 include_once __DIR__ . '/events/events.php';
+
+/* Include Weather Alerts */
+include_once __DIR__ . '/weather-alerts/weather-alerts.php';
+
+
+/* Add Skip to main content */
+function iowa_aea_theme_skip_to_content() {
+  ?>
+  <a href="#main" class="skip-to-content">Skip to main content</a>
+  <?php
+}
+
+add_action('wp_head', 'iowa_aea_theme_skip_to_content', 9);

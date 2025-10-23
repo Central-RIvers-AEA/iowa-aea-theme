@@ -16,7 +16,6 @@ function register_news_post_type() {
     'trackbacks', 
 	);
 
-
   register_post_type( 'news', array(
       'label' => 'News',
       'labels' => array(
@@ -38,6 +37,7 @@ function register_news_post_type() {
       'show_in_admin' => true,
       'exclude_from_search' => false,
       'supports' => $supports,
+      'menu_position' => 7,
       'query_var' => true,
       'rewrite' => array(
         'slug' => 'news',

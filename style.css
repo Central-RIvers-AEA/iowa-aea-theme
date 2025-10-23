@@ -5,7 +5,7 @@
     Author: Iowa AEAs
     Author URI: https://example.com/
     Template: twentytwentyfive
-    Version: 1.0.1.26
+    Version: 1.0.1.27
     License: GNU General Public License v2 or later
     License URI: http://www.gnu.org/licenses/gpl-2.0.html
     Text Domain: iowa-aea-theme
@@ -272,5 +272,72 @@
     outline: 2px solid var(--wp--preset--color--primary);
     background-color: white;
     color: var(--wp--preset--color--text-color);
+  }
+}
+
+.weather-alerts-notices {
+  background: #eee;
+  padding: 2rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+
+  .weather-alert {
+    --main-color: var(--wp--preset--color--primary);
+    position: relative;
+    background: white;
+    padding: 1.5rem 2rem 1rem;
+    border: 2px solid var(--main-color);
+    border-bottom-width: 10px;
+    border-radius: 19px 19px 0 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    max-width: min(400px, 100%);
+    min-width: 300px;
+
+    &:nth-child(2) {
+      --main-color: var(--wp--preset--color--alt-one);
+    }
+
+    &:nth-child(3) {
+      --main-color: var(--wp--preset--color--alt-two);
+    }
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
+  .location {
+    position: absolute;
+    color: white;
+    top: -1.25rem;
+    left: -2rem;
+    font-weight: bold;
+    background: var(--main-color);
+    padding: 0.2rem 0.75rem;
+    border-radius: 8px;
+    border: 2px solid white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  }
+}
+
+.skip-to-content {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  background: var(--wp--preset--color--primary);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  z-index: 1000;
+
+  &:focus,
+  &:hover {
+    top: 1rem;
   }
 }

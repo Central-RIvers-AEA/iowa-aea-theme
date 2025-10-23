@@ -30,6 +30,7 @@ function register_events_post_type() {
       'show_in_admin' => true,
       'exclude_from_search' => false,
       'supports' => $supports,
+      'menu_position' => 8,
       'query_var' => true,
       'rewrite' => array(
         'slug' => 'events',
