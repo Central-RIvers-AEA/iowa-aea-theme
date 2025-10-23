@@ -85,9 +85,9 @@ const {
       // Clear existing options
       let form = districtSelect.ref.closest('form');
       let buildingSelect = form.querySelector('select[name="school-building"]');
-      buildingSelect.innerHTML = '<option value="">Select a District to view Buildings</option>';
       let buildings = context.buildings.filter(building => building.district_id == district);
       if (district) {
+        buildingSelect.innerHTML = '<option value="">Select a Building</option>';
         buildings.forEach(building => {
           let option = document.createElement('option');
           option.value = building.id;
@@ -96,7 +96,7 @@ const {
         });
         buildingSelect.disabled = false;
       } else {
-        buildingSelect.innerHTML = '<option value="">Select a Building</option>';
+        buildingSelect.innerHTML = '<option value="">Select a District to view Buildings</option>';
         buildingSelect.disabled = true;
       }
     },
