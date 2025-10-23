@@ -68,19 +68,12 @@ const {
       let context = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.getContext)();
       let formData = new FormData(e.target);
       let query = formData.get('staff-name');
-      let district = formData.get('district');
-      let building = formData.get('building');
-      let area = formData.get('area');
       let queryObj = {};
       if (query) queryObj.search = query;
-      if (district) queryObj.district = district;
-      if (building) queryObj.building = building;
-      if (area) queryObj.area = area;
       let queryString = new URLSearchParams(queryObj).toString();
 
       // Query Employee Endpoint
       fetch(`${context.staffEndpoint}?${queryString}`).then(response => response.json()).then(data => {
-        console.log(data);
         context.staff = data;
       });
     },
@@ -176,7 +169,6 @@ const {
   }
 });
 function sortByAssignmentPriority(staff) {
-  console.log(staff);
   let districtSelect = document.querySelector('#school-district');
   let buildingSelect = document.querySelector('#school-building');
   let contentAreaSelect = document.querySelector('#content-area');
@@ -192,7 +184,6 @@ function sortByAssignmentPriority(staff) {
     }
     return newItem;
   });
-  console.log(adjustedItems);
   let sortedItems = adjustedItems.sort((itemA, itemB) => {
     if (districtSelect.value != '') {
       let assignmentA = itemA.assignments_array.find(assignment => assignment.district == districtSelect.value);
@@ -208,8 +199,6 @@ function sortByAssignmentPriority(staff) {
       return 0;
     }
   });
-  console.log(sortedItems);
-  console.log('sorted');
   return sortedItems;
 }
 })();
