@@ -1,0 +1,73 @@
+/**
+ * The following styles get applied inside the editor only.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.wp-block-iowa-aea-theme-header-slider {
+	// border: 1px dotted #f00;
+	background: #eee;
+
+	.characters-remaining{
+		font-size: 12px;
+		color: #666;
+		margin-bottom: -0.5rem;
+	}
+
+	.slide {
+    background: var(--wp--preset--color--alt-one);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    position: relative;
+    margin-bottom: 1rem;
+  }
+
+  .title-content{
+    padding: 1rem 3rem;
+    border-right: 5px solid var(--wp--preset--color--primary);
+  }
+
+	.label-content{
+    position: absolute;
+    bottom: 0;
+    left: 2.5rem;
+		max-width: 200px;
+		flex-grow: 0;
+  }
+
+	.image-content {
+		aspect-ratio: 1;
+		height: 652px;
+		overflow: hidden;
+
+		button {
+			height: 100%;
+			width: 100%;
+			padding: 0;
+			margin: 0;
+			border: none;
+			position: relative;
+
+			&:hover {
+				&:after {
+					content: 'Click to Update Image';
+					position: absolute;
+					inset: 0;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					background: rgba(0, 0, 0, 0.5);
+					color: white;
+					font-size: 16px;
+					font-weight: bold;
+					transition: opacity 0.2s ease-in-out;
+				}
+			}
+		}
+
+		img {
+			object-fit: cover;
+			width: 100%;
+		}
+	}
+}

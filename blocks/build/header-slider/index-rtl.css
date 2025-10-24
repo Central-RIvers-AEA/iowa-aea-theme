@@ -1,0 +1,65 @@
+/*!******************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/header-slider/editor.scss ***!
+  \******************************************************************************************************************************************************************************************************************************************************/
+/**
+ * The following styles get applied inside the editor only.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+.wp-block-iowa-aea-theme-header-slider {
+  background: #eee;
+}
+.wp-block-iowa-aea-theme-header-slider .characters-remaining {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: -0.5rem;
+}
+.wp-block-iowa-aea-theme-header-slider .slide {
+  background: var(--wp--preset--color--alt-one);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  position: relative;
+  margin-bottom: 1rem;
+}
+.wp-block-iowa-aea-theme-header-slider .title-content {
+  padding: 1rem 3rem;
+  border-left: 5px solid var(--wp--preset--color--primary);
+}
+.wp-block-iowa-aea-theme-header-slider .label-content {
+  position: absolute;
+  bottom: 0;
+  right: 2.5rem;
+  max-width: 200px;
+  flex-grow: 0;
+}
+.wp-block-iowa-aea-theme-header-slider .image-content {
+  aspect-ratio: 1;
+  height: 652px;
+  overflow: hidden;
+}
+.wp-block-iowa-aea-theme-header-slider .image-content button {
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  border: none;
+  position: relative;
+}
+.wp-block-iowa-aea-theme-header-slider .image-content button:hover:after {
+  content: "Click to Update Image";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  transition: opacity 0.2s ease-in-out;
+}
+.wp-block-iowa-aea-theme-header-slider .image-content img {
+  -o-object-fit: cover;
+     object-fit: cover;
+  width: 100%;
+}

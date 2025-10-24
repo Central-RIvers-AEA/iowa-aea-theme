@@ -108,6 +108,59 @@ return array(
 		'render' => 'file:./render.php',
 		'viewScriptModule' => 'file:./view.js'
 	),
+	'header-slider' => array(
+		'$schema' => 'https://schemas.wp.org/trunk/block.json',
+		'apiVersion' => 3,
+		'name' => 'iowa-aea-theme/header-slider',
+		'version' => '0.1.0',
+		'title' => 'Header Slider',
+		'category' => 'widgets',
+		'icon' => 'smiley',
+		'description' => 'A block for displaying a header slider.',
+		'attributes' => array(
+			'slides' => array(
+				'default' => array(
+					
+				),
+				'type' => 'array',
+				'items' => array(
+					'type' => 'object',
+					'properties' => array(
+						'title' => array(
+							'type' => 'string'
+						),
+						'content' => array(
+							'type' => 'string'
+						),
+						'slide_label' => array(
+							'type' => 'string'
+						),
+						'image' => array(
+							'type' => 'string',
+							'format' => 'uri'
+						)
+					),
+					'required' => array(
+						'image',
+						'title',
+						'slide_label'
+					)
+				)
+			)
+		),
+		'example' => array(
+			
+		),
+		'supports' => array(
+			'interactivity' => true
+		),
+		'textdomain' => 'header-slider',
+		'editorScript' => 'file:./index.js',
+		'editorStyle' => 'file:./index.css',
+		'style' => 'file:./style-index.css',
+		'render' => 'file:./render.php',
+		'viewScriptModule' => 'file:./view.js'
+	),
 	'important-contacts' => array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'apiVersion' => 3,

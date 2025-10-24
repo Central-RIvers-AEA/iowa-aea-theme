@@ -187,6 +187,10 @@ body,
   }
 }
 
+.header-image {
+  height: 600px;
+}
+
 .has-bottom-dots {
   position: relative;
   & > * {

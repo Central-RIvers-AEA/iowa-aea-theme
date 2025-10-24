@@ -341,3 +341,7 @@
     top: 1rem;
   }
 }
+
+.header-image {
+  height: 600px;
+}
