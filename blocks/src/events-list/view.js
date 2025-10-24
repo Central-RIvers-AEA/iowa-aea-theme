@@ -91,16 +91,13 @@ const { state, actions, callbacks } = store( 'iowa-aea-theme/events-list', {
   },
   actions: {
     loadEvents: async () => {
-      console.log(state)
-      console.log('Loading events...');
-
       await fetchEvents();
 
       if(state.topEventId === null) {
         let currentDate = state.currentDate;
         let firstOfDate = state.events.find(event => event.event_date === currentDate);
 
-        state.topEventId = firstOfDate?.id || null;
+        state.topEventId = firstOfDate?.id || state.events.find(event => event.event_date >= currentDate)?.id;
       }
 
       actions.updateEventsView();
@@ -159,9 +156,5 @@ const { state, actions, callbacks } = store( 'iowa-aea-theme/events-list', {
       actions.loadEvents();
     },
   },
-  init: {
-    setup: () => {
-      console.log('Events List block initialized');
-    }
-  }
+  init: {}
 });
