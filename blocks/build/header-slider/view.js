@@ -60,20 +60,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/interactivity */ "@wordpress/interactivity");
 
 const {
-  actions
+  actions,
+  state
 } = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.store)('iowa-aea-theme/header-slider', {
   state: {
     currentSlide: 0
   },
   actions: {
-    nextSlide: () => {
-      console.log('Next slide');
-    },
-    prevSlide: () => {
-      console.log('Previous slide');
+    nextSlide: context => {
+      let next = state.currentSlide + 1;
+      let slidesData = context.attributes.slides || [];
+      if (next >= slidesData.length) {
+        next = 0;
+      }
+      state.currentSlide = next;
+      actions.setVisibleSlide(next);
     },
     loadSlideShow: () => {
-      console.log('Loading slideshow');
       const context = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.getContext)();
       const element = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.getElement)();
       let slidesData = context.attributes.slides || [];
@@ -93,8 +96,6 @@ const {
       imageContents.classList.add('image-contents');
       slide.appendChild(imageContents);
       slidesData.forEach((slide, index) => {
-        console.log(`Slide ${index}:`, slide);
-
         // slide contents
         let slideContent = document.createElement('div');
         slideContent.classList.add('slide-content');
@@ -122,7 +123,7 @@ const {
         imageContent.innerHTML = `<img src="${slide.image}" alt="${slide.title}" />`;
         imageContents.appendChild(imageContent);
       });
-      actions.setVisibleSlide(0);
+      actions.startSlideshow(context);
     },
     setVisibleSlide(index) {
       let currentHiddenSlides = document.querySelectorAll('[data-slide-index].hide');
@@ -142,19 +143,18 @@ const {
       });
       const slideTabs = document.querySelectorAll('[data-slide-tab-index]');
       slideTabs.forEach(tab => {
-        console.log(tab);
         tab.classList.toggle('active', tab.dataset.slideTabIndex == index);
       });
-    }
-  },
-  callbacks: {
-    onSlideChange: newSlide => {
-      console.log('Slide changed to:', newSlide);
+    },
+    startSlideshow: context => {
+      actions.setVisibleSlide(0);
+      setInterval(() => {
+        actions.nextSlide(context);
+      }, 10000);
     }
   },
   init: {
     setup: () => {
-      console.log('Header Slider block initialized');
       actions.loadSlideShow();
     }
   }
