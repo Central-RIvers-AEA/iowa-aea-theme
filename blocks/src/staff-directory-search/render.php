@@ -104,8 +104,14 @@ $context['staff'] = $staff;
       </select>
     </div>
 
-    <button type='submit' class='staff-directory-search-btn staff-directory-search-submit'>Submit</button>
-    <button type='button' class='staff-directory-search-btn staff-directory-search-reset'>Reset</button>
+    <div style='display: flex; gap: 1rem; margin-top: 1rem;'>
+      <div class='wp-block-button is-style-aea-styled-button'>
+        <button type='submit' class='staff-directory-search-btn staff-directory-search-submit wp-block-button__link wp-element-button'>Submit</button>
+      </div>
+      <div class='wp-block-button is-style-aea-styled-button'>
+        <button type='button' class='staff-directory-search-btn staff-directory-search-reset wp-block-button__link wp-element-button' data-wp-on--click='actions.formReset'>Reset</button>
+      </div>
+    </div>
 </form>
 
   <div class='staff-directory-results' data-wp-init='callbacks.initialStaff'>

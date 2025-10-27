@@ -113,6 +113,16 @@ const {
         return (!query || member.full_name.toLowerCase().includes(query.toLowerCase())) && (!district || assignments.some(assignment => assignment.district == district)) && (!building || assignments.some(assignment => assignment.building == building)) && (!area || assignments.some(assignment => assignment.content_area == area)) && (!position || member.position == position);
       });
       return filteredStaff;
+    },
+    formReset: e => {
+      e.preventDefault();
+      let form = e.target.closest('form');
+      form.reset();
+
+      // Reset building select
+      let buildingSelect = form.querySelector('select[name="school-building"]');
+      buildingSelect.innerHTML = '<option value="">Select a District to view Buildings</option>';
+      buildingSelect.disabled = true;
     }
   },
   callbacks: {
