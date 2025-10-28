@@ -116,6 +116,15 @@ function Edit(props) {
         className: "title-content",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("button", {
           onClick: () => removeSlide(index),
+          style: {
+            background: 'red',
+            color: 'white',
+            border: 'none',
+            padding: '5px 10px',
+            borderRadius: '19px',
+            fontWeight: 'bold',
+            cursor: 'pointer'
+          },
           children: "Remove Slide"
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.RichText, {
           identifier: `slide-title-${index}`,
@@ -173,6 +182,15 @@ function Edit(props) {
       })]
     }, index)), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("button", {
       onClick: addSlide,
+      style: {
+        background: 'var(--wp--preset--color--primary)',
+        marginLeft: '4rem',
+        color: 'white',
+        border: 'none',
+        padding: '10px 20px',
+        borderRadius: '4px',
+        cursor: 'pointer'
+      },
       children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Add Slide', 'header-slider')
     })]
   });

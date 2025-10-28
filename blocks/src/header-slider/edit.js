@@ -74,7 +74,7 @@ export default function Edit(props) {
 			{ slides && slides.map((slide, index) => (
 				<div key={ index } className='slide'>
 					<div className='title-content'>
-						<button onClick={() => removeSlide(index)}>Remove Slide</button>
+						<button onClick={() => removeSlide(index)} style={{ background: 'red', color: 'white', border: 'none', padding: '5px 10px', borderRadius: '19px', fontWeight: 'bold', cursor: 'pointer' }}>Remove Slide</button>
 						<RichText
 							key={`slide-title-${index}`}
 							identifier={`slide-title-${index}`}
@@ -122,7 +122,7 @@ export default function Edit(props) {
 				</div>
 			)) }
 
-			<button onClick={ addSlide }>
+			<button onClick={ addSlide } style={{ background: 'var(--wp--preset--color--primary)', marginLeft: '4rem', color: 'white', border: 'none', padding: '10px 20px', borderRadius: '4px', cursor: 'pointer' }}>
 				{ __( 'Add Slide', 'header-slider' ) }
 			</button>
 		</div>
