@@ -2,20 +2,20 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./src/side-tabs/block.json":
-/*!**********************************!*\
-  !*** ./src/side-tabs/block.json ***!
-  \**********************************/
+/***/ "./src/side-tab/block.json":
+/*!*********************************!*\
+  !*** ./src/side-tab/block.json ***!
+  \*********************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"iowa-aea-theme/side-tabs","version":"0.1.0","title":"Side Tabs","category":"widgets","icon":"smiley","description":"A container block for side tabs with individual tab blocks.","example":{},"supports":{"interactivity":true},"textdomain":"side-tabs","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","viewScript":"file:./view.js"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"iowa-aea-theme/side-tab","version":"0.1.0","title":"Side Tab","category":"widgets","icon":"smiley","parent":["iowa-aea-theme/side-tabs"],"attributes":{"tabNumber":{"type":"number","default":1},"backgroundColor":{"type":"string","default":"#f28b82"}},"description":"An individual tab block for use within the Side Tabs container.","example":{},"supports":{"reusable":false},"textdomain":"side-tab","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css"}');
 
 /***/ }),
 
-/***/ "./src/side-tabs/edit.js":
-/*!*******************************!*\
-  !*** ./src/side-tabs/edit.js ***!
-  \*******************************/
+/***/ "./src/side-tab/edit.js":
+/*!******************************!*\
+  !*** ./src/side-tab/edit.js ***!
+  \******************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -30,11 +30,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
-/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./editor.scss */ "./src/side-tabs/editor.scss");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./editor.scss */ "./src/side-tab/editor.scss");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__);
 /**
  * Retrieves the translation of text.
  *
@@ -48,7 +46,6 @@ __webpack_require__.r(__webpack_exports__);
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
-
 
 
 
@@ -72,81 +69,125 @@ __webpack_require__.r(__webpack_exports__);
 
 function Edit(props) {
   const {
+    attributes,
+    setAttributes,
     clientId
   } = props;
   const {
-    insertBlock,
+    tabNumber,
+    backgroundColor
+  } = attributes;
+  const {
     removeBlock
   } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.useDispatch)('core/block-editor');
 
-  // Get current inner blocks
-  const innerBlocks = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.useSelect)(select => {
-    return select('core/block-editor').getBlocks(clientId);
-  }, [clientId]);
-
-  // Initial template for new installations
-  const blockTemplate = [['iowa-aea-theme/side-tab'], ['iowa-aea-theme/side-tab']];
-  const addTab = () => {
-    const newBlock = (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_4__.createBlock)('iowa-aea-theme/side-tab');
-    insertBlock(newBlock, innerBlocks.length, clientId);
-  };
-  const removeLastTab = () => {
-    if (innerBlocks.length > 1) {
-      const lastBlock = innerBlocks[innerBlocks.length - 1];
-      removeBlock(lastBlock.clientId);
+  // Get the index of this block within its parent and sibling count
+  const {
+    tabIndex,
+    siblingCount
+  } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.useSelect)(select => {
+    const {
+      getBlockRootClientId,
+      getBlockOrder
+    } = select('core/block-editor');
+    const parentClientId = getBlockRootClientId(clientId);
+    if (parentClientId) {
+      const siblingBlocks = getBlockOrder(parentClientId);
+      const currentIndex = siblingBlocks.indexOf(clientId);
+      return {
+        tabIndex: currentIndex + 1,
+        // 1-based index
+        siblingCount: siblingBlocks.length
+      };
+    }
+    return {
+      tabIndex: tabNumber || 1,
+      siblingCount: 1
+    };
+  }, [clientId, tabNumber]);
+  console.log('Tab Index:', tabIndex);
+  setAttributes({
+    tabNumber: tabIndex
+  });
+  const removeThisTab = () => {
+    if (siblingCount > 1) {
+      removeBlock(clientId);
     }
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.Fragment, {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.BlockControls, {
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToolbarGroup, {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToolbarButton, {
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Add Tab', 'side-tabs'),
-          onClick: addTab
-        }), innerBlocks.length > 1 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToolbarButton, {
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Remove Last Tab', 'side-tabs'),
-          onClick: removeLastTab
-        })]
+  const blockTemplate = [['core/heading', {
+    placeholder: `Tab ${tabIndex} Title`,
+    level: 3,
+    className: `tab-header-${tabIndex}`
+  }], ['core/paragraph', {
+    placeholder: `Content for Tab ${tabIndex}`,
+    className: `tab-content-${tabIndex}`
+  }]];
+  const bgColors = ['var(--wp--preset--color--primary)', 'var(--wp--preset--color--alt-four)', 'var(--wp--preset--color--alt-one)', 'var(--wp--preset--color--alt-three)'];
+
+  // Set background color based on tab index
+  const tabBgColor = bgColors[(tabIndex - 1) % bgColors.length];
+  const blockProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps)({
+    className: 'impact-tab',
+    'data-tab-num': tabIndex,
+    style: {
+      '--tab-background': tabBgColor
+    }
+  });
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.BlockControls, {
+      children: siblingCount > 1 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToolbarGroup, {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToolbarButton, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Remove This Tab', 'side-tab'),
+          onClick: removeThisTab
+        })
       })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InspectorControls, {
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
-        title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Tab Management', 'side-tabs'),
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-          style: {
-            marginBottom: '16px'
-          },
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("strong", {
-            children: [(0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Current tabs:', 'side-tabs'), " ", innerBlocks.length]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+      ...blockProps,
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+        style: {
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: '10px',
+          padding: '5px',
+          backgroundColor: 'rgba(0,0,0,0.1)',
+          borderRadius: '3px',
+          position: 'absolute',
+          width: 'fit-content',
+          top: '10px',
+          right: '10px'
+        },
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("small", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("strong", {
+            children: ["Tab ", tabIndex]
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
-          variant: "primary",
-          onClick: addTab,
+        }), siblingCount > 1 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
+          onClick: removeThisTab,
           style: {
-            marginRight: '8px'
+            background: '#dc3545',
+            color: 'white',
+            border: 'none',
+            borderRadius: '3px',
+            padding: '2px 6px',
+            fontSize: '12px',
+            cursor: 'pointer'
           },
-          children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Add Tab', 'side-tabs')
-        }), innerBlocks.length > 1 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
-          variant: "secondary",
-          onClick: removeLastTab,
-          children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Remove Last Tab', 'side-tabs')
+          children: "Remove"
         })]
-      })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-      ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps)(),
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InnerBlocks, {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InnerBlocks, {
         template: blockTemplate,
-        allowedBlocks: ['iowa-aea-theme/side-tab'],
-        renderAppender: false
-      })
+        templateLock: "all"
+      })]
     })]
   });
 }
 
 /***/ }),
 
-/***/ "./src/side-tabs/editor.scss":
-/*!***********************************!*\
-  !*** ./src/side-tabs/editor.scss ***!
-  \***********************************/
+/***/ "./src/side-tab/editor.scss":
+/*!**********************************!*\
+  !*** ./src/side-tab/editor.scss ***!
+  \**********************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -155,19 +196,19 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./src/side-tabs/index.js":
-/*!********************************!*\
-  !*** ./src/side-tabs/index.js ***!
-  \********************************/
+/***/ "./src/side-tab/index.js":
+/*!*******************************!*\
+  !*** ./src/side-tab/index.js ***!
+  \*******************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
 /* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./style.scss */ "./src/side-tabs/style.scss");
-/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./edit */ "./src/side-tabs/edit.js");
-/* harmony import */ var _save__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./save */ "./src/side-tabs/save.js");
-/* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./block.json */ "./src/side-tabs/block.json");
+/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./style.scss */ "./src/side-tab/style.scss");
+/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./edit */ "./src/side-tab/edit.js");
+/* harmony import */ var _save__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./save */ "./src/side-tab/save.js");
+/* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./block.json */ "./src/side-tab/block.json");
 /**
  * Registers a new block provided a unique name and an object defining its behavior.
  *
@@ -209,10 +250,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./src/side-tabs/save.js":
-/*!*******************************!*\
-  !*** ./src/side-tabs/save.js ***!
-  \*******************************/
+/***/ "./src/side-tab/save.js":
+/*!******************************!*\
+  !*** ./src/side-tab/save.js ***!
+  \******************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -221,14 +262,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
 /**
  * React hook that is used to mark the block wrapper element.
  * It provides all the necessary props like the class name.
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
+
 
 
 /**
@@ -241,19 +285,35 @@ __webpack_require__.r(__webpack_exports__);
  * @return {Element} Element to render.
  */
 
-function save() {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-    ..._wordpress_block_editor__WEBPACK_IMPORTED_MODULE_0__.useBlockProps.save(),
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_0__.InnerBlocks.Content, {})
+function save({
+  attributes
+}) {
+  const {
+    tabNumber
+  } = attributes;
+  const bgColors = ['var(--wp--preset--color--primary)', 'var(--wp--preset--color--alt-four)', 'var(--wp--preset--color--alt-one)', 'var(--wp--preset--color--alt-three)'];
+
+  // Set background color based on tab index
+  const tabBgColor = bgColors[(tabNumber - 1) % bgColors.length];
+  const blockProps = _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_0__.useBlockProps.save({
+    className: 'impact-tab',
+    'data-tab-num': tabNumber || 1,
+    'style': {
+      backgroundColor: tabBgColor
+    }
+  });
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+    ...blockProps,
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_0__.InnerBlocks.Content, {})
   });
 }
 
 /***/ }),
 
-/***/ "./src/side-tabs/style.scss":
-/*!**********************************!*\
-  !*** ./src/side-tabs/style.scss ***!
-  \**********************************/
+/***/ "./src/side-tab/style.scss":
+/*!*********************************!*\
+  !*** ./src/side-tab/style.scss ***!
+  \*********************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -432,8 +492,8 @@ module.exports = window["ReactJSXRuntime"];
 /******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
 /******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
 /******/ 		var installedChunks = {
-/******/ 			"side-tabs/index": 0,
-/******/ 			"side-tabs/style-index": 0
+/******/ 			"side-tab/index": 0,
+/******/ 			"side-tab/style-index": 0
 /******/ 		};
 /******/ 		
 /******/ 		// no chunk on demand loading
@@ -483,7 +543,7 @@ module.exports = window["ReactJSXRuntime"];
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["side-tabs/style-index"], () => (__webpack_require__("./src/side-tabs/index.js")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["side-tab/style-index"], () => (__webpack_require__("./src/side-tab/index.js")))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

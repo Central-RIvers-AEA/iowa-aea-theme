@@ -6,6 +6,8 @@
  */
 import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
 
+import { useSelect } from '@wordpress/data';
+
 /**
  * The save function defines the way in which the different attributes should
  * be combined into the final markup, which is then serialized by the block
@@ -15,9 +17,28 @@ import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
  *
  * @return {Element} Element to render.
  */
-export default function save() {
+export default function save({ attributes }) {
+
+  const { tabNumber } = attributes;
+
+  const bgColors = [
+		'var(--wp--preset--color--primary)',
+		'var(--wp--preset--color--alt-four)',
+		'var(--wp--preset--color--alt-one)',
+		'var(--wp--preset--color--alt-three)'
+	];
+
+	// Set background color based on tab index
+	const tabBgColor = bgColors[(tabNumber - 1) % bgColors.length];
+
+	const blockProps = useBlockProps.save({
+		className: 'impact-tab',
+		'data-tab-num': tabNumber || 1,
+    'style': { backgroundColor: tabBgColor }
+	});
+
 	return (
-		<div {...useBlockProps.save()}>
+		<div {...blockProps}>
 			<InnerBlocks.Content />
 		</div>
 	);

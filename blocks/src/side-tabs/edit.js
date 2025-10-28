@@ -11,7 +11,10 @@ import { __ } from '@wordpress/i18n';
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
-import { useBlockProps, RichText, InnerBlocks } from '@wordpress/block-editor';
+import { useBlockProps, InnerBlocks, InspectorControls, BlockControls } from '@wordpress/block-editor';
+import { PanelBody, Button, ToolbarGroup, ToolbarButton } from '@wordpress/components';
+import { useSelect, useDispatch } from '@wordpress/data';
+import { createBlock } from '@wordpress/blocks';
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -30,107 +33,80 @@ import './editor.scss';
  * @return {Element} Element to render.
  */
 export default function Edit(props) {
-	const { attributes, setAttributes } = props;
-	const { titleOne, tabContentOne, titleTwo, tabContentTwo, titleThree, tabContentThree, titleFour, tabContentFour } = attributes;
+	const { clientId } = props;
+	
+	const { insertBlock, removeBlock } = useDispatch('core/block-editor');
+	
+	// Get current inner blocks
+	const innerBlocks = useSelect((select) => {
+		return select('core/block-editor').getBlocks(clientId);
+	}, [clientId]);
+
+	// Initial template for new installations
+	const blockTemplate = [
+		[ 'iowa-aea-theme/side-tab' ],
+		[ 'iowa-aea-theme/side-tab' ]
+	];
+
+	const addTab = () => {
+		const newBlock = createBlock('iowa-aea-theme/side-tab');
+		insertBlock(newBlock, innerBlocks.length, clientId);
+	};
+
+	const removeLastTab = () => {
+		if (innerBlocks.length > 1) {
+			const lastBlock = innerBlocks[innerBlocks.length - 1];
+			removeBlock(lastBlock.clientId);
+		}
+	};
 
 	return (
-		<div { ...useBlockProps() }>
-			<div className='impact-tab' style={{ '--tab-background': '#9B2246' }} data-tab-num="1" key="tab-one">
-				<RichText
-					key="title-one"
-					identifier="tab-title-one"
-					tagName="h3"
-					className='tab-header-one'
-					value={titleOne || ''}
-					onChange={(value) => setAttributes({ titleOne: value })}
-					placeholder={__('Enter heading text...', 'side-tabs')}
-					allowedFormats={['core/bold', 'core/italic']}
-				/>
-
-				<RichText
-					key="content-one"
-					identifier="tab-content-one"
-					tagName="div"
-					className="tab-content-one"
-					value={tabContentOne || ''}
-					onChange={(value) => setAttributes({ tabContentOne: value })}
-					placeholder={__('Enter content...', 'side-tabs')}
-					multiline="p"
-					
-				/>
-			</div>
-
-			<div className='impact-tab' style={{ '--tab-background': '#D17829' }} data-tab-num="2" key="tab-two">
-				<RichText
-					key="title-two"
-					identifier="tab-title-two"
-					tagName="h3"
-					className='tab-header-two'
-					value={titleTwo || ''}
-					onChange={(value) => setAttributes({ titleTwo: value })}
-					placeholder={__('Enter heading text...', 'side-tabs')}
-					allowedFormats={['core/bold', 'core/italic']}
-				/>
-
-				<RichText
-					key="content-two"
-					identifier="tab-content-two"
-					tagName="div"
-					className="tab-content-two"
-					value={tabContentTwo || ''}
-					onChange={(value) => setAttributes({ tabContentTwo: value })}
-					placeholder={__('Enter content...', 'side-tabs')}
-					multiline="p"
+		<>
+			<BlockControls>
+				<ToolbarGroup>
+					<ToolbarButton
+						label={__('Add Tab', 'side-tabs')}
+						onClick={addTab}
+					/>
+					{innerBlocks.length > 1 && (
+						<ToolbarButton
+							label={__('Remove Last Tab', 'side-tabs')}
+							onClick={removeLastTab}
+						/>
+					)}
+				</ToolbarGroup>
+			</BlockControls>
+			
+			<InspectorControls>
+				<PanelBody title={__('Tab Management', 'side-tabs')}>
+					<div style={{ marginBottom: '16px' }}>
+						<strong>{__('Current tabs:', 'side-tabs')} {innerBlocks.length}</strong>
+					</div>
+					<Button 
+						variant="primary" 
+						onClick={addTab}
+						style={{ marginRight: '8px' }}
+					>
+						{__('Add Tab', 'side-tabs')}
+					</Button>
+					{innerBlocks.length > 1 && (
+						<Button 
+							variant="secondary" 
+							onClick={removeLastTab}
+						>
+							{__('Remove Last Tab', 'side-tabs')}
+						</Button>
+					)}
+				</PanelBody>
+			</InspectorControls>
+			
+			<div { ...useBlockProps() }>
+				<InnerBlocks 
+					template={blockTemplate}
+					allowedBlocks={['iowa-aea-theme/side-tab']}
+					renderAppender={false}
 				/>
 			</div>
-
-			<div className='impact-tab' style={{ '--tab-background': '#001777' }} data-tab-num="3" key="tab-three">
-				<RichText
-					key="title-three"
-					identifier="tab-title-three"
-					tagName="h3"
-					className='tab-header-three'
-					value={titleThree || ''}
-					onChange={(value) => setAttributes({ titleThree: value })}
-					placeholder={__('Enter heading text...', 'side-tabs')}
-					allowedFormats={['core/bold', 'core/italic']}
-				/>
-
-				<RichText
-					key="content-three"
-					identifier="tab-content-three"
-					tagName="div"
-					className="tab-content-three"
-					value={tabContentThree || ''}
-					onChange={(value) => setAttributes({ tabContentThree: value })}
-					placeholder={__('Enter content...', 'side-tabs')}
-					multiline="p"
-				/>
-			</div>
-
-			<div className='impact-tab' style={{ '--tab-background': '#00826E' }} data-tab-num="4" key="tab-four">
-				<RichText
-					key="title-four"
-					identifier="tab-title-four"
-					tagName="h3"
-					className='tab-header-four'
-					value={titleFour || ''}
-					onChange={(value) => setAttributes({ titleFour: value })}
-					placeholder={__('Enter heading text...', 'side-tabs')}
-					allowedFormats={['core/bold', 'core/italic']}
-				/>
-
-				<RichText
-					key="content-four"
-					identifier="tab-content-four"
-					tagName="div"
-					className="tab-content-four"
-					value={tabContentFour || ''}
-					onChange={(value) => setAttributes({ tabContentFour: value })}
-					placeholder={__('Enter content...', 'side-tabs')}
-					multiline="p"
-				/>
-			</div>
-		</div>
+		</>
 	);
 }

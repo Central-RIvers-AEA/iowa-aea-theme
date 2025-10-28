@@ -6,49 +6,7 @@
   "title": "Side Tabs",
   "category": "widgets",
   "icon": "smiley",
-  "attributes": {
-    "titleOne": {
-      "type": "string",
-      "source": "html",
-      "selector": ".tab-header-one"
-    },
-    "tabContentOne": {
-      "type": "string",
-      "source": "html",
-      "selector": ".tab-content-one"
-    },
-    "titleTwo": {
-      "type": "string",
-      "source": "html",
-      "selector": ".tab-header-two"
-    },
-    "tabContentTwo": {
-      "type": "string",
-      "source": "html",
-      "selector": ".tab-content-two"
-    },
-    "titleThree": {
-      "type": "string",
-      "source": "html",
-      "selector": ".tab-header-three"
-    },
-    "tabContentThree": {
-      "type": "string",
-      "source": "html",
-      "selector": ".tab-content-three"
-    },
-    "titleFour": {
-      "type": "string",
-      "source": "html",
-      "selector": ".tab-header-four"
-    },
-    "tabContentFour": {
-      "type": "string",
-      "source": "html",
-      "selector": ".tab-content-four"
-    }
-  },
-  "description": "Example block scaffolded with Create Block tool.",
+  "description": "A container block for side tabs with individual tab blocks.",
   "example": {},
   "supports": {
     "interactivity": true

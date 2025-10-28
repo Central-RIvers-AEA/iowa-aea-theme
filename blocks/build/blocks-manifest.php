@@ -235,6 +235,39 @@ return array(
 		'render' => 'file:./render.php',
 		'viewScript' => 'file:./view.js'
 	),
+	'side-tab' => array(
+		'$schema' => 'https://schemas.wp.org/trunk/block.json',
+		'apiVersion' => 3,
+		'name' => 'iowa-aea-theme/side-tab',
+		'version' => '0.1.0',
+		'title' => 'Side Tab',
+		'category' => 'widgets',
+		'icon' => 'smiley',
+		'parent' => array(
+			'iowa-aea-theme/side-tabs'
+		),
+		'attributes' => array(
+			'tabNumber' => array(
+				'type' => 'number',
+				'default' => 1
+			),
+			'backgroundColor' => array(
+				'type' => 'string',
+				'default' => '#f28b82'
+			)
+		),
+		'description' => 'An individual tab block for use within the Side Tabs container.',
+		'example' => array(
+			
+		),
+		'supports' => array(
+			'reusable' => false
+		),
+		'textdomain' => 'side-tab',
+		'editorScript' => 'file:./index.js',
+		'editorStyle' => 'file:./index.css',
+		'style' => 'file:./style-index.css'
+	),
 	'side-tabs' => array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'apiVersion' => 3,
@@ -243,49 +276,7 @@ return array(
 		'title' => 'Side Tabs',
 		'category' => 'widgets',
 		'icon' => 'smiley',
-		'attributes' => array(
-			'titleOne' => array(
-				'type' => 'string',
-				'source' => 'html',
-				'selector' => '.tab-header-one'
-			),
-			'tabContentOne' => array(
-				'type' => 'string',
-				'source' => 'html',
-				'selector' => '.tab-content-one'
-			),
-			'titleTwo' => array(
-				'type' => 'string',
-				'source' => 'html',
-				'selector' => '.tab-header-two'
-			),
-			'tabContentTwo' => array(
-				'type' => 'string',
-				'source' => 'html',
-				'selector' => '.tab-content-two'
-			),
-			'titleThree' => array(
-				'type' => 'string',
-				'source' => 'html',
-				'selector' => '.tab-header-three'
-			),
-			'tabContentThree' => array(
-				'type' => 'string',
-				'source' => 'html',
-				'selector' => '.tab-content-three'
-			),
-			'titleFour' => array(
-				'type' => 'string',
-				'source' => 'html',
-				'selector' => '.tab-header-four'
-			),
-			'tabContentFour' => array(
-				'type' => 'string',
-				'source' => 'html',
-				'selector' => '.tab-content-four'
-			)
-		),
-		'description' => 'Example block scaffolded with Create Block tool.',
+		'description' => 'A container block for side tabs with individual tab blocks.',
 		'example' => array(
 			
 		),
