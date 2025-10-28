@@ -20,12 +20,14 @@
   border-radius: 19px 0 0 19px;
   padding: 3rem 3rem 3rem 2rem;
   position: relative;
+  min-height: 350px;
 }
 .impact-tab.open {
   width: 100%;
 }
 .impact-tab.open * {
   width: 100%;
+  display: block;
 }
 .impact-tab {
   width: 2rem;
@@ -34,6 +36,7 @@
 .impact-tab * {
   width: 0;
   overflow: hidden;
+  display: none;
 }
 .impact-tab:nth-child(1) {
   z-index: 4;

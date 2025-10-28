@@ -18,12 +18,14 @@
 	border-radius: 0 19px 19px 0;
 	padding: 3rem 2rem 3rem 3rem;
 	position: relative;
+	min-height: 350px;
 
 	&.open {
 		// Styles for open tab
 		width: 100%;
 		* {
 			width: 100%;
+			display: block;
 		}
 	}
 
@@ -32,6 +34,7 @@
 	* {
 		width: 0;
 		overflow: hidden;
+		display: none;
 	}
 
 	&:nth-child(1) {

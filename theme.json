@@ -169,9 +169,7 @@
       "core/quote": {
         "border": {
           "left": {
-            "width": "2px",
-            "style": "solid",
-            "color": "var(--wp--preset--color--primary)"
+            "width": "0px"
           }
         },
         "spacing": {

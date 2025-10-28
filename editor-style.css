@@ -162,14 +162,53 @@ body,
 }
 
 .wp-block-quote {
+  position: relative;
+  padding-inline: 6rem;
   cite {
     color: var(--wp--preset--color--primary);
     font-size: 1.5rem;
     font-weight: 500;
-    isolation: isolate;
+  }
+
+  &:before {
+    content: "";
+    background-color: var(--wp--preset--color--primary, red);
+    mask: url('data:image/svg+xml,<svg width="85" height="58" viewBox="0 0 85 58" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(%23clip0_493_1537)"><path d="M34.8307 2.51931C35.9993 4.47083 30.6287 7.40743 29.2146 9.23001C28.3244 10.3831 26.3335 13.7051 26.3706 15.0185C26.4242 16.6862 29.1225 17.0148 30.3024 17.8264C55.8881 35.3896 22.7387 68.576 5.48294 46.6045C-4.26548 34.1885 3.19296 16.8494 14.6992 8.44832C17.5401 6.37764 32.5662 -1.24324 34.8193 2.51874L34.8307 2.51931Z" fill="black"/><path d="M78.2032 4.68454C79.414 6.70659 73.3652 9.97428 71.9545 11.9567C66.789 19.2373 71.963 18.1841 76.4689 22.0585C94.6577 37.6786 70.7098 66.8195 51.7912 51.8815C37.7995 40.8389 45.5944 19.7302 58.0945 10.6147C60.9354 8.54401 75.9614 0.923126 78.2146 4.68511L78.2032 4.68454Z" fill="black"/></g><defs><clipPath id="clip0_493_1537"><rect width="82" height="53" fill="white" transform="translate(81.8979 57.0227) rotate(-177.142)"/></clipPath></defs></svg>')
+      no-repeat;
+    mask-size: contain;
+    -webkit-mask: url('data:image/svg+xml,<svg width="85" height="58" viewBox="0 0 85 58" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(%23clip0_493_1537)"><path d="M34.8307 2.51931C35.9993 4.47083 30.6287 7.40743 29.2146 9.23001C28.3244 10.3831 26.3335 13.7051 26.3706 15.0185C26.4242 16.6862 29.1225 17.0148 30.3024 17.8264C55.8881 35.3896 22.7387 68.576 5.48294 46.6045C-4.26548 34.1885 3.19296 16.8494 14.6992 8.44832C17.5401 6.37764 32.5662 -1.24324 34.8193 2.51874L34.8307 2.51931Z" fill="black"/><path d="M78.2032 4.68454C79.414 6.70659 73.3652 9.97428 71.9545 11.9567C66.789 19.2373 71.963 18.1841 76.4689 22.0585C94.6577 37.6786 70.7098 66.8195 51.7912 51.8815C37.7995 40.8389 45.5944 19.7302 58.0945 10.6147C60.9354 8.54401 75.9614 0.923126 78.2146 4.68511L78.2032 4.68454Z" fill="black"/></g><defs><clipPath id="clip0_493_1537"><rect width="82" height="53" fill="white" transform="translate(81.8979 57.0227) rotate(-177.142)"/></clipPath></defs></svg>')
+      no-repeat;
+    -webkit-mask-size: contain;
+    display: block;
+    height: 58px;
+    width: 85px;
+    position: absolute;
+    top: -3.5rem;
+    left: 0rem;
+    z-index: 99;
+  }
+
+  &:after {
+    content: "";
+    background-color: var(--wp--preset--color--primary, red);
+    mask: url('data:image/svg+xml,<svg width="85" height="58" viewBox="0 0 85 58" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(%23clip0_493_1682)"><path d="M49.7098 54.5034C48.5411 52.5519 53.9118 49.6153 55.3259 47.7927C56.2161 46.6396 58.207 43.3176 58.1699 42.0042C58.1163 40.3365 55.418 40.0079 54.2381 39.1963C28.6524 21.6331 61.8018 -11.5533 79.0576 10.4182C88.806 22.8342 81.3475 40.1733 69.8413 48.5744C67.0004 50.6451 51.9743 58.2659 49.7212 54.504L49.7098 54.5034Z" fill="black"/><path d="M6.33743 52.3382C5.12667 50.3161 11.1754 47.0484 12.5861 45.066C17.7516 37.7854 12.5776 38.8386 8.07168 34.9642C-10.1171 19.3441 13.8308 -9.79682 32.7494 5.14122C46.7411 16.1838 38.9462 37.2925 26.4461 46.408C23.6053 48.4787 8.57918 56.0996 6.32606 52.3376L6.33743 52.3382Z" fill="black"/></g><defs><clipPath id="clip0_493_1682"><rect width="82" height="53" fill="white" transform="translate(2.64267) rotate(2.85805)"/></clipPath></defs></svg>')
+      no-repeat;
+    mask-size: contain;
+    -webkit-mask: url('data:image/svg+xml,<svg width="85" height="58" viewBox="0 0 85 58" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(%23clip0_493_1682)"><path d="M49.7098 54.5034C48.5411 52.5519 53.9118 49.6153 55.3259 47.7927C56.2161 46.6396 58.207 43.3176 58.1699 42.0042C58.1163 40.3365 55.418 40.0079 54.2381 39.1963C28.6524 21.6331 61.8018 -11.5533 79.0576 10.4182C88.806 22.8342 81.3475 40.1733 69.8413 48.5744C67.0004 50.6451 51.9743 58.2659 49.7212 54.504L49.7098 54.5034Z" fill="black"/><path d="M6.33743 52.3382C5.12667 50.3161 11.1754 47.0484 12.5861 45.066C17.7516 37.7854 12.5776 38.8386 8.07168 34.9642C-10.1171 19.3441 13.8308 -9.79682 32.7494 5.14122C46.7411 16.1838 38.9462 37.2925 26.4461 46.408C23.6053 48.4787 8.57918 56.0996 6.32606 52.3376L6.33743 52.3382Z" fill="black"/></g><defs><clipPath id="clip0_493_1682"><rect width="82" height="53" fill="white" transform="translate(2.64267) rotate(2.85805)"/></clipPath></defs></svg>')
+      no-repeat;
+    -webkit-mask-size: contain;
+    display: block;
+    height: 58px;
+    width: 85px;
+    z-index: 99;
+    position: absolute;
+    bottom: 03.5rem;
+    right: 0rem;
   }
 
   &.beside-picture {
+    max-width: 800px;
+    padding-inline: unset;
     &:before {
       content: "";
       background-color: var(--wp--preset--color--primary, red);
@@ -183,6 +222,10 @@ body,
       top: -3.5rem;
       height: 58px;
       width: 85px;
+    }
+
+    &:after {
+      all: unset;
     }
   }
 }
