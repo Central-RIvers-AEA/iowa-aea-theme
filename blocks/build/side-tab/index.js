@@ -105,7 +105,6 @@ function Edit(props) {
       siblingCount: 1
     };
   }, [clientId, tabNumber]);
-  console.log('Tab Index:', tabIndex);
   setAttributes({
     tabNumber: tabIndex
   });

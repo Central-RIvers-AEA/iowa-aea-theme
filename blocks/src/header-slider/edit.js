@@ -70,9 +70,9 @@ export default function Edit(props) {
 	}
 
 	return (
-		<div { ...useBlockProps() }>
+		<div { ...useBlockProps() } style={{ textAlign: 'center' }}>
 			{ slides && slides.map((slide, index) => (
-				<div key={ index } className='slide'>
+				<div key={ index } className='slide' style={{ textAlign: 'left' }}>
 					<div className='title-content'>
 						<button onClick={() => removeSlide(index)} style={{ background: 'red', color: 'white', border: 'none', padding: '5px 10px', borderRadius: '19px', fontWeight: 'bold', cursor: 'pointer' }}>Remove Slide</button>
 						<RichText

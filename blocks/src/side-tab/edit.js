@@ -57,8 +57,6 @@ export default function Edit(props) {
     };
   }, [clientId, tabNumber]);
 
-  console.log('Tab Index:', tabIndex);
-
   setAttributes({ tabNumber: tabIndex });
 
 	const removeThisTab = () => {
