@@ -290,7 +290,6 @@ function iowa_aea_handle_manual_update_check() {
     
     // Add debugging information
     $current_version = wp_get_theme()->get('Version');
-    $remote_info = $myUpdateChecker->requestInfo();
     
     if ($update !== null) {
         $message = sprintf(
@@ -300,11 +299,9 @@ function iowa_aea_handle_manual_update_check() {
         );
         $type = 'success';
     } else {
-        $remote_version = $remote_info ? $remote_info->version : 'Unknown';
         $message = sprintf(
-            'No updates available. Current version: %s, Remote version: %s. Your theme is up to date!',
-            $current_version,
-            $remote_version
+            'No updates available. Current version: %s. Your theme is up to date!',
+            $current_version
         );
         $type = 'info';
     }
