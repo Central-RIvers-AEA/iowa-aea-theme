@@ -33,6 +33,8 @@ const fetchGoogleCalendarEvents = async (start_date, end_date) => {
   let calendarIDs = state.calendarIDs;
   let apiKey = state.apiKey;
 
+  let events = [];
+
   if(!calendarIDs.length || !apiKey) {
     return [];
   }
@@ -40,23 +42,34 @@ const fetchGoogleCalendarEvents = async (start_date, end_date) => {
   // For simplicity, fetch from the first calendar ID only
   let calendarID = calendarIDs[0];
 
-  let calendarURL = `https://www.googleapis.com/calendar/v3/calendars/${calendarID}/events?key=${apiKey}&timeMin=${start_date}T00:00:00Z&timeMax=${end_date}T23:59:59Z`;
+  try {
+    let calendarURL = `https://www.googleapis.com/calendar/v3/calendars/${calendarID}/events?key=${apiKey}&timeMin=${start_date}T00:00:00Z&timeMax=${end_date}T23:59:59Z`;
+  
+    // Fetch events from Google Calendar API
+    const response = await fetch(calendarURL);
 
-  // Fetch events from Google Calendar API
-  const response = await fetch(calendarURL);
-  const data = await response.json();
-
-  // Convert Google Calendar events to local format
-  const events = data.items.map(gEvent => {
-    let event = {
-      id: gEvent.id,
-      title: { rendered: gEvent.summary },
-      event_date: gEvent.start.date || gEvent.start.dateTime.split('T')[0],
-      event_time: gEvent.start.dateTime ? formatTime(gEvent.start.dateTime.split('T')[1]) : 'All Day'
+    if(!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
+   
+    const data = await response.json();
 
-    return event;
-  });
+    // Convert Google Calendar events to local format
+     events = data.items.map(gEvent => {
+      let event = {
+        id: gEvent.id,
+        title: { rendered: gEvent.summary },
+        event_date: gEvent.start.date || gEvent.start.dateTime.split('T')[0],
+        event_time: gEvent.start.dateTime ? formatTime(gEvent.start.dateTime.split('T')[1]) : 'All Day'
+      }
+  
+      return event;
+    });
+  } catch (error) {
+    console.error('Error fetching Google Calendar events:', error);
+    return events;
+  }
+
 
   return events;
 };
