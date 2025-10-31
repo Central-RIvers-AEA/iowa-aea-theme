@@ -136,7 +136,7 @@ const fetchEvents = async () => {
   firstOfLastMonth.setDate(1);
   firstOfLastMonth.setMonth(firstOfLastMonth.getMonth() - 1);
   let lastOfNextMonth = new Date(state.currentDate);
-  lastOfNextMonth.setMonth(lastOfNextMonth.getMonth() + 1);
+  lastOfNextMonth.setMonth(lastOfNextMonth.getMonth() + 2);
   lastOfNextMonth.setDate(0);
   let start_date = firstOfLastMonth.toISOString().split('T')[0];
   let end_date = lastOfNextMonth.toISOString().split('T')[0];
