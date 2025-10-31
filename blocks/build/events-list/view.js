@@ -244,6 +244,13 @@ const {
       if (state.events[0]?.id === state.topEventId) {
         document.querySelector('.load-previous').disabled = true;
       }
+
+      // set button states
+      if (state.events[state.events.length - 1]?.id === state.topEventId) {
+        document.querySelector('.load-next').disabled = true;
+      } else {
+        document.querySelector('.load-next').disabled = false;
+      }
     },
     resetEvents: () => {
       state.topEventId = null;
