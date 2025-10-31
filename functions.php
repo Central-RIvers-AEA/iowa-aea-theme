@@ -300,7 +300,6 @@ function iowa_aea_handle_manual_update_check() {
     // Redirect back with message
     $redirect_url = add_query_arg(
         array(
-            'page' => 'themes.php',
             'update_check_message' => urlencode($message),
             'update_check_type' => $type
         ),
