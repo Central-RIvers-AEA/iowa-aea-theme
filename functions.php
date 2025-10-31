@@ -298,14 +298,9 @@ function iowa_aea_handle_manual_update_check() {
     // Try to get more detailed info for debugging
     $debug_info = '';
     if (current_user_can('administrator')) {
-        // Get what the update checker thinks the remote version is
-        $state = $myUpdateChecker->getUpdateState();
-        $last_check = $state ? $state->getLastCheckTime() : 'Never';
-        
         $debug_info = sprintf(
-            ' [Debug: Local: %s, Last Check: %s, Repo: %s]',
+            ' [Debug: Local: %s, Checking: %s]',
             $current_version,
-            $last_check ? date('Y-m-d H:i:s', $last_check) : 'Never',
             'https://github.com/Central-RIvers-AEA/iowa-aea-theme/'
         );
     }
