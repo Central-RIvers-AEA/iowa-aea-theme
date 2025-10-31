@@ -255,13 +255,14 @@ add_action( 'wp_enqueue_scripts', 'iowa_aea_google_translate_enqueue' );
 require 'plugin-update-checker/plugin-update-checker.php';
 use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
 
+// For themes, point to the theme's main file (usually style.css or the main theme file)
 $myUpdateChecker = PucFactory::buildUpdateChecker(
 	'https://github.com/Central-RIvers-AEA/iowa-aea-theme/',
-	get_stylesheet_directory() . '/style.css', // Point to style.css for theme version detection
+	get_stylesheet_directory() . '/style.css',
 	'iowa-aea-theme'
 );
 
-//Set the branch that contains the stable release.
+// Set the branch that contains the stable release
 $myUpdateChecker->setBranch('main');
 
 // Optional: Enable release assets if you want to use GitHub releases instead of just commits
@@ -282,26 +283,46 @@ function iowa_aea_handle_manual_update_check() {
     
     global $myUpdateChecker;
     
+    // Clear any cached update info to force a fresh check
+    $myUpdateChecker->resetUpdateState();
+    
     // Force check for updates
     $myUpdateChecker->checkForUpdates();
     
     // Get the update info
     $update = $myUpdateChecker->getUpdate();
     
-    // Add debugging information
+    // Add detailed debugging information
     $current_version = wp_get_theme()->get('Version');
+    
+    // Try to get more detailed info for debugging
+    $debug_info = '';
+    if (current_user_can('administrator')) {
+        // Get what the update checker thinks the remote version is
+        $state = $myUpdateChecker->getUpdateState();
+        $last_check = $state ? $state->getLastCheckTime() : 'Never';
+        
+        $debug_info = sprintf(
+            ' [Debug: Local: %s, Last Check: %s, Repo: %s]',
+            $current_version,
+            $last_check ? date('Y-m-d H:i:s', $last_check) : 'Never',
+            'https://github.com/Central-RIvers-AEA/iowa-aea-theme/'
+        );
+    }
     
     if ($update !== null) {
         $message = sprintf(
-            'Update available! Version %s is available. Current version: %s',
+            'Update available! Version %s is available. Current version: %s%s',
             $update->version,
-            $current_version
+            $current_version,
+            $debug_info
         );
         $type = 'success';
     } else {
         $message = sprintf(
-            'No updates available. Current version: %s. Your theme is up to date!',
-            $current_version
+            'No updates available. Current version: %s. Your theme is up to date!%s',
+            $current_version,
+            $debug_info
         );
         $type = 'info';
     }
