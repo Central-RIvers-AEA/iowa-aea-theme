@@ -257,12 +257,15 @@ use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
 
 $myUpdateChecker = PucFactory::buildUpdateChecker(
 	'https://github.com/Central-RIvers-AEA/iowa-aea-theme/',
-	__FILE__,
+	get_stylesheet_directory() . '/style.css', // Point to style.css for theme version detection
 	'iowa-aea-theme'
 );
 
 //Set the branch that contains the stable release.
 $myUpdateChecker->setBranch('main');
+
+// Optional: Enable release assets if you want to use GitHub releases instead of just commits
+// $myUpdateChecker->getVcsApi()->enableReleaseAssets();
 
 // Add manual update check functionality
 add_action('admin_post_check_theme_updates', 'iowa_aea_handle_manual_update_check');
@@ -273,7 +276,7 @@ function iowa_aea_handle_manual_update_check() {
     }
     
     // Check nonce for security
-    if (!wp_verify_nonce($_GET['_wpnonce'], 'check_theme_updates')) {
+    if (!wp_verify_nonce($_REQUEST['_wpnonce'], 'check_theme_updates')) {
         wp_die('Security check failed.');
     }
     
