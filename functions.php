@@ -256,7 +256,7 @@ require 'plugin-update-checker/plugin-update-checker.php';
 use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
 
 $myUpdateChecker = PucFactory::buildUpdateChecker(
-	'https://github.com/Central-RIvers-AEA/iowa-aea-theme',
+	'https://github.com/Central-RIvers-AEA/iowa-aea-theme/',
 	__FILE__,
 	'iowa-aea-theme'
 );
