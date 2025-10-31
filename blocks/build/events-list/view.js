@@ -132,13 +132,14 @@ const fetchGoogleCalendarEvents = async (start_date, end_date) => {
 };
 const fetchEvents = async () => {
   // fetch from events api
-  let firstOfMonth = new Date(state.currentDate);
-  firstOfMonth.setDate(1);
-  let lastOfMonth = new Date(firstOfMonth);
-  lastOfMonth.setMonth(lastOfMonth.getMonth() + 1);
-  lastOfMonth.setDate(0);
-  let start_date = firstOfMonth.toISOString().split('T')[0];
-  let end_date = lastOfMonth.toISOString().split('T')[0];
+  let firstOfLastMonth = new Date(state.currentDate);
+  firstOfLastMonth.setDate(1);
+  firstOfLastMonth.setMonth(firstOfLastMonth.getMonth() - 1);
+  let lastOfNextMonth = new Date(state.currentDate);
+  lastOfNextMonth.setMonth(lastOfNextMonth.getMonth() + 1);
+  lastOfNextMonth.setDate(0);
+  let start_date = firstOfLastMonth.toISOString().split('T')[0];
+  let end_date = lastOfNextMonth.toISOString().split('T')[0];
   const response = await fetch(`/wp-json/wp/v2/event?start_date=${start_date}&end_date=${end_date}`);
   const localEvents = await response.json();
 
