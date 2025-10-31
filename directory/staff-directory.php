@@ -37,20 +37,18 @@ class StaffDirectory
       array($this, 'import_employees_page_callback')
     );
 
-    // add_menu_page(
-    //   'Import Employees',
-    //   'Import Employees',
-    //   'manage_options',
-    //   'import-employees',
-    //   array($this, 'import_employees_page_callback'),
-    //   'dashicons-upload',
-    //   20
-    // );
+    add_submenu_page(
+      'edit.php?post_type=employee',
+      'Directory Config',
+      'Directory Config',
+      'manage_options',
+      'directory-config',
+      array($this, 'directory_config_page_callback')
+    );
   }
 
   /* callback for import employees page */
-  public function import_employees_page_callback()
-  {
+  public function import_employees_page_callback(){
     if (!current_user_can('manage_options')) {
       wp_die(__('You do not have sufficient permissions to access this page.'));
     }
@@ -383,8 +381,51 @@ class StaffDirectory
 
   }
 
-  public function enqueue_assignment_script()
-  {
+  public function directory_config_page_callback(){
+    if (!current_user_can('manage_options')) {
+      wp_die(__('You do not have sufficient permissions to access this page.'));
+    }
+
+    ?>
+      <div class="wrap">
+        <h1>Staff Directory Configuration</h1>
+        <p>Configure settings for the staff directory here.</p>
+        <!-- Configuration options can be added here -->
+
+        <form method="post" action="options.php">
+          <?php
+          settings_fields('staff_directory_options_group');
+          do_settings_sections('staff_directory_options_group');
+          ?>
+          <input type="hidden" name="action" value="update" />
+          <input type="hidden" name="page_options" value="staff_directory_options" />
+
+          <h2>General Settings</h2>
+          <table class="form-table">
+            <tr>
+              <th><label for="staff_directory_results_per_page">Results Per Page</label></th>
+              <td>
+                <input type="number" id="staff_directory_results_per_page" name="staff_directory_results_per_page" value="<?php echo esc_attr(get_option('staff_directory_results_per_page', 10)); ?>" class="regular-text" />
+                <p class="description">Number of results to display per page in the staff directory.</p>
+              </td>
+            </tr>
+            <tr>
+              <th><label for="staff_directory_use_external_api">External API URL</label></th>
+              <td>
+                <input type="text" name="staff_directory_use_external_api" value="<?php echo esc_attr(get_option('staff_directory_use_external_api', '')); ?>" class="regular-text" />
+                <p class="description">Enter the URL of the external API to use for staff directory data.</p>
+              </td>
+            </tr>
+          </table>
+          <?php
+          submit_button();
+          ?>
+        </form>
+      </div>
+    <?php
+  }
+
+  public function enqueue_assignment_script(){
     if ('employee' != get_post_type()) {
       return;
     }
