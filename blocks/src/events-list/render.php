@@ -3,12 +3,19 @@
  * @see https://github.com/WordPress/gutenberg/blob/trunk/docs/reference-guides/block-api/block-metadata.md#render
  */
 
+  $context = [
+    'apiKey' => get_option('google_calendar_api_key', ''),
+    'calendarIds' => get_option('google_calendar_ids', array()),
+    'today' => date( 'Y-m-d' ), 
+    'visible-events' => 3 
+  ];
+
 ?>
 
 <div
   <?php echo get_block_wrapper_attributes(); ?>
   data-wp-interactive="iowa-aea-theme/events-list"
-  <?php echo wp_interactivity_data_wp_context( array( 'today' => date( 'Y-m-d' ), 'visible-events' => 3 ) ); ?>
+  <?php echo wp_interactivity_data_wp_context( $context ); ?>
   aria-live='polite'
 >
   <ul class='events-list' data-wp-init="actions.loadEvents"></ul>

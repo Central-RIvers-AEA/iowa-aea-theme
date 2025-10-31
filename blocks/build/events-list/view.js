@@ -93,8 +93,14 @@ const formatTime = timeString => {
 };
 const fetchGoogleCalendarEvents = async (start_date, end_date) => {
   // Simulate fetching events from Google Calendar API
-  let calendarID = '';
-  let apiKey = '';
+  let calendarIDs = state.calendarIDs;
+  let apiKey = state.apiKey;
+  if (!calendarIDs.length || !apiKey) {
+    return [];
+  }
+
+  // For simplicity, fetch from the first calendar ID only
+  let calendarID = calendarIDs[0];
   let calendarURL = `https://www.googleapis.com/calendar/v3/calendars/${calendarID}/events?key=${apiKey}&timeMin=${start_date}T00:00:00Z&timeMax=${end_date}T23:59:59Z`;
 
   // Fetch events from Google Calendar API
@@ -147,10 +153,15 @@ const {
     visibleEvents: 3,
     topEventId: null,
     currentDate: new Date().toISOString().split('T')[0],
-    currentMonth: new Date().toISOString().split('T')[0].slice(0, 7)
+    currentMonth: new Date().toISOString().split('T')[0].slice(0, 7),
+    apiKey: '',
+    calendarIDs: []
   },
   actions: {
     loadEvents: async () => {
+      let context = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.getContext)();
+      state.apiKey = context.apiKey || '';
+      state.calendarIDs = context.calendarIds || [];
       await fetchEvents();
       if (state.topEventId === null) {
         let currentDate = state.currentDate;

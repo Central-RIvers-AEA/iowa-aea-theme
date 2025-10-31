@@ -30,8 +30,16 @@ const formatTime = ( timeString ) => {
 
 const fetchGoogleCalendarEvents = async (start_date, end_date) => {
   // Simulate fetching events from Google Calendar API
-  let calendarID = 'c_b84675c9e32f1f13cf8f8c51952bc13f927182c1bebb70c77572db5211472993@group.calendar.google.com';
-  let apiKey = 'AIzaSyAHRHplEzIo3lIQnXD0Q7m_3uWJxj2Zssg';
+  let calendarIDs = state.calendarIDs;
+  let apiKey = state.apiKey;
+
+  if(!calendarIDs.length || !apiKey) {
+    return [];
+  }
+
+  // For simplicity, fetch from the first calendar ID only
+  let calendarID = calendarIDs[0];
+
   let calendarURL = `https://www.googleapis.com/calendar/v3/calendars/${calendarID}/events?key=${apiKey}&timeMin=${start_date}T00:00:00Z&timeMax=${end_date}T23:59:59Z`;
 
   // Fetch events from Google Calendar API
@@ -87,10 +95,16 @@ const { state, actions, callbacks } = store( 'iowa-aea-theme/events-list', {
     visibleEvents: 3,
     topEventId: null,
     currentDate: new Date().toISOString().split('T')[0],
-    currentMonth: new Date().toISOString().split('T')[0].slice(0, 7)
+    currentMonth: new Date().toISOString().split('T')[0].slice(0, 7),
+    apiKey: '',
+    calendarIDs: []
   },
   actions: {
     loadEvents: async () => {
+      let context = getContext();
+      state.apiKey = context.apiKey || '';
+      state.calendarIDs = context.calendarIds || [];
+
       await fetchEvents();
 
       if(state.topEventId === null) {
