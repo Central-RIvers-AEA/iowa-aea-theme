@@ -288,15 +288,24 @@ function iowa_aea_handle_manual_update_check() {
     // Get the update info
     $update = $myUpdateChecker->getUpdate();
     
+    // Add debugging information
+    $current_version = wp_get_theme()->get('Version');
+    $remote_info = $myUpdateChecker->requestInfo();
+    
     if ($update !== null) {
         $message = sprintf(
             'Update available! Version %s is available. Current version: %s',
             $update->version,
-            wp_get_theme()->get('Version')
+            $current_version
         );
         $type = 'success';
     } else {
-        $message = 'No updates available. Your theme is up to date!';
+        $remote_version = $remote_info ? $remote_info->version : 'Unknown';
+        $message = sprintf(
+            'No updates available. Current version: %s, Remote version: %s. Your theme is up to date!',
+            $current_version,
+            $remote_version
+        );
         $type = 'info';
     }
     
