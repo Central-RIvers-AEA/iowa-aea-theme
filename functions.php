@@ -263,3 +263,208 @@ $myUpdateChecker = PucFactory::buildUpdateChecker(
 
 //Set the branch that contains the stable release.
 $myUpdateChecker->setBranch('main');
+
+// Add manual update check functionality
+add_action('admin_post_check_theme_updates', 'iowa_aea_handle_manual_update_check');
+function iowa_aea_handle_manual_update_check() {
+    // Check if user has permission
+    if (!current_user_can('update_themes')) {
+        wp_die('You do not have permission to check for theme updates.');
+    }
+    
+    // Check nonce for security
+    if (!wp_verify_nonce($_GET['_wpnonce'], 'check_theme_updates')) {
+        wp_die('Security check failed.');
+    }
+    
+    global $myUpdateChecker;
+    
+    // Force check for updates
+    $myUpdateChecker->checkForUpdates();
+    
+    // Get the update info
+    $update = $myUpdateChecker->getUpdate();
+    
+    if ($update !== null) {
+        $message = sprintf(
+            'Update available! Version %s is available. Current version: %s',
+            $update->version,
+            wp_get_theme()->get('Version')
+        );
+        $type = 'success';
+    } else {
+        $message = 'No updates available. Your theme is up to date!';
+        $type = 'info';
+    }
+    
+    // Redirect back with message
+    $redirect_url = add_query_arg(
+        array(
+            'page' => 'themes.php',
+            'update_check_message' => urlencode($message),
+            'update_check_type' => $type
+        ),
+        admin_url('themes.php')
+    );
+    
+    wp_redirect($redirect_url);
+    exit;
+}
+
+// Add the check for updates button to the theme actions
+// We need to use the correct filter hook based on the theme's stylesheet directory
+add_action('init', 'iowa_aea_setup_theme_action_links');
+function iowa_aea_setup_theme_action_links() {
+    $theme_slug = get_option('stylesheet'); // Gets the current theme's directory name
+    add_filter("theme_action_links_{$theme_slug}", 'iowa_aea_theme_action_links');
+}
+
+function iowa_aea_theme_action_links($actions) {
+    // Only show for administrators
+    if (!current_user_can('update_themes')) {
+        return $actions;
+    }
+    
+    $check_updates_url = wp_nonce_url(
+        admin_url('admin-post.php?action=check_theme_updates'),
+        'check_theme_updates'
+    );
+    
+    $actions['check_updates'] = sprintf(
+        '<a href="%s" class="check-theme-updates">%s</a>',
+        esc_url($check_updates_url),
+        __('Check for Updates')
+    );
+    
+    return $actions;
+}
+
+// Alternative method: Add update button to themes page via JavaScript
+add_action('admin_footer-themes.php', 'iowa_aea_add_update_button_js');
+function iowa_aea_add_update_button_js() {
+    if (!current_user_can('update_themes')) {
+        return;
+    }
+    
+    $check_updates_url = wp_nonce_url(
+        admin_url('admin-post.php?action=check_theme_updates'),
+        'check_theme_updates'
+    );
+    ?>
+    <script>
+    jQuery(document).ready(function($) {
+        // Find the current theme (active theme)
+        var currentTheme = $('.theme.active .theme-actions, .theme.current .theme-actions');
+        if (currentTheme.length > 0) {
+            var updateButton = '<a href="<?php echo esc_js($check_updates_url); ?>" class="button button-secondary check-theme-updates">' +
+                'Check for Updates</a>';
+            currentTheme.append(updateButton);
+        }
+        
+        // Also add to theme details modal if it exists
+        $(document).on('click', '.theme-overlay .theme-actions .button-primary', function() {
+            setTimeout(function() {
+                var modal = $('.theme-overlay .theme-actions');
+                if (modal.length > 0 && !modal.find('.check-theme-updates').length) {
+                    var updateButton = '<a href="<?php echo esc_js($check_updates_url); ?>" class="button button-secondary check-theme-updates">' +
+                        'Check for Updates</a>';
+                    modal.append(updateButton);
+                }
+            }, 100);
+        });
+    });
+    </script>
+    <style>
+    .check-theme-updates {
+        margin-left: 10px !important;
+    }
+    .check-theme-updates .dashicons {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+    }
+    </style>
+    <?php
+}
+
+// Display update check messages
+add_action('admin_notices', 'iowa_aea_display_update_check_message');
+function iowa_aea_display_update_check_message() {
+    if (isset($_GET['update_check_message']) && isset($_GET['update_check_type'])) {
+        $message = urldecode($_GET['update_check_message']);
+        $type = $_GET['update_check_type'];
+        
+        printf(
+            '<div class="notice notice-%s is-dismissible"><p>%s</p></div>',
+            esc_attr($type),
+            esc_html($message)
+        );
+    }
+}
+
+// Add some basic styling for the update check button
+add_action('admin_head', 'iowa_aea_update_check_styles');
+function iowa_aea_update_check_styles() {
+    ?>
+    <style>
+    .check-theme-updates {
+        color: #2271b1 !important;
+        text-decoration: none;
+    }
+    .check-theme-updates:hover {
+        color: #135e96 !important;
+    }
+    .check-theme-updates:before {
+        content: "\f463";
+        font-family: dashicons;
+        margin-right: 5px;
+    }
+    </style>
+    <?php
+}
+
+// Add update check to admin bar
+add_action('admin_bar_menu', 'iowa_aea_admin_bar_update_check', 100);
+function iowa_aea_admin_bar_update_check($wp_admin_bar) {
+    // Only show for administrators
+    if (!current_user_can('update_themes')) {
+        return;
+    }
+    
+    global $myUpdateChecker;
+    
+    // Check if there are pending updates
+    $update = $myUpdateChecker->getUpdate();
+    $has_update = ($update !== null);
+    
+    $title = $has_update ? 'Theme Update Available!' : 'Check Theme Updates';
+    $class = $has_update ? 'update-available' : '';
+    
+    $check_updates_url = wp_nonce_url(
+        admin_url('admin-post.php?action=check_theme_updates'),
+        'check_theme_updates'
+    );
+    
+    $wp_admin_bar->add_node(array(
+        'id'    => 'iowa-aea-theme-updates',
+        'title' => $title,
+        'href'  => $check_updates_url,
+        'meta'  => array(
+            'class' => $class,
+            'title' => $has_update ? 'Click to update your theme' : 'Click to check for theme updates'
+        )
+    ));
+    
+    // Add some styling for the admin bar item
+    if ($has_update) {
+        echo '<style>
+        #wpadminbar .update-available > .ab-item {
+            background-color: #d63638 !important;
+            color: white !important;
+        }
+        #wpadminbar .update-available:hover > .ab-item {
+            background-color: #c92d2f !important;
+        }
+        </style>';
+    }
+}
