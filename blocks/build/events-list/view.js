@@ -218,7 +218,6 @@ const {
       state.topEventId = state.events[state.events.map(event => event.id).indexOf(state.topEventId) + 1]?.id || null;
       if (state.events.map(event => event.id).indexOf(state.topEventId) > state.events.length - state.visibleEvents) {
         state.topEventId = state.events[state.events.length - state.visibleEvents]?.id || null;
-        document.querySelector('.load-next').disabled = true;
       } else {
         actions.updateEventsView();
       }

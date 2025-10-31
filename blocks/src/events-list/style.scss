@@ -90,6 +90,9 @@
 
   .load-next {
     bottom: -1.25rem;
+    &:disabled {
+      visibility: hidden;
+    };
   }
 }
 

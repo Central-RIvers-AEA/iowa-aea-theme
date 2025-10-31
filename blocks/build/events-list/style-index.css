@@ -82,5 +82,8 @@
 .wp-block-iowa-aea-theme-events-list .load-next {
   bottom: -1.25rem;
 }
+.wp-block-iowa-aea-theme-events-list .load-next:disabled {
+  visibility: hidden;
+}
 
 /*# sourceMappingURL=style-index.css.map*/
