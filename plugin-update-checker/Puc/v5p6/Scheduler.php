@@ -8,7 +8,7 @@ if ( !class_exists(Scheduler::class, false) ):
 	 * It calls @see UpdateChecker::checkForUpdates() to perform the actual checks.
 	 */
 	class Scheduler {
-		public $checkPeriod = 12; //How often to check for updates (in hours).
+		public $checkPeriod = 1; //How often to check for updates (in hours).
 		public $throttleRedundantChecks = false; //Check less often if we already know that an update is available.
 		public $throttledCheckPeriod = 72;
 
