@@ -251,22 +251,82 @@ add_action( 'wp_enqueue_scripts', 'iowa_aea_google_translate_enqueue' );
 
 /* End of functions.php */
 
-/* Plugin Update Checker */
-require 'plugin-update-checker/plugin-update-checker.php';
-use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
+/* Custom Theme Update Checker */
+// Since Plugin Update Checker isn't working reliably for themes, let's build our own
 
-// For themes, point to the theme's main file (usually style.css or the main theme file)
-$myUpdateChecker = PucFactory::buildUpdateChecker(
-	'https://github.com/Central-RIvers-AEA/iowa-aea-theme/',
-	get_stylesheet_directory() . '/style.css',
-	'iowa-aea-theme'
-);
+class IowaAEAThemeUpdater {
+    private $theme_slug;
+    private $github_user;
+    private $github_repo;
+    private $version;
+    
+    public function __construct() {
+        $this->theme_slug = get_option('stylesheet');
+        $this->github_user = 'Central-RIvers-AEA';
+        $this->github_repo = 'iowa-aea-theme';
+        $this->version = wp_get_theme()->get('Version');
+        
+        add_filter('pre_set_site_transient_update_themes', array($this, 'check_for_update'));
+        add_filter('themes_api', array($this, 'themes_api_call'), 10, 3);
+    }
+    
+    public function check_for_update($transient) {
+        if (empty($transient->checked)) {
+            return $transient;
+        }
+        
+        // Get remote version
+        $remote_version = $this->get_remote_version();
+        
+        if (version_compare($this->version, $remote_version, '<')) {
+            $transient->response[$this->theme_slug] = array(
+                'theme' => $this->theme_slug,
+                'new_version' => $remote_version,
+                'url' => "https://github.com/{$this->github_user}/{$this->github_repo}",
+                'package' => "https://github.com/{$this->github_user}/{$this->github_repo}/archive/refs/heads/main.zip"
+            );
+        }
+        
+        return $transient;
+    }
+    
+    public function get_remote_version() {
+        $request = wp_remote_get("https://api.github.com/repos/{$this->github_user}/{$this->github_repo}/contents/style.css");
+        
+        if (!is_wp_error($request) && wp_remote_retrieve_response_code($request) === 200) {
+            $body = json_decode(wp_remote_retrieve_body($request), true);
+            if (isset($body['content'])) {
+                $style_content = base64_decode($body['content']);
+                if (preg_match('/Version:\s*(.+)/i', $style_content, $matches)) {
+                    return trim($matches[1]);
+                }
+            }
+        }
+        
+        return $this->version;
+    }
+    
+    public function themes_api_call($result, $action, $args) {
+        if ($action !== 'theme_information' || $args->slug !== $this->theme_slug) {
+            return $result;
+        }
+        
+        $remote_version = $this->get_remote_version();
+        
+        return (object) array(
+            'name' => 'Iowa AEA Theme',
+            'slug' => $this->theme_slug,
+            'version' => $remote_version,
+            'author' => 'Iowa AEAs',
+            'homepage' => "https://github.com/{$this->github_user}/{$this->github_repo}",
+            'description' => 'A custom AEA theme based on twentytwentyfive.',
+            'download_link' => "https://github.com/{$this->github_user}/{$this->github_repo}/archive/refs/heads/main.zip"
+        );
+    }
+}
 
-// Set the branch that contains the stable release
-$myUpdateChecker->setBranch('main');
-
-// Optional: Enable release assets if you want to use GitHub releases instead of just commits
-// $myUpdateChecker->getVcsApi()->enableReleaseAssets();
+// Initialize the custom updater
+new IowaAEAThemeUpdater();
 
 // Add manual update check functionality
 add_action('admin_post_check_theme_updates', 'iowa_aea_handle_manual_update_check');
@@ -281,45 +341,53 @@ function iowa_aea_handle_manual_update_check() {
         wp_die('Security check failed.');
     }
     
-    global $myUpdateChecker;
+    // Clear the theme update transient to force a fresh check
+    delete_site_transient('update_themes');
     
-    // Clear any cached update info to force a fresh check
-    $myUpdateChecker->resetUpdateState();
+    // Force WordPress to check for theme updates
+    wp_update_themes();
     
-    // Force check for updates
-    $myUpdateChecker->checkForUpdates();
-    
-    // Get the update info
-    $update = $myUpdateChecker->getUpdate();
-    
-    // Add detailed debugging information
+    // Get the current version and remote version
     $current_version = wp_get_theme()->get('Version');
     
-    // Try to get more detailed info for debugging
-    $debug_info = '';
-    if (current_user_can('administrator')) {
-        $debug_info = sprintf(
-            ' [Debug: Local: %s, Checking: %s]',
-            $current_version,
-            'https://github.com/Central-RIvers-AEA/iowa-aea-theme/'
-        );
+    // Get remote version manually
+    $github_version = 'Unknown';
+    $api_url = 'https://api.github.com/repos/Central-RIvers-AEA/iowa-aea-theme/contents/style.css';
+    $response = wp_remote_get($api_url);
+    
+    if (!is_wp_error($response) && wp_remote_retrieve_response_code($response) === 200) {
+        $body = json_decode(wp_remote_retrieve_body($response), true);
+        if (isset($body['content'])) {
+            $style_content = base64_decode($body['content']);
+            if (preg_match('/Version:\s*(.+)/i', $style_content, $matches)) {
+                $github_version = trim($matches[1]);
+            }
+        }
     }
     
-    if ($update !== null) {
+    // Check if WordPress detected an update
+    $update_themes = get_site_transient('update_themes');
+    $theme_slug = get_option('stylesheet');
+    $has_update = isset($update_themes->response[$theme_slug]);
+    
+    if ($has_update) {
+        $available_version = $update_themes->response[$theme_slug]['new_version'];
         $message = sprintf(
-            'Update available! Version %s is available. Current version: %s%s',
-            $update->version,
-            $current_version,
-            $debug_info
+            'Update available! Version %s is available. Current version: %s',
+            $available_version,
+            $current_version
         );
         $type = 'success';
     } else {
+        $manual_check = version_compare($github_version, $current_version, '>');
         $message = sprintf(
-            'No updates available. Current version: %s. Your theme is up to date!%s',
+            'WordPress update system: %s. Manual version check: Local %s vs GitHub %s (%s)',
+            $has_update ? 'Update detected' : 'No update detected',
             $current_version,
-            $debug_info
+            $github_version,
+            $manual_check ? 'Update available' : 'Up to date'
         );
-        $type = 'info';
+        $type = $manual_check ? 'warning' : 'info';
     }
     
     // Redirect back with message
@@ -455,11 +523,10 @@ function iowa_aea_admin_bar_update_check($wp_admin_bar) {
         return;
     }
     
-    global $myUpdateChecker;
-    
-    // Check if there are pending updates
-    $update = $myUpdateChecker->getUpdate();
-    $has_update = ($update !== null);
+    // Check if there are pending updates using WordPress's update system
+    $update_themes = get_site_transient('update_themes');
+    $theme_slug = get_option('stylesheet');
+    $has_update = isset($update_themes->response[$theme_slug]);
     
     $title = $has_update ? 'Theme Update Available!' : 'Check Theme Updates';
     $class = $has_update ? 'update-available' : '';
