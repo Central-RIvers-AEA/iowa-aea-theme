@@ -1,0 +1,55 @@
+{
+  "version": 2,
+  "settings": {
+    "color": {
+      "palette": [
+        {
+          "name": "Primary",
+          "slug": "primary",
+          "color": "#0D2C58"
+        },
+        {
+          "name": "Secondary",
+          "slug": "secondary",
+          "color": "#031938"
+        },
+        {
+          "name": "Alt One",
+          "slug": "alt-one",
+          "color": "#4F6585"
+        },
+        {
+          "name": "Alt Two",
+          "slug": "alt-two",
+          "color": "#F89F3C"
+        },
+        {
+          "name": "Alt Three",
+          "slug": "alt-three",
+          "color": "#809E3E"
+        },
+        {
+          "name": "Alt Four",
+          "slug": "alt-four",
+          "color": "#537F28"
+        },
+        {
+          "name": "Background Color",
+          "slug": "background-color",
+          "color": "#ffffff"
+        },
+        {
+          "color": "#FFFFFF",
+          "name": "Base",
+          "slug": "base"
+        },
+        {
+          "name": "Text Color",
+          "slug": "text-color",
+          "color": "#333333"
+        }
+      ]
+    }
+  },
+  "title": "Central Rivers AEA"
+}

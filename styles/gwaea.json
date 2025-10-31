@@ -1,0 +1,55 @@
+{
+  "version": 2,
+  "settings": {
+    "color": {
+      "palette": [
+        {
+          "name": "Primary",
+          "slug": "primary",
+          "color": "#9b2246"
+        },
+        {
+          "name": "Secondary",
+          "slug": "secondary",
+          "color": "#f0b52b"
+        },
+        {
+          "name": "Alt One",
+          "slug": "alt-one",
+          "color": "#001777"
+        },
+        {
+          "name": "Alt Two",
+          "slug": "alt-two",
+          "color": "#582c63"
+        },
+        {
+          "name": "Alt Three",
+          "slug": "alt-three",
+          "color": "#00826e"
+        },
+        {
+          "name": "Alt Four",
+          "slug": "alt-four",
+          "color": "#d17829"
+        },
+        {
+          "name": "Background Color",
+          "slug": "background-color",
+          "color": "#ffffff"
+        },
+        {
+          "color": "#FFFFFF",
+          "name": "Base",
+          "slug": "base"
+        },
+        {
+          "name": "Text Color",
+          "slug": "text-color",
+          "color": "#333333"
+        }
+      ]
+    }
+  },
+  "title": "Grant Wood AEA"
+}

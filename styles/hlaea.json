@@ -1,0 +1,60 @@
+{
+  "version": 2,
+  "settings": {
+    "color": {
+      "palette": [
+        {
+          "name": "Primary",
+          "slug": "primary",
+          "color": "#500878"
+        },
+        {
+          "name": "Secondary",
+          "slug": "secondary",
+          "color": "#088391"
+        },
+        {
+          "name": "Secondary 2",
+          "slug": "secondary-2",
+          "color": "#8C4799"
+        },
+        {
+          "name": "Alt One",
+          "slug": "alt-one",
+          "color": "#001871"
+        },
+        {
+          "name": "Alt Two",
+          "slug": "alt-two",
+          "color": "#A20067"
+        },
+        {
+          "name": "Alt Three",
+          "slug": "alt-three",
+          "color": "#7D55C7"
+        },
+        {
+          "name": "Alt Four",
+          "slug": "alt-four",
+          "color": "#BF0D3E"
+        },
+        {
+          "name": "Background Color",
+          "slug": "background-color",
+          "color": "#ffffff"
+        },
+        {
+          "color": "#FFFFFF",
+          "name": "Base",
+          "slug": "base"
+        },
+        {
+          "name": "Text Color",
+          "slug": "text-color",
+          "color": "#333333"
+        }
+      ]
+    }
+  },
+  "title": "Heartland AEA"
+}
