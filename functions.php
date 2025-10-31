@@ -250,3 +250,16 @@ function iowa_aea_google_translate_enqueue() {
 add_action( 'wp_enqueue_scripts', 'iowa_aea_google_translate_enqueue' );
 
 /* End of functions.php */
+
+/* Plugin Update Checker */
+require 'plugin-update-checker/plugin-update-checker.php';
+use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
+
+$myUpdateChecker = PucFactory::buildUpdateChecker(
+	'https://github.com/Central-RIvers-AEA/iowa-aea-theme',
+	__FILE__,
+	'iowa-aea-theme'
+);
+
+//Set the branch that contains the stable release.
+$myUpdateChecker->setBranch('main');
