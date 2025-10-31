@@ -177,6 +177,19 @@ const {
         let currentDate = state.currentDate;
         let firstOfDate = state.events.find(event => event.event_date === currentDate);
         state.topEventId = firstOfDate?.id || state.events.find(event => event.event_date >= currentDate)?.id;
+        if (!state.topEventId && state.events.length) {
+          state.topEventId = state.events[0].id;
+        }
+
+        // set button states
+        let loadPreviousButton = document.querySelector('.load-previous');
+        if (loadPreviousButton) {
+          loadPreviousButton.disabled = state.events[0]?.id === state.topEventId;
+        }
+        let loadNextButton = document.querySelector('.load-next');
+        if (loadNextButton) {
+          loadNextButton.disabled = state.events.map(event => event.id).indexOf(state.topEventId) > state.events.length - state.visibleEvents - 1;
+        }
       }
       actions.updateEventsView();
     },
@@ -205,6 +218,7 @@ const {
       state.topEventId = state.events[state.events.map(event => event.id).indexOf(state.topEventId) + 1]?.id || null;
       if (state.events.map(event => event.id).indexOf(state.topEventId) > state.events.length - state.visibleEvents) {
         state.topEventId = state.events[state.events.length - state.visibleEvents]?.id || null;
+        document.querySelector('.load-next').disabled = true;
       } else {
         actions.updateEventsView();
       }
@@ -215,6 +229,13 @@ const {
 
       // set button states
       document.querySelector('.load-previous').disabled = false;
+
+      // set button states
+      if (state.events[state.events.length - 1]?.id === state.topEventId) {
+        document.querySelector('.load-next').disabled = true;
+      } else {
+        document.querySelector('.load-next').disabled = false;
+      }
     },
     scrollBackEvents: () => {
       state.topEventId = state.events[state.events.map(event => event.id).indexOf(state.topEventId) - 1]?.id || state.events[0]?.id;
