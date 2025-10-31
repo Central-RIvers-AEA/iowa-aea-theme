@@ -182,14 +182,7 @@ const {
         }
 
         // set button states
-        let loadPreviousButton = document.querySelector('.load-previous');
-        if (loadPreviousButton) {
-          loadPreviousButton.disabled = state.events[0]?.id === state.topEventId;
-        }
-        let loadNextButton = document.querySelector('.load-next');
-        if (loadNextButton) {
-          loadNextButton.disabled = state.events.map(event => event.id).indexOf(state.topEventId) > state.events.length - state.visibleEvents - 1;
-        }
+        callbacks.checkButtonStates();
       }
       actions.updateEventsView();
     },
@@ -227,14 +220,7 @@ const {
       }
 
       // set button states
-      document.querySelector('.load-previous').disabled = false;
-
-      // set button states
-      if (state.events[state.events.length - 1]?.id === state.topEventId) {
-        document.querySelector('.load-next').disabled = true;
-      } else {
-        document.querySelector('.load-next').disabled = false;
-      }
+      callbacks.checkButtonStates();
     },
     scrollBackEvents: () => {
       state.topEventId = state.events[state.events.map(event => event.id).indexOf(state.topEventId) - 1]?.id || state.events[0]?.id;
@@ -246,15 +232,21 @@ const {
       }
 
       // set button states
-      if (state.events[state.events.length - 1]?.id === state.topEventId) {
-        document.querySelector('.load-next').disabled = true;
-      } else {
-        document.querySelector('.load-next').disabled = false;
-      }
+      callbacks.checkButtonStates();
     },
     resetEvents: () => {
       state.topEventId = null;
       actions.loadEvents();
+    },
+    checkButtonStates: () => {
+      let loadPreviousButton = document.querySelector('.load-previous');
+      if (loadPreviousButton) {
+        loadPreviousButton.disabled = state.events[0]?.id === state.topEventId;
+      }
+      let loadNextButton = document.querySelector('.load-next');
+      if (loadNextButton) {
+        loadNextButton.disabled = state.events.map(event => event.id).indexOf(state.topEventId) > state.events.length - state.visibleEvents - 1;
+      }
     }
   },
   init: {}
