@@ -6,32 +6,32 @@
         {
           "name": "Primary",
           "slug": "primary",
-          "color": "#9b2246"
+          "color": "#48822f"
         },
         {
           "name": "Secondary",
           "slug": "secondary",
-          "color": "#f0b52b"
+          "color": "#00558c"
         },
         {
           "name": "Alt One",
           "slug": "alt-one",
-          "color": "#001777"
+          "color": "#72c24f"
         },
         {
           "name": "Alt Two",
           "slug": "alt-two",
-          "color": "#582c63"
+          "color": "#f78d28"
         },
         {
           "name": "Alt Three",
           "slug": "alt-three",
-          "color": "#00826e"
+          "color": "#386625"
         },
         {
           "name": "Alt Four",
           "slug": "alt-four",
-          "color": "#d17829"
+          "color": "#f8f7f4"
         },
         {
           "name": "Background Color",
