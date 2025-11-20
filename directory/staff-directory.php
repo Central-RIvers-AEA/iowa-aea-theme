@@ -53,7 +53,7 @@ class StaffDirectory
       wp_die(__('You do not have sufficient permissions to access this page.'));
     }
 
-?>
+    ?>
     <div class="wrap">
       <h1>Import Employees from CSV</h1>
       <p>Please upload a CSV file containing employee data. The columns should be as below</p>
@@ -291,7 +291,7 @@ class StaffDirectory
 
     */
 
-  ?>
+   ?>
     <button type='button' id='addAssignment' class='button'>Add Assignment</button>
 
     <template id='rowTemplate'>
@@ -377,7 +377,7 @@ class StaffDirectory
       </tbody>
     </table>
 
-<?php
+    <?php
 
   }
 
@@ -403,17 +403,33 @@ class StaffDirectory
           <h2>General Settings</h2>
           <table class="form-table">
             <tr>
-              <th><label for="staff_directory_results_per_page">Results Per Page</label></th>
-              <td>
-                <input type="number" id="staff_directory_results_per_page" name="staff_directory_results_per_page" value="<?php echo esc_attr(get_option('staff_directory_results_per_page', 10)); ?>" class="regular-text" />
-                <p class="description">Number of results to display per page in the staff directory.</p>
-              </td>
-            </tr>
-            <tr>
               <th><label for="staff_directory_use_external_api">External API URL</label></th>
               <td>
                 <input type="text" name="staff_directory_use_external_api" value="<?php echo esc_attr(get_option('staff_directory_use_external_api', '')); ?>" class="regular-text" />
                 <p class="description">Enter the URL of the external API to use for staff directory data.</p>
+              </td>
+            </tr>
+            <tr>
+              <th>API Mapping</th>
+              <td>
+                <button type="button" id="queryAPIForFields" class="button">Query API for Fields</button>
+                <input type="hidden" id="apiFieldMappingsNonce" value="<?php echo wp_create_nonce('api_field_mappings_nonce'); ?>" />
+                <input type='hidden' id='apiFieldsRecieved' value='<?php echo get_option('staff_directory_api_fields_received', '') ?>' name='staff_directory_api_fields_received' />
+                <div id="apiFieldMappings">
+                  <?php
+                  $api_mappings = get_option('staff_directory_api_mappings', array());
+                  if (!empty($api_mappings)) {
+                    foreach ($api_mappings as $field => $mapping) {
+                      echo '<div class="api-mapping-row">';
+                      echo '<label>' . esc_html($field) . ':</label> ';
+                      echo '<input type="text" name="staff_directory_api_mappings[' . esc_attr($field) . ']" value="' . esc_attr($mapping) . '" class="regular-text" />';
+                      echo '</div>';
+                    }
+                  } else {
+                    echo '<p>No API field mappings configured yet.</p>';
+                  }
+                  ?>
+                </div>
               </td>
             </tr>
           </table>
@@ -820,27 +836,6 @@ class StaffDirectory
   }
 
   /**
-   * Helper method for IP range checking (for Option 6)
-   */
-  private function ip_in_range($ip, $allowed_ranges) {
-    foreach ($allowed_ranges as $range) {
-      if (strpos($range, '/') !== false) {
-        // CIDR notation
-        list($subnet, $mask) = explode('/', $range);
-        if ((ip2long($ip) & ~((1 << (32 - $mask)) - 1)) == ip2long($subnet)) {
-          return true;
-        }
-      } else {
-        // Single IP
-        if ($ip === $range) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
-  /**
    * REST API callback to get all employees
    */
   public function get_employees_rest($request) {
@@ -966,3 +961,359 @@ class StaffDirectory
 
 // Initialize the StaffDirectory class
 $GLOBALS['staff-directory'] = new StaffDirectory();
+
+
+// Some example parameters that Green Hills AEA uses for their directory REST API
+
+// action -directory
+// ajax - true
+// per_page - 1000
+// department - 271
+// district - 82
+// building - 272
+// title - 213
+// office - 180
+// search - pa
+
+// Example Return for Green Hills
+
+// {
+//   "id": 1239,
+//   "date": "2022-10-28T13:14:56",
+//   "date_gmt": "2022-10-28T18:14:56",
+//   "guid": {
+//     "rendered": "https://green-hills.staging2.juiceboxint.com/directory-listing/teresa-johnsen/"
+//   },
+//   "modified": "2024-07-15T09:39:35",
+//   "modified_gmt": "2024-07-15T14:39:35",
+//   "slug": "teresa-johnsen",
+//   "status": "publish",
+//   "type": "directory",
+//   "link": "https://www.ghaea.org/directory-listing/teresa-johnsen/",
+//   "title": {
+//     "rendered": "Teresa Johnsen"
+//   },
+//   "template": "",
+//   "meta": {
+//     "_acf_changed": false,
+//     "_links_to": "",
+//     "_links_to_target": ""
+//   },
+//   "departments": [
+//     160
+//   ],
+//   "districts": [
+//     386,
+//     61
+//   ],
+//   "buildings": [
+//     76
+//   ],
+//   "expertises": [],
+//   "positions": [],
+//   "titles": [
+//     492,
+//     171
+//   ],
+//   "offices": [
+//     180
+//   ],
+//   "class_list": [
+//     "post-1239",
+//     "type-directory",
+//     "status-publish",
+//     "hentry",
+//     "department-specialized-services-and-supports",
+//     "district-agency-wide",
+//     "district-council-bluffs",
+//     "title-consultant-integrated-support-assistive-technology",
+//     "title-speech-language-pathologist",
+//     "office-council-bluffs-office"
+//   ],
+//   "yoast_head": "<!-- This site is optimized with the Yoast SEO plugin v23.6 - https://yoast.com/wordpress/plugins/seo/ -->\n<meta name=\"robots\" content=\"index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1\" />\n<link rel=\"canonical\" href=\"https://www.ghaea.org/directory-listing/teresa-johnsen/\" />\n<meta property=\"og:locale\" content=\"en_US\" />\n<meta property=\"og:type\" content=\"article\" />\n<meta property=\"og:title\" content=\"Teresa Johnsen - Green Hills AEA\" />\n<meta property=\"og:url\" content=\"https://www.ghaea.org/directory-listing/teresa-johnsen/\" />\n<meta property=\"og:site_name\" content=\"Green Hills AEA\" />\n<meta property=\"article:modified_time\" content=\"2024-07-15T14:39:35+00:00\" />\n<meta name=\"twitter:card\" content=\"summary_large_image\" />\n<script type=\"application/ld+json\" class=\"yoast-schema-graph\">{\"@context\":\"https://schema.org\",\"@graph\":[{\"@type\":\"WebPage\",\"@id\":\"https://www.ghaea.org/directory-listing/teresa-johnsen/\",\"url\":\"https://www.ghaea.org/directory-listing/teresa-johnsen/\",\"name\":\"Teresa Johnsen - Green Hills AEA\",\"isPartOf\":{\"@id\":\"https://www.ghaea.org/#website\"},\"datePublished\":\"2022-10-28T18:14:56+00:00\",\"dateModified\":\"2024-07-15T14:39:35+00:00\",\"breadcrumb\":{\"@id\":\"https://www.ghaea.org/directory-listing/teresa-johnsen/#breadcrumb\"},\"inLanguage\":\"en-US\",\"potentialAction\":[{\"@type\":\"ReadAction\",\"target\":[\"https://www.ghaea.org/directory-listing/teresa-johnsen/\"]}]},{\"@type\":\"BreadcrumbList\",\"@id\":\"https://www.ghaea.org/directory-listing/teresa-johnsen/#breadcrumb\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Home\",\"item\":\"https://www.ghaea.org/\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Directory Listings\",\"item\":\"https://www.ghaea.org/directory-listing/\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"Teresa Johnsen\"}]},{\"@type\":\"WebSite\",\"@id\":\"https://www.ghaea.org/#website\",\"url\":\"https://www.ghaea.org/\",\"name\":\"Green Hills AEA\",\"description\":\"Proud to be a part of Iowa’s Area Education Agencies\",\"publisher\":{\"@id\":\"https://www.ghaea.org/#organization\"},\"inLanguage\":\"en-US\"},{\"@type\":\"Organization\",\"@id\":\"https://www.ghaea.org/#organization\",\"name\":\"Green Hills AEA\",\"url\":\"https://www.ghaea.org/\",\"logo\":{\"@type\":\"ImageObject\",\"inLanguage\":\"en-US\",\"@id\":\"https://www.ghaea.org/#/schema/logo/image/\",\"url\":\"https://www.ghaea.org/app/uploads/sites/21/2021/05/logo-gh.png\",\"contentUrl\":\"https://www.ghaea.org/app/uploads/sites/21/2021/05/logo-gh.png\",\"width\":232,\"height\":91,\"caption\":\"Green Hills AEA\"},\"image\":{\"@id\":\"https://www.ghaea.org/#/schema/logo/image/\"}}]}</script>\n<!-- / Yoast SEO plugin. -->",
+//   "yoast_head_json": {
+//     "robots": {
+//       "index": "index",
+//       "follow": "follow",
+//       "max-snippet": "max-snippet:-1",
+//       "max-image-preview": "max-image-preview:large",
+//       "max-video-preview": "max-video-preview:-1"
+//     },
+//     "canonical": "https://www.ghaea.org/directory-listing/teresa-johnsen/",
+//     "og_locale": "en_US",
+//     "og_type": "article",
+//     "og_title": "Teresa Johnsen - Green Hills AEA",
+//     "og_url": "https://www.ghaea.org/directory-listing/teresa-johnsen/",
+//     "og_site_name": "Green Hills AEA",
+//     "article_modified_time": "2024-07-15T14:39:35+00:00",
+//     "twitter_card": "summary_large_image",
+//     "schema": {
+//       "@context": "https://schema.org",
+//       "@graph": [
+//         {
+//           "@type": "WebPage",
+//           "@id": "https://www.ghaea.org/directory-listing/teresa-johnsen/",
+//           "url": "https://www.ghaea.org/directory-listing/teresa-johnsen/",
+//           "name": "Teresa Johnsen - Green Hills AEA",
+//           "isPartOf": {
+//             "@id": "https://www.ghaea.org/#website"
+//           },
+//           "datePublished": "2022-10-28T18:14:56+00:00",
+//           "dateModified": "2024-07-15T14:39:35+00:00",
+//           "breadcrumb": {
+//             "@id": "https://www.ghaea.org/directory-listing/teresa-johnsen/#breadcrumb"
+//           },
+//           "inLanguage": "en-US",
+//           "potentialAction": [
+//             {
+//               "@type": "ReadAction",
+//               "target": [
+//                 "https://www.ghaea.org/directory-listing/teresa-johnsen/"
+//               ]
+//             }
+//           ]
+//         },
+//         {
+//           "@type": "BreadcrumbList",
+//           "@id": "https://www.ghaea.org/directory-listing/teresa-johnsen/#breadcrumb",
+//           "itemListElement": [
+//             {
+//               "@type": "ListItem",
+//               "position": 1,
+//               "name": "Home",
+//               "item": "https://www.ghaea.org/"
+//             },
+//             {
+//               "@type": "ListItem",
+//               "position": 2,
+//               "name": "Directory Listings",
+//               "item": "https://www.ghaea.org/directory-listing/"
+//             },
+//             {
+//               "@type": "ListItem",
+//               "position": 3,
+//               "name": "Teresa Johnsen"
+//             }
+//           ]
+//         },
+//         {
+//           "@type": "WebSite",
+//           "@id": "https://www.ghaea.org/#website",
+//           "url": "https://www.ghaea.org/",
+//           "name": "Green Hills AEA",
+//           "description": "Proud to be a part of Iowa’s Area Education Agencies",
+//           "publisher": {
+//             "@id": "https://www.ghaea.org/#organization"
+//           },
+//           "inLanguage": "en-US"
+//         },
+//         {
+//           "@type": "Organization",
+//           "@id": "https://www.ghaea.org/#organization",
+//           "name": "Green Hills AEA",
+//           "url": "https://www.ghaea.org/",
+//           "logo": {
+//             "@type": "ImageObject",
+//             "inLanguage": "en-US",
+//             "@id": "https://www.ghaea.org/#/schema/logo/image/",
+//             "url": "https://www.ghaea.org/app/uploads/sites/21/2021/05/logo-gh.png",
+//             "contentUrl": "https://www.ghaea.org/app/uploads/sites/21/2021/05/logo-gh.png",
+//             "width": 232,
+//             "height": 91,
+//             "caption": "Green Hills AEA"
+//           },
+//           "image": {
+//             "@id": "https://www.ghaea.org/#/schema/logo/image/"
+//           }
+//         }
+//       ]
+//     }
+//   },
+//   "acf": {
+//     "office": [
+//       {
+//         "term_id": 180,
+//         "name": "Council Bluffs Office",
+//         "slug": "council-bluffs-office",
+//         "term_group": 0,
+//         "term_taxonomy_id": 180,
+//         "taxonomy": "office",
+//         "description": "",
+//         "parent": 0,
+//         "count": 98,
+//         "filter": "raw"
+//       }
+//     ],
+//     "department": [
+//       {
+//         "term_id": 160,
+//         "name": "Specialized Services and Supports",
+//         "slug": "specialized-services-and-supports",
+//         "term_group": 0,
+//         "term_taxonomy_id": 160,
+//         "taxonomy": "department",
+//         "description": "",
+//         "parent": 0,
+//         "count": 197,
+//         "filter": "raw"
+//       }
+//     ],
+//     "position": false,
+//     "phone_extension": "6420",
+//     "phone_number": "712-366-0503 ext. 6420",
+//     "fax_number": "712-527-5263",
+//     "email": "tjohnsen@ghaea.org",
+//     "first_name": "Teresa",
+//     "last_name": "Johnsen",
+//     "photo": {
+//       "ID": 4601,
+//       "id": 4601,
+//       "title": "Teresa Johnsen",
+//       "filename": "Teresa-Johnsen.png",
+//       "filesize": 6647263,
+//       "url": "https://www.ghaea.org/app/uploads/sites/21/2022/10/Teresa-Johnsen.png",
+//       "link": "https://www.ghaea.org/directory-listing/teresa-johnsen/teresa-johnsen-3/",
+//       "alt": "Teresa Johnsen",
+//       "author": "2531",
+//       "description": "",
+//       "caption": "",
+//       "name": "teresa-johnsen-3",
+//       "status": "inherit",
+//       "uploaded_to": 1239,
+//       "date": "2023-07-05 16:20:47",
+//       "modified": "2023-07-05 16:20:47",
+//       "menu_order": 0,
+//       "mime_type": "image/png",
+//       "type": "image",
+//       "subtype": "png",
+//       "icon": "https://www.ghaea.org/wp/wp-includes/images/media/default.png",
+//       "width": 1828,
+//       "height": 2512,
+//       "sizes": {
+//         "thumbnail": "https://www.ghaea.org/app/uploads/sites/21/2022/10/Teresa-Johnsen-150x150.png",
+//         "thumbnail-width": 150,
+//         "thumbnail-height": 150,
+//         "medium": "https://www.ghaea.org/app/uploads/sites/21/2022/10/Teresa-Johnsen-218x300.png",
+//         "medium-width": 218,
+//         "medium-height": 300,
+//         "medium_large": "https://www.ghaea.org/app/uploads/sites/21/2022/10/Teresa-Johnsen-768x1055.png",
+//         "medium_large-width": 620,
+//         "medium_large-height": 852,
+//         "large": "https://www.ghaea.org/app/uploads/sites/21/2022/10/Teresa-Johnsen-745x1024.png",
+//         "large-width": 620,
+//         "large-height": 852,
+//         "1536x1536": "https://www.ghaea.org/app/uploads/sites/21/2022/10/Teresa-Johnsen-1118x1536.png",
+//         "1536x1536-width": 620,
+//         "1536x1536-height": 852,
+//         "2048x2048": "https://www.ghaea.org/app/uploads/sites/21/2022/10/Teresa-Johnsen-1490x2048.png",
+//         "2048x2048-width": 620,
+//         "2048x2048-height": 852
+//       }
+//     },
+//     "fax": "712-527-5263",
+//     "job_classification": "Certified",
+//     "job_level": "",
+//     "expertise": "",
+//     "assignments": [
+//       {
+//         "job_title": {
+//           "term_id": 171,
+//           "name": "Speech-Language Pathologist"
+//         },
+//         "district": [
+//           {
+//             "term_id": 61,
+//             "name": "Council Bluffs"
+//           }
+//         ],
+//         "building": [
+//           {
+//             "term_id": 76,
+//             "name": "Council Bluffs Kirn Middle (6-8)"
+//           }
+//         ]
+//       },
+//       {
+//         "job_title": {
+//           "term_id": 492,
+//           "name": "Consultant, Integrated Support: Assistive Technology"
+//         },
+//         "district": [
+//           {
+//             "term_id": 386,
+//             "name": "Agency Wide"
+//           }
+//         ]
+//       }
+//     ]
+//   },
+//   "permalink": "https://www.ghaea.org/directory-listing/teresa-johnsen/",
+//   "featured_image": null,
+//   "email": "mailto:tjohnsen@ghaea.org",
+//   "_links": {
+//     "self": [
+//       {
+//         "href": "https://www.ghaea.org/wp-json/wp/v2/directory/1239"
+//       }
+//     ],
+//     "collection": [
+//       {
+//         "href": "https://www.ghaea.org/wp-json/wp/v2/directory"
+//       }
+//     ],
+//     "about": [
+//       {
+//         "href": "https://www.ghaea.org/wp-json/wp/v2/types/directory"
+//       }
+//     ],
+//     "wp:attachment": [
+//       {
+//         "href": "https://www.ghaea.org/wp-json/wp/v2/media?parent=1239"
+//       }
+//     ],
+//     "wp:term": [
+//       {
+//         "taxonomy": "department",
+//         "embeddable": true,
+//         "href": "https://www.ghaea.org/wp-json/wp/v2/departments?post=1239"
+//       },
+//       {
+//         "taxonomy": "district",
+//         "embeddable": true,
+//         "href": "https://www.ghaea.org/wp-json/wp/v2/districts?post=1239"
+//       },
+//       {
+//         "taxonomy": "building",
+//         "embeddable": true,
+//         "href": "https://www.ghaea.org/wp-json/wp/v2/buildings?post=1239"
+//       },
+//       {
+//         "taxonomy": "expertise",
+//         "embeddable": true,
+//         "href": "https://www.ghaea.org/wp-json/wp/v2/expertises?post=1239"
+//       },
+//       {
+//         "taxonomy": "position",
+//         "embeddable": true,
+//         "href": "https://www.ghaea.org/wp-json/wp/v2/positions?post=1239"
+//       },
+//       {
+//         "taxonomy": "title",
+//         "embeddable": true,
+//         "href": "https://www.ghaea.org/wp-json/wp/v2/titles?post=1239"
+//       },
+//       {
+//         "taxonomy": "office",
+//         "embeddable": true,
+//         "href": "https://www.ghaea.org/wp-json/wp/v2/offices?post=1239"
+//       }
+//     ],
+//     "curies": [
+//       {
+//         "name": "wp",
+//         "href": "https://api.w.org/{rel}",
+//         "templated": true
+//       }
+//     ]
+//   }
+// }

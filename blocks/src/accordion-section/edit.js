@@ -11,7 +11,9 @@ import { __ } from '@wordpress/i18n';
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
-import { useBlockProps, InnerBlocks, ButtonBlockAppender } from '@wordpress/block-editor';
+import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
+import { Button } from '@wordpress/components';
+import { useDispatch } from '@wordpress/data';
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -30,23 +32,41 @@ import './editor.scss';
  * @return {Element} Element to render.
  */
 export default function Edit(props) {
-	const allowed_blocks = ['iowa-aea-theme/accordion-section']
-	const template = [
-		['iowa-aea-theme/accordion-section', {}]
-	]
+	const blockProps = useBlockProps({ className: 'accordion-section'});
+
+	const { removeBlock } = useDispatch('core/block-editor');
+
+	const handleRemove = () => {
+		removeBlock(props.clientId);
+	};
 
 	return (
-			<div { ...useBlockProps({ className: 'accordion-holder'}) }>
-				<InnerBlocks 
-					allowedBlocks={allowed_blocks}
-					template={template}
-					renderAppender={() => (
-						<ButtonBlockAppender
-							rootClientId={props.clientId}
-							className="accordion-add-section"
-						/>
-					)}
-				/>
-			</div>
+		<div { ...blockProps } >
+			<Button
+					isDestructive
+					variant="secondary"
+					onClick={handleRemove}
+					className="accordion-remove-button"
+				>
+					{__('X', 'your-text-domain')}
+			</Button>
+			<InnerBlocks
+				template={[
+					[ 'core/heading', { 
+						level: 3,
+						placeholder: 'Enter heading...',
+						className: 'section-heading',
+						lock: {
+							move: true,
+							remove: true
+						}
+					} ],
+					[ 'core/paragraph', { 
+						placeholder: `Content for section`,
+						className: `section-content`,
+					} ]
+				]}
+			/>
+		</div>
 	);
 }

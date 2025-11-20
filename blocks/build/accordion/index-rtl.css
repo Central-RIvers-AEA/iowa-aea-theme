@@ -19,8 +19,32 @@
   background-color: white;
   color: var(--wp--preset--color--primary);
 }
+.accordion-holder .block-list-appender {
+  left: unset;
+  right: 1rem;
+  bottom: -1rem;
+}
+.accordion-holder .accordion-remove-button {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 99;
+}
 
 .accordion-section p {
   padding: 1rem;
   height: auto !important;
+}
+
+.accordion-add-section {
+  background-color: var(--wp--preset--color--primary);
+  color: white;
+  border-radius: 4px;
+  padding: 10px 20px;
+}
+.accordion-add-section:hover {
+  filter: brightness(0.7);
+}
+.accordion-add-section .block-editor-button-block-appender {
+  color: white;
 }
