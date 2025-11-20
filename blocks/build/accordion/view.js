@@ -27,22 +27,6 @@
 /* eslint-disable no-console */
 console.log('Hello World! (from iowa-aea-accordion block)');
 /* eslint-enable no-console */
-
-// Select accordion section
-const accordionSections = document.querySelectorAll('.accordion-section');
-
-// Add click event listener to each section
-accordionSections.forEach(section => {
-  const header = section.querySelector('h3');
-  header.addEventListener('click', () => {
-    document.querySelectorAll('.accordion-section.open').forEach(openSection => {
-      if (openSection !== section) {
-        openSection.classList.remove('open');
-      }
-    });
-    section.classList.toggle('open');
-  });
-});
 /******/ })()
 ;
 //# sourceMappingURL=view.js.map

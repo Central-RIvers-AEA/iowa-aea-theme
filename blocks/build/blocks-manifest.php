@@ -9,25 +9,6 @@ return array(
 		'title' => 'Accordion',
 		'category' => 'widgets',
 		'icon' => 'smiley',
-		'attributes' => array(
-			'sections' => array(
-				'type' => 'array',
-				'items' => array(
-					'type' => 'object',
-					'properties' => array(
-						'title' => array(
-							'type' => 'string',
-							'source' => 'html'
-						),
-						'content' => array(
-							'type' => 'string',
-							'source' => 'html',
-							'default' => '<p>Default content for section</p>'
-						)
-					)
-				)
-			)
-		),
 		'description' => 'Example block scaffolded with Create Block tool.',
 		'example' => array(
 			
@@ -39,7 +20,6 @@ return array(
 		'editorScript' => 'file:./index.js',
 		'editorStyle' => 'file:./index.css',
 		'style' => 'file:./style-index.css',
-		'render' => 'file:./render.php',
 		'viewScript' => 'file:./view.js'
 	),
 	'accordion-section' => array(
@@ -64,7 +44,6 @@ return array(
 		'editorScript' => 'file:./index.js',
 		'editorStyle' => 'file:./index.css',
 		'style' => 'file:./style-index.css',
-		'render' => 'file:./render.php',
 		'viewScript' => 'file:./view.js'
 	),
 	'big-card' => array(

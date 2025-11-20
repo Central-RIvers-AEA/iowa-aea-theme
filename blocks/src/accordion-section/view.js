@@ -21,7 +21,7 @@
  */
 
 /* eslint-disable no-console */
-console.log( 'Hello World! (from iowa-aea-accordion block)' );
+console.log( 'Hello World! (from iowa-aea-accordion-section block)' );
 /* eslint-enable no-console */
 
 // Select accordion section
