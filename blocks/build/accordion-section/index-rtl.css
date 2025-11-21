@@ -24,3 +24,6 @@
   padding: 1rem;
   height: auto !important;
 }
+.accordion-section .section-content {
+  display: block !important;
+}
