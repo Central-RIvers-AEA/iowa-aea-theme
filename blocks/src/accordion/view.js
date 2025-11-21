@@ -24,3 +24,25 @@
 console.log( 'Hello World! (from iowa-aea-accordion block)' );
 /* eslint-enable no-console */
 
+// Grab accordions and only affect the accordion
+const accordions = document.querySelectorAll('.accordion-holder')
+
+accordions.forEach(accordion => {
+	let sections = accordion.querySelectorAll('.accordion-section')
+
+	
+	sections.forEach(section => {
+		if(section.dataset.prepared){
+			return
+		}
+
+		section.dataset.prepared = 1
+		section.querySelector('.section-heading').addEventListener('click', (e) => {
+			if(section.classList.contains('open')){
+				section.classList.remove('open');
+			} else {
+				section.classList.add('open');
+			}
+		})
+	})
+})

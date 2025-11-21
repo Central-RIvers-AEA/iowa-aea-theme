@@ -6,6 +6,9 @@
  *
  * Replace them with your own styles or remove the file completely.
  */
+.accordion-holder {
+  margin-bottom: 2rem !important;
+}
 .accordion-holder .btn {
   margin: 1rem;
   padding: 0.5rem 1rem;
@@ -34,6 +37,9 @@
 .accordion-section p {
   padding: 1rem;
   height: auto !important;
+}
+.accordion-section .accordion-holder {
+  margin-inline: 1rem;
 }
 
 .accordion-add-section {

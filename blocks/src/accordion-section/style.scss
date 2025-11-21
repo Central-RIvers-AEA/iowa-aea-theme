@@ -45,29 +45,24 @@
 		color: var(--wp--preset--color--text-color);
 		opacity: 0.6;
 	}
-	p{
-		height: 0;
-		overflow: hidden;
-		margin: 0;
-		padding: 0;
+
+	.section-content {
+		display: none;
 	}
 
 	&:hover {
-		h3{
+		& > h3{
 			opacity: 1;
 		}
 	}
 
 	&.open {
-		h3{
+		& > h3{
 			opacity: 1;
 			font-size: 1.5rem;
 		}
-		p{
-			height: auto;
-			overflow: visible;
-			margin: 0;
-			padding: 1rem 1.25rem;
+		.section-content{
+			display: block;
 		}
 	}
 }

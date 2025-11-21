@@ -17,6 +17,7 @@
 .accordion-section{
 	border-bottom: 15px solid var(--wp--preset--color--primary);
 
+	
 	// nth-child border bottom adjustments
 	&:nth-child(2n) {
 		border-bottom: 15px solid var(--wp--preset--color--secondary);
@@ -38,6 +39,15 @@
 		border-bottom: 15px solid var(--wp--preset--color--alt-four);
 	}
 
+	&:not(.wp-block){
+		& > *:not(h3, .accordion, .accordion-selection, .wp-block-iowa-aea-theme-accordion){
+			height: 0;
+			overflow: hidden;
+			margin: 0;
+			padding: 0;
+		} 
+	}
+
 	h3{
 		font-size: 1.25rem;
 		margin: 0;
@@ -45,12 +55,7 @@
 		color: var(--wp--preset--color--text-color);
 		opacity: 0.6;
 	}
-	p{
-		height: 0;
-		overflow: hidden;
-		margin: 0;
-		padding: 0;
-	}
+	
 
 	&:hover {
 		h3{
@@ -59,15 +64,21 @@
 	}
 
 	&.open {
-		h3{
-			opacity: 1;
-			font-size: 1.5rem;
-		}
-		p{
+		& > *:not(h3, .accordion-holder, .accordion-selection, .wp-block-iowa-aea-theme-accordion){
 			height: auto;
 			overflow: visible;
 			margin: 0;
 			padding: 1rem 1.25rem;
 		}
+
+		.accordion-holder{
+			margin: 0 1rem 1rem !important;
+		}
+
+		h3{
+			opacity: 1;
+			font-size: 1.5rem;
+		}
+		
 	}
 }

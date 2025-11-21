@@ -340,7 +340,7 @@
       "alt-three-color": "var(--wp--preset--color--alt-three)",
       "alt-four-color": "var(--wp--preset--color--alt-four)",
       "text-color": "var(--wp--preset--color--text-color)",
-      "dot-pattern-url": "url('/wp-content/themes/iowa-aea-theme/assets/images/dot-pattern.png')"
+      "dot-pattern-url": "url('/wp-content/themes/iowa-aea-theme-main/assets/images/dot-pattern.png')"
     },
     "blocks": {
       "core/button": {

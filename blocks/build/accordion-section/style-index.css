@@ -40,24 +40,18 @@
   color: var(--wp--preset--color--text-color);
   opacity: 0.6;
 }
-.accordion-section p {
-  height: 0;
-  overflow: hidden;
-  margin: 0;
-  padding: 0;
+.accordion-section .section-content {
+  display: none;
 }
-.accordion-section:hover h3 {
+.accordion-section:hover > h3 {
   opacity: 1;
 }
-.accordion-section.open h3 {
+.accordion-section.open > h3 {
   opacity: 1;
   font-size: 1.5rem;
 }
-.accordion-section.open p {
-  height: auto;
-  overflow: visible;
-  margin: 0;
-  padding: 1rem 1.25rem;
+.accordion-section.open .section-content {
+  display: block;
 }
 
 /*# sourceMappingURL=style-index.css.map*/

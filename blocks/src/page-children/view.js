@@ -29,6 +29,9 @@ document.querySelectorAll(".wp-block-iowa-aea-theme-page-children").forEach(bloc
 
   dropdowns.forEach(dropdown => {
     const button = dropdown.querySelector("button");
+
+    if(!button){ return }
+
     button.addEventListener("click", () => {
       dropdown.classList.toggle("open");
       if (dropdown.classList.contains("open")) {

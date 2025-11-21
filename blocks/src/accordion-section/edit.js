@@ -61,10 +61,21 @@ export default function Edit(props) {
 							remove: true
 						}
 					} ],
-					[ 'core/paragraph', { 
-						placeholder: `Content for section`,
-						className: `section-content`,
-					} ]
+					[
+						'core/group', 
+						{
+							className: 'section-content',
+							lock: {
+								move: true,
+								remove: true
+							}
+						}, 
+						[
+							[ 'core/paragraph', { 
+								placeholder: `Content for section`,
+							} ]
+						]
+					],
 				]}
 			/>
 		</div>
