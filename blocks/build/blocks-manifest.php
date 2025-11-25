@@ -29,7 +29,10 @@ return array(
 		'version' => '0.1.0',
 		'title' => 'Accordion Section',
 		'category' => 'widgets',
-		'icon' => 'smiley',
+		'icon' => 'hidden',
+		'parent' => array(
+			'iowa-aea-theme/accordion'
+		),
 		'attributes' => array(
 			
 		),

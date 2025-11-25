@@ -5,7 +5,10 @@
   "version": "0.1.0",
   "title": "Accordion Section",
   "category": "widgets",
-  "icon": "smiley",
+  "icon": "hidden",
+  "parent": [
+    "iowa-aea-theme/accordion"
+  ],
   "attributes": {},
   "description": "Example block scaffolded with Create Block tool.",
   "example": {},
