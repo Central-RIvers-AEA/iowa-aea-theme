@@ -41,7 +41,7 @@ function get_page_current_hierarchy($parent_id) {
 		'post_parent' => $parent_id,
 		'post_type'   => 'page',
 		'post_status' => 'publish',
-		'orderby'     => 'menu_order',
+		'orderby'     => 'title',
 		'order'       => 'ASC'
 	));
 	
