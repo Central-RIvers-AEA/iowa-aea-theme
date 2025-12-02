@@ -478,6 +478,8 @@
       border-top-width: 10px !important;
 
       width: 300px !important;
+
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
     }
   }
 }
