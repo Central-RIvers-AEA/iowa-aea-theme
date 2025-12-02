@@ -16,11 +16,11 @@ import { useBlockProps } from '@wordpress/block-editor';
  * @return {Element} Element to render.
  */
 export default function save({ attributes }) {
-  const { backgroundColor, svgIcon, linkText, linkURL } = attributes;
+  const { backgroundColor, textColor, textHoverColor, svgIcon, linkText, linkURL } = attributes;
 
   const blockProps = useBlockProps.save({
     className: 'icon-card',
-    style: { '--card-color': backgroundColor }
+    style: { '--card-color': backgroundColor, '--card-text-color': textColor, '--card-text-hover-color': textHoverColor },
   });
 
   return (

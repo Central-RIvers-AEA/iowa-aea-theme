@@ -287,6 +287,14 @@ return array(
 			'backgroundColor' => array(
 				'type' => 'string',
 				'default' => ''
+			),
+			'textColor' => array(
+				'type' => 'string',
+				'default' => '#333333'
+			),
+			'textHoverColor' => array(
+				'type' => 'string',
+				'default' => '#FFFFFF'
 			)
 		),
 		'description' => 'A block for displaying important contacts.',

@@ -22,6 +22,14 @@
     "backgroundColor": {
       "type": "string",
       "default": ""
+    },
+    "textColor": {
+      "type": "string",
+      "default": "#333333"
+    },
+    "textHoverColor": {
+      "type": "string",
+      "default": "#FFFFFF"
     }
   },
   "description": "A block for displaying important contacts.",

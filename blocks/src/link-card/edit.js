@@ -74,6 +74,7 @@ export default function Edit(props) {
           {/* Field For Link */}
           <TextControl label={__('Link URL', 'link-card')} value={attributes.linkURL} onChange={(value) => setAttributes({ linkURL: value })} />
           {/* Color Picker for Background Color */}
+          <span>Background Color</span>
           <ColorPalette
             label={__('Background Color', 'link-card')}
             value={attributes.backgroundColor}
@@ -82,10 +83,28 @@ export default function Edit(props) {
             enableAlpha={false}
             clearable={true}
           />
+          <span>Text Color</span>
+          <ColorPalette
+            label={__('Text Color', 'link-card')}
+            value={attributes.textColor}
+            onChange={(value) => setAttributes({ textColor: value })}
+            colors={colorPalette}
+            enableAlpha={false}
+            clearable={true}
+          />
+          <span>Text Hover Color</span>
+          <ColorPalette
+            label={__('Text Hover Color', 'link-card')}
+            value={attributes.textHoverColor}
+            onChange={(value) => setAttributes({ textHoverColor: value })}
+            colors={colorPalette}
+            enableAlpha={false}
+            clearable={true}
+          />
         </PanelBody>
       </InspectorControls>
 
-      <a href='' { ...useBlockProps({ className: 'icon-card', style: { '--card-color': attributes.backgroundColor } }) } onClick={(e) => e.preventDefault()}>
+      <a href='' { ...useBlockProps({ className: 'icon-card', style: { '--card-color': attributes.backgroundColor, '--card-text-color': attributes.textColor, '--card-text-hover-color': attributes.textHoverColor } }) } onClick={(e) => e.preventDefault()}>
         {attributes.svgIcon ? (<span class='icon-card__icon' dangerouslySetInnerHTML={{ __html: attributes.svgIcon }}></span>
         ) : null}
 
