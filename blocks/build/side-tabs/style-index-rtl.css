@@ -12,45 +12,35 @@
   color: #fff;
   padding: 2px;
   display: flex;
+  flex-direction: column;
   position: relative;
+}
+@media (min-width: 800px) {
+  .wp-block-iowa-aea-theme-side-tabs {
+    flex-direction: row;
+  }
 }
 
 .impact-tab {
   background: var(--tab-background, white);
-  border-radius: 19px 0 0 19px;
+  border-radius: 0 0 19px 19px;
   padding: 3rem 3rem 3rem 2rem;
   position: relative;
-  min-height: 350px;
-}
-.impact-tab.open {
-  width: 100%;
-}
-.impact-tab.open * {
-  width: 100%;
-  display: block;
-}
-.impact-tab {
-  width: 2rem;
   overflow: hidden;
-}
-.impact-tab * {
-  width: 0;
-  overflow: hidden;
-  display: none;
 }
 .impact-tab:nth-child(1) {
   z-index: 4;
 }
 .impact-tab:nth-child(2) {
-  margin-right: -2rem;
+  margin-top: -1rem;
   z-index: 3;
 }
 .impact-tab:nth-child(3) {
-  margin-right: -2rem;
+  margin-top: -1rem;
   z-index: 2;
 }
 .impact-tab:nth-child(4) {
-  margin-right: -2rem;
+  margin-top: -1rem;
   z-index: 1;
 }
 .impact-tab h3 {
@@ -72,4 +62,40 @@
   font-size: var(--font-size);
   text-align: center;
   line-height: 0;
+}
+@media (min-width: 800px) {
+  .impact-tab {
+    border-radius: 19px 0 0 19px;
+    width: 2rem;
+  }
+  .impact-tab:nth-child(1) {
+    z-index: 4;
+  }
+  .impact-tab:nth-child(2) {
+    margin-top: unset;
+    margin-right: -2rem;
+    z-index: 3;
+  }
+  .impact-tab:nth-child(3) {
+    margin-top: unset;
+    margin-right: -2rem;
+    z-index: 2;
+  }
+  .impact-tab:nth-child(4) {
+    margin-top: unset;
+    margin-right: -2rem;
+    z-index: 1;
+  }
+  .impact-tab * {
+    width: 0;
+    overflow: hidden;
+    display: none;
+  }
+  .impact-tab.open {
+    width: 100%;
+  }
+  .impact-tab.open * {
+    width: 100%;
+    display: block;
+  }
 }
