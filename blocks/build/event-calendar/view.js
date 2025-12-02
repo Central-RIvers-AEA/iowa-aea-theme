@@ -102,6 +102,9 @@ const fetchGoogleCalendarEvents = async (start_date, end_date, google_calendar_i
     const response = await fetch(calendarURL);
     const data = await response.json();
     console.log(data.items);
+    if (!data.items) {
+      return;
+    }
     data.items.forEach(gEvent => {
       let event = {
         id: gEvent.id,
@@ -122,9 +125,11 @@ const fetchGoogleCalendarEvents = async (start_date, end_date, google_calendar_i
 };
 const fetchEvents = async (google_calendar_ids, google_calendar_api_key) => {
   // fetch from events api
-  let firstOfMonth = new Date(state.currentDate);
+
+  let [year, month, day] = state.currentDate.split('-');
+  let firstOfMonth = new Date(year, parseInt(month) - 1, parseInt(day));
   firstOfMonth.setDate(1);
-  let lastOfMonth = new Date(firstOfMonth);
+  let lastOfMonth = new Date(year, parseInt(month) - 1, parseInt(day));
   lastOfMonth.setMonth(lastOfMonth.getMonth() + 1);
   lastOfMonth.setDate(0);
   let start_date = firstOfMonth.toISOString().split('T')[0];
@@ -155,7 +160,7 @@ const {
     visibleEvents: 100,
     topEventId: null,
     currentDate: new Date().toISOString().split('T')[0],
-    currentMonth: new Date().toISOString().split('T')[0].slice(0, 7)
+    currentMonth: new Date().toISOString().split('T')[0].slice(5, 7)
   },
   actions: {
     loadEvents: async () => {
@@ -242,9 +247,10 @@ const {
       actions.loadCalendar();
     },
     loadCalendar: () => {
-      let firstOfMonth = new Date(state.currentDate);
+      let [year, month, day] = state.currentDate.split('-');
+      let firstOfMonth = new Date(year, parseInt(month) - 1, parseInt(day));
       firstOfMonth.setDate(1);
-      let lastOfMonth = new Date(firstOfMonth);
+      let lastOfMonth = new Date(year, parseInt(month) - 1, parseInt(day));
       lastOfMonth.setMonth(lastOfMonth.getMonth() + 1);
       lastOfMonth.setDate(0);
       let firstDayOfWeek = lastOfMonth.getDay();
