@@ -101,6 +101,10 @@ export default function Edit(props) {
             enableAlpha={false}
             clearable={true}
           />
+
+          {/* raw html */}
+          <span>SVG Icon Raw HTML</span>
+
         </PanelBody>
       </InspectorControls>
 

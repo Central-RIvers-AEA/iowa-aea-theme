@@ -5,7 +5,7 @@
     Author: Iowa AEAs
     Author URI: https://example.com/
     Template: twentytwentyfive
-    Version: 1.0.13.6
+    Version: 1.0.13.7
     License: GNU General Public License v2 or later
     License URI: http://www.gnu.org/licenses/gpl-2.0.html
     Text Domain: iowa-aea-theme
@@ -489,6 +489,66 @@
     @media (min-width: 800px) {
       left: unset !important;
       right: 0 !important;
+    }
+  }
+}
+
+.side-nav {
+  h3 {
+    font-weight: 400;
+    text-transform: uppercase;
+  }
+
+  .wp-block-navigation-item__content {
+    font-weight: normal;
+    font-size: var(--wp--preset--font-size--normal);
+    display: block;
+
+    &[aria-current="page"] {
+      font-weight: bold;
+      text-decoration: underline;
+    }
+  }
+
+  .has-child {
+    flex-wrap: wrap;
+
+    .wp-block-navigation-submenu__toggle[aria-expanded="true"] {
+      & ~ .wp-block-navigation__submenu-container {
+        position: relative !important;
+        height: auto !important;
+        min-width: 200px;
+        opacity: 1 !important;
+        overflow: visible;
+        visibility: visible;
+        width: auto;
+
+        border: none !important;
+        box-shadow: none !important;
+      }
+    }
+  }
+
+  .current-menu-item {
+    &.has-child {
+      flex-wrap: wrap;
+
+      .wp-block-navigation-submenu__toggle {
+        display: none;
+      }
+
+      .wp-block-navigation__submenu-container {
+        position: relative !important;
+        height: auto !important;
+        min-width: 200px;
+        opacity: 1 !important;
+        overflow: visible;
+        visibility: visible;
+        width: auto;
+
+        border: none !important;
+        box-shadow: none !important;
+      }
     }
   }
 }
