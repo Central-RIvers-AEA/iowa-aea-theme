@@ -11,5 +11,17 @@
   margin: 0 !important;
   padding: 1rem !important;
 }
+.wp-block-iowa-aea-theme-important-contacts .contact-image-btn {
+  cursor: pointer;
+}
+.wp-block-iowa-aea-theme-important-contacts .contact-item input {
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  background: none;
+  width: 100%;
+}
 
 /*# sourceMappingURL=index.css.map*/

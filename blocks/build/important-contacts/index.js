@@ -80,7 +80,24 @@ function Edit(props) {
       email: 'new.contact@example.com',
       phone: '123-456-7890',
       jobTitle: 'New Job Title',
-      image: ''
+      image: '',
+      type: 'selectable'
+    });
+    props.setAttributes({
+      contacts: updatedContacts
+    });
+  };
+  const addCustomeImportantContact = () => {
+    console.log('adding contact');
+    let updatedContacts = [...contacts];
+    updatedContacts.push({
+      id: Date.now(),
+      name: '',
+      email: '',
+      phone: '',
+      jobTitle: '',
+      image: '',
+      type: 'custom'
     });
     props.setAttributes({
       contacts: updatedContacts
@@ -121,51 +138,155 @@ function Edit(props) {
       contacts: updatedContacts
     });
   };
+  const handleContactUpdate = (index, value, field) => {
+    let updatedContacts = contacts.map((contact, conIndex) => {
+      if (conIndex == index) {
+        return {
+          ...contact,
+          [field]: value
+        };
+      }
+      return contact;
+    });
+    props.setAttributes({
+      contacts: updatedContacts
+    });
+  };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
     ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.useBlockProps)(),
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("h2", {
       children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Important Contacts', 'important-contacts')
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
       className: "contacts-block",
-      children: contacts.map((contact, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
-        className: "contact-item",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("img", {
-          src: contact.image,
-          alt: contact.name
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
-          className: "contact-info",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("h3", {
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("select", {
-              onChange: e => handleContactChange(index, e.target.value),
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("option", {
-                value: "",
-                children: "Select a Contact"
-              }), full_contacts_list.map(full_contact => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("option", {
-                value: full_contact.id,
-                selected: full_contact.id === contact.id,
-                children: full_contact.name
-              }, full_contact.id))]
-            })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
-            children: contact.jobTitle
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
-            children: contact.email
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
-            children: contact.phone
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
-            onClick: () => removeImportantContact(index),
-            className: "btn",
-            children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Remove', 'important-contacts')
-          })]
-        })]
-      }, index))
+      children: contacts.map((contact, index) => {
+        if (contact.type === 'custom') {
+          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(CustomContactCard, {
+            contact: contact,
+            handleContactChange: handleContactUpdate,
+            removeImportantContact: removeImportantContact,
+            index: index
+          }, index);
+        } else {
+          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(ContactCard, {
+            contact: contact,
+            handleContactChange: handleContactChange,
+            removeImportantContact: removeImportantContact,
+            index: index,
+            full_contacts_list: full_contacts_list
+          }, index);
+        }
+      })
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
+      onClick: addCustomeImportantContact,
+      className: "btn",
+      children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Add Custom Important Contact', 'important-contacts')
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
       onClick: addImportantContact,
       className: "btn",
-      children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Add Important Contact', 'important-contacts')
+      children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Add Important Contact from Local Staff Directory', 'important-contacts')
     })]
   });
 }
+const CustomContactCard = ({
+  contact,
+  handleContactChange,
+  removeImportantContact,
+  index
+}) => {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+    className: "contact-item",
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.MediaUpload, {
+      onSelect: media => handleContactChange(index, media.url, 'image'),
+      allowedTypes: ['image'],
+      render: ({
+        open
+      }) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
+        onClick: open,
+        className: "contact-image-btn",
+        children: contact.image ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("img", {
+          src: contact.image,
+          alt: contact.name
+        }) : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Upload Image', 'important-contacts')
+      }),
+      identifier: `contact-image-${index}`
+    }, `contact-image-${index}`), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+      className: "contact-info",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("h3", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
+          type: "text",
+          placeholder: "Contact Name",
+          value: contact.name,
+          onChange: e => handleContactChange(index, e.target.value, 'name')
+        })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
+          type: "text",
+          placeholder: "Job Title",
+          value: contact.jobTitle,
+          onChange: e => handleContactChange(index, e.target.value, 'jobTitle')
+        })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
+          type: "email",
+          placeholder: "Email",
+          value: contact.email,
+          onChange: e => handleContactChange(index, e.target.value, 'email')
+        })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
+          type: "text",
+          placeholder: "555-555-5555",
+          value: contact.phone,
+          onChange: e => handleContactChange(index, e.target.value, 'phone')
+        })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
+        onClick: () => removeImportantContact(index),
+        className: "btn",
+        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('X', 'important-contacts')
+      })]
+    })]
+  }, index);
+};
+const ContactCard = ({
+  contact,
+  handleContactChange,
+  removeImportantContact,
+  index,
+  full_contacts_list
+}) => {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+    className: "contact-item",
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("img", {
+      src: contact.image,
+      alt: contact.name
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+      className: "contact-info",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("h3", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("select", {
+          onChange: e => handleContactChange(index, e.target.value),
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("option", {
+            value: "",
+            children: "Select a Contact"
+          }), full_contacts_list.map(full_contact => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("option", {
+            value: full_contact.id,
+            selected: full_contact.id === contact.id,
+            children: full_contact.name
+          }, full_contact.id))]
+        })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
+        children: contact.jobTitle
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
+        children: contact.email
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
+        children: contact.phone
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
+        onClick: () => removeImportantContact(index),
+        className: "btn",
+        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('X', 'important-contacts')
+      })]
+    })]
+  }, index);
+};
 
 /***/ }),
 

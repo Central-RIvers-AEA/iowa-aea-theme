@@ -189,6 +189,8 @@ function Edit(props) {
           colors: colorPalette,
           enableAlpha: false,
           clearable: true
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+          children: "SVG Icon Raw HTML"
         })]
       })
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("a", {
