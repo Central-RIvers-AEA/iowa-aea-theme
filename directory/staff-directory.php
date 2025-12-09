@@ -962,7 +962,7 @@ class StaffDirectory
       'search_terms' => $search_terms
     );
 
-    return new WP_REST_Response($formatted_employees, 200);
+    return new WP_REST_Response($returns, 200);
   }
 
   public function reformat_employee_data_from_external_api($employee){
