@@ -920,9 +920,9 @@ class StaffDirectory
     if(!empty($search) && !empty($search_mappings['Name'])){
       $search_terms[urlencode($search_mappings['Name'])] = $search;
     }
-    if(!empty($search_mappings['Name'])){
-      $search_terms[urlencode($search_mappings['Name'])] = $name;
-    }
+    // if(!empty($search_mappings['Name'])){
+    //   $search_terms[urlencode($search_mappings['Name'])] = $name;
+    // }
     if(!empty($search_mappings['District'])){
       $search_terms[urlencode($search_mappings['District'])] = $school_district;
     }
@@ -933,6 +933,13 @@ class StaffDirectory
       $search_terms[urlencode($search_mappings['Position'])] = $position;
     }
 
+    $search_string = '';
+
+    foreach ($search_terms as $key => $value) {
+      $search_string .= $key . '=' . urlencode($value);
+      $search_string .= '&';
+    }
+
     $api_url = get_option('staff_directory_use_external_api', '');
 
     if (empty($api_url)) {
@@ -940,9 +947,9 @@ class StaffDirectory
       return;
     }
 
-    $search_string = add_query_arg($search_terms, $api_url);
+    $search_url = $api_url . '?' . rtrim($search_string, '&');
 
-    $response = wp_remote_get($search_string);
+    $response = wp_remote_get($search_url);
 
     if (is_wp_error($response)) {
       return new WP_REST_Response($response, 500);
