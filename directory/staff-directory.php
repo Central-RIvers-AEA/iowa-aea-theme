@@ -928,7 +928,7 @@ class StaffDirectory
       return;
     }
 
-    $search_string = add_query_arg('q[name_cont', $search, $api_url);
+    $search_string = add_query_arg('name_cont', $search, $api_url);
 
     $response = wp_remote_get($search_string);
 
