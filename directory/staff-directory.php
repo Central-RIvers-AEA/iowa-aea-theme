@@ -920,6 +920,18 @@ class StaffDirectory
     if(!empty($search) && !empty($search_mappings['Name'])){
       $search_terms[urlencode($search_mappings['Name'])] = $search;
     }
+    if(!empty($search_mappings['Name'])){
+      $search_terms[urlencode($search_mappings['Name'])] = $name;
+    }
+    if(!empty($search_mappings['District'])){
+      $search_terms[urlencode($search_mappings['District'])] = $school_district;
+    }
+    if(!empty($search_mappings['Building'])){
+      $search_terms[urlencode($search_mappings['Building'])] = $school_building;
+    }
+    if(!empty($search_mappings['Position'])){
+      $search_terms[urlencode($search_mappings['Position'])] = $position;
+    }
 
     $api_url = get_option('staff_directory_use_external_api', '');
 
@@ -957,7 +969,7 @@ class StaffDirectory
       'employees' => $formatted_employees,
     );
 
-    return new WP_REST_Response($returns, 200);
+    return new WP_REST_Response($formatted_employees, 200);
   }
 
   public function reformat_employee_data_from_external_api($employee){
