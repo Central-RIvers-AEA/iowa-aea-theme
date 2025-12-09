@@ -58,6 +58,7 @@ $context['staff'] = $staff;
   <?php echo wp_interactivity_data_wp_context( $context ); ?>
   aria-live='polite'
   data-wp-watch="callbacks.renderStaffList"
+  data-wp-init="callbacks.loadStaffData"
 >
   <form class='staff-directory-search' data-wp-on--submit='actions.searchStaff' data-wp-init='callbacks.fillFormOptions'>
     <div class='staff-directory-search-input'>
