@@ -57,7 +57,7 @@ $context['staff'] = $staff;
   data-wp-interactive="iowa-aea-theme/staff-directory-search"
   <?php echo wp_interactivity_data_wp_context( $context ); ?>
   aria-live='polite'
-  data-wp-watch="callbacks.loadStaffData"
+  data-wp-watch="callbacks.renderStaffList"
 >
   <form class='staff-directory-search' data-wp-on--submit='actions.searchStaff' data-wp-init='callbacks.fillFormOptions'>
     <div class='staff-directory-search-input'>

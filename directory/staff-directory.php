@@ -28,8 +28,7 @@ class StaffDirectory
   }
 
   // import employees page
-  public function import_employees_page()
-  {
+  public function import_employees_page(){
     add_submenu_page(
       'edit.php?post_type=employee',
       'Import Employees',
@@ -89,7 +88,6 @@ class StaffDirectory
       }
     }
   }
-
 
   /* register employee custom post type */
   public function register_employee_post_type(){
@@ -242,8 +240,7 @@ class StaffDirectory
   <?php
   }
 
-  public function employee_districts_callback($post)
-  {
+  public function employee_districts_callback($post){
     $assignments = unserialize(get_post_meta($post->ID, 'assignments', true));
 
     $districts = get_posts(array(
@@ -445,7 +442,7 @@ class StaffDirectory
                 <input type='hidden' id='apiFieldsRecieved' value='<?php echo get_option('staff_directory_api_fields_received', '') ?>' name='staff_directory_api_fields_received' />
                 <div id="apiFieldMappings">
                   <?php
-                    $api_mappings = get_option('staff_directory_api_mappings', ['First Name' => '', 'Last Name' => '', 'Position' => '', 'Email' => '', 'Phone' => '', 'Photo' => '']);
+                    $api_mappings = get_option('staff_directory_api_mappings', ['Name' => '', 'First Name' => '', 'Last Name' => '', 'Position' => '', 'Email' => '', 'Phone' => '', 'Photo' => '']);
                     foreach ($api_mappings as $field => $mapping) {
                       echo '<div class="api-mapping-row">';
                       echo '<label>' . esc_html($field) . ':</label> ';
@@ -464,8 +461,6 @@ class StaffDirectory
       </div>
     <?php
   }
-
-
 
   public function enqueue_assignment_script(){
     if ('employee' != get_post_type()) {
@@ -507,8 +502,7 @@ class StaffDirectory
   }
 
   /* Save employee details */
-  public function save_employee_details($post_id)
-  {
+  public function save_employee_details($post_id){
     // Check if our nonce is set.
     if (!isset($_POST['employee_details_nonce']) || !wp_verify_nonce($_POST['employee_details_nonce'], 'employee_details_nonce_action')) {
       return;
@@ -556,8 +550,7 @@ class StaffDirectory
     }
   }
 
-  public function directory_filter()
-  {
+  public function directory_filter(){
     // Check if the request is an AJAX request
     if (!defined('DOING_AJAX') || !DOING_AJAX) {
       wp_send_json_error('Invalid request', 400);
@@ -722,8 +715,7 @@ class StaffDirectory
     }
   }
 
-  public function import_employees()
-  {
+  public function import_employees(){
     $post = $_POST;
     $extension = pathinfo($_FILES['employee_csv']['name'], PATHINFO_EXTENSION);
     // echo 'hello';
@@ -872,7 +864,7 @@ class StaffDirectory
     }
   }
 
-    public function check_if_using_external_api(){
+  public function check_if_using_external_api(){
     $use_api = get_option('staff_directory_use_external_api_enabled', 0);
     return $use_api == 1;
   }
@@ -902,7 +894,30 @@ class StaffDirectory
       return;
     }
 
-    return new WP_REST_Response($employees, 200);
+    $formatted_employees = array();
+    foreach ($employees as $employee) {
+      $formatted_employees[] = $this->reformat_employee_data_from_external_api($employee);
+    }
+
+    return new WP_REST_Response($formatted_employees, 200);
+  }
+
+  public function reformat_employee_data_from_external_api($employee){
+    $api_mappings = get_option('staff_directory_api_mappings', array());
+
+    $formatted_employee = array();
+
+    foreach ($api_mappings as $field => $mapping) {
+      if (isset($employee[$mapping])) {
+        $formatted_employee[strtolower(str_replace(' ', '_', $field))] = $employee[$mapping];
+      } else {
+        $formatted_employee[strtolower(str_replace(' ', '_', $field))] = '';
+      } 
+    }
+
+    // Additional formatting can be done here if needed
+
+    return $formatted_employee;
   }
 
   public function get_employees_from_internal_api($request){
