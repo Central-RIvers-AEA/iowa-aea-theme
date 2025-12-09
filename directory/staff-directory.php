@@ -398,6 +398,11 @@ class StaffDirectory
       'staff_directory_options_group',
       'staff_directory_api_mappings'
     );
+    
+    register_setting(
+      'staff_directory_options_group',
+      'staff_directory_api_search_mappings'
+    );
   }
 
   public function directory_config_page_callback(){
@@ -421,6 +426,10 @@ class StaffDirectory
           $saved_api_mappings = get_option('staff_directory_api_mappings', $initial_api_mappings);
 
           $api_mappings = array_merge($initial_api_mappings, $saved_api_mappings);
+
+          $initial_api_search_mappings = ['Name' => '', 'Position' => '', 'District' => '', 'Building' => ''];
+          $saved_api_search_mappings = get_option('staff_directory_api_search_mappings', $initial_api_search_mappings);
+          $api_search_mappings = array_merge($initial_api_search_mappings, $saved_api_search_mappings);
           
           ?>
           <input type="hidden" name="action" value="update" />
@@ -445,6 +454,7 @@ class StaffDirectory
             <tr>
               <th>API Mapping</th>
               <td>
+                <p class="description">Map external API fields to staff directory fields.</p>
                 <input type="hidden" id="apiFieldMappingsNonce" value="<?php echo wp_create_nonce('api_field_mappings_nonce'); ?>" />
                 <input type='hidden' id='apiFieldsRecieved' value='<?php echo get_option('staff_directory_api_fields_received', '') ?>' name='staff_directory_api_fields_received' />
                 <div id="apiFieldMappings">
@@ -458,8 +468,23 @@ class StaffDirectory
                     }        
                   ?>
                 </div>
+                <br />
+                <p>Search Field Key Mapping</p>
+
+                <div id='apiSearchFieldMappings'>
+                  <?php
+                    foreach ($api_search_mappings as $field => $mapping) {
+                      echo '<div class="api-search-mapping-row">';
+                      echo '<label>' . esc_html($field) . ':</label> ';
+                      echo '<input type="text" name="staff_directory_api_search_mappings[' . esc_attr($field) . ']" value="' . esc_attr($mapping) . '" class="regular-text" />';
+                      echo '</div>';
+                    }
+                  ?>
+                </div>
+
               </td>
             </tr>
+
           </table>
           <?php
           submit_button();
@@ -877,7 +902,32 @@ class StaffDirectory
   }
 
   public function get_employees_from_external_api($request){
-    $search_term = isset($request['search_term']) ? sanitize_text_field($request['search_term']) : '';
+    $search_mappings = get_option('staff_directory_api_search_mappings', array());
+
+    $name = isset($request['staff-name']) ? sanitize_text_field($request['staff-name']) : '';
+    $school_district = isset($request['school-district']) ? sanitize_text_field($request['school-district']) : '';
+    $school_building = isset($request['school-building']) ? sanitize_text_field($request['school-building']) : '';
+    $position = isset($request['position']) ? sanitize_text_field($request['position']) : '';
+
+    if(empty($search_mappings)){
+      wp_send_json_error('API Search Mappings not configured', 500);
+      return;
+    }
+
+    $search_terms = array();
+    if(!empty($name) && !empty($search_mappings['Name'])){
+      $search_terms[$search_mappings['Name']] = $name;
+    }
+    if(!empty($school_district) && !empty($search_mappings['District'])){
+      $search_terms[$search_mappings['District']] = $school_district;
+    }
+    if(!empty($school_building) && !empty($search_mappings['Building'])){
+      $search_terms[$search_mappings['Building']] = $school_building;
+    }
+    if(!empty($position) && !empty($search_mappings['Position'])){
+      $search_terms[$search_mappings['Position']] = $position;
+    }
+
 
     $api_url = get_option('staff_directory_use_external_api', '');
 
@@ -886,8 +936,8 @@ class StaffDirectory
       return;
     }
 
-    $response = wp_remote_get(add_query_arg('search', $search_term, $api_url));
-
+    $response = wp_remote_get(add_query_arg($search_terms, $api_url));
+    
     if (is_wp_error($response)) {
       return new WP_REST_Response($response, 500);
       return;
