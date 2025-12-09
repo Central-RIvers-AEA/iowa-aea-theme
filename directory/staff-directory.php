@@ -924,7 +924,7 @@ class StaffDirectory
 
     // Additional formatting can be done here if needed
 
-    $formatted_employee['assignments'] = array() || $formatted_employee['assignments'];
+    $formatted_employee['assignments'] = array() || $employee['assignments'];
 
     return $formatted_employee;
   }
