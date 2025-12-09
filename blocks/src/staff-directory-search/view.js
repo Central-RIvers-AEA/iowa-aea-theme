@@ -71,6 +71,11 @@ const { actions, callbacks } = store( 'iowa-aea-theme/staff-directory-search', {
                (!position || member.position == position)
       });
 
+      // limit to 10 results if no filters are applied
+      if(!query && !district && !building && !area && !position) {
+        filteredStaff = filteredStaff.slice(0, 10);
+      }
+
       return filteredStaff;
     },
     formReset: (e) => {
@@ -155,6 +160,16 @@ const { actions, callbacks } = store( 'iowa-aea-theme/staff-directory-search', {
         });
 
       callbacks.renderStaffList();
+    }
+    loadSearchData: () => {
+      let context = getContext();
+
+      // Initial fetch of all staff
+      fetch(`${context.searchablesEndpoint}`)
+        .then(response => response.json())
+        .then(data => {
+          context.staff = data;
+        });
     }
   }
 });

@@ -1118,6 +1118,30 @@ class StaffDirectory
 
     return $assignments;
   }
+
+  /** Staff Directory Employee Districts (SETUP Lookups for EXTERNAL API) */
+  public static function get_districts() {
+    $districts = get_posts(array(
+      'post_type' => 'district',
+      'numberposts' => -1,
+      'orderby' => 'title',
+      'order' => 'ASC'
+    ));
+
+    return $districts;
+  }
+
+  /** Staff Directory Employee Buildings */
+  public static function get_buildings() {
+    $buildings = get_posts(array(
+      'post_type' => 'school',
+      'numberposts' => -1,
+      'orderby' => 'title',
+      'order' => 'ASC'
+    ));
+
+    return $buildings;
+  }
 }
 
 // Initialize the StaffDirectory class

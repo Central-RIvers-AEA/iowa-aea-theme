@@ -6,6 +6,7 @@
 $context = [
   'staff' => [],
   'staffEndpoint' => '/wp-json/staff-directory/v1/employees',
+  'searchablesEndpoint' => '/wp-json/staff-directory/v1/searchables',
   'districts' => [],
   'buildings' => [],
   'contentAreas' => [],
@@ -14,6 +15,8 @@ $context = [
 
 $context['positions'] = StaffDirectory::get_positions();
 $context['contentAreas'] = StaffDirectory::get_content_areas();
+$context['districts'] = StaffDirectory::get_districts();
+$context['buildings'] = StaffDirectory::get_buildings();
 
 $staff = [];
 
