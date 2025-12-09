@@ -416,7 +416,7 @@ class StaffDirectory
           settings_fields('staff_directory_options_group');
           do_settings_sections('staff_directory_options_group');
 
-          $initial_api_mappings = ['Name' => '', 'First Name' => '', 'Last Name' => '', 'Position' => '', 'Email' => '', 'Phone' => '', 'Photo' => ''];
+          $initial_api_mappings = ['Full_Name' => '', 'First Name' => '', 'Last Name' => '', 'Position' => '', 'Email' => '', 'Phone' => '', 'Image' => ''];
 
           $saved_api_mappings = get_option('staff_directory_api_mappings', $initial_api_mappings);
 
