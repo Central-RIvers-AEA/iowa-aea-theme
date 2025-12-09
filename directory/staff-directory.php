@@ -415,6 +415,13 @@ class StaffDirectory
           <?php
           settings_fields('staff_directory_options_group');
           do_settings_sections('staff_directory_options_group');
+
+          $initial_api_mappings = ['Name' => '', 'First Name' => '', 'Last Name' => '', 'Position' => '', 'Email' => '', 'Phone' => '', 'Photo' => ''];
+
+          $saved_api_mappings = get_option('staff_directory_api_mappings', $initial_api_mappings);
+
+          $api_mappings = array_merge($initial_api_mappings, $saved_api_mappings);
+          
           ?>
           <input type="hidden" name="action" value="update" />
           <input type="hidden" name="page_options" value="staff_directory_options" />
@@ -442,7 +449,7 @@ class StaffDirectory
                 <input type='hidden' id='apiFieldsRecieved' value='<?php echo get_option('staff_directory_api_fields_received', '') ?>' name='staff_directory_api_fields_received' />
                 <div id="apiFieldMappings">
                   <?php
-                    $api_mappings = get_option('staff_directory_api_mappings', ['Name' => '', 'First Name' => '', 'Last Name' => '', 'Position' => '', 'Email' => '', 'Phone' => '', 'Photo' => '']);
+                    
                     foreach ($api_mappings as $field => $mapping) {
                       echo '<div class="api-mapping-row">';
                       echo '<label>' . esc_html($field) . ':</label> ';
