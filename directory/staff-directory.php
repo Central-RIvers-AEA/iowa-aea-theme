@@ -937,7 +937,7 @@ class StaffDirectory
     }
 
     $response = wp_remote_get(add_query_arg($search_terms, $api_url));
-    
+
     if (is_wp_error($response)) {
       return new WP_REST_Response($response, 500);
       return;
@@ -955,6 +955,12 @@ class StaffDirectory
     foreach ($employees as $employee) {
       $formatted_employees[] = $this->reformat_employee_data_from_external_api($employee);
     }
+
+    $returns = array(
+      'source' => 'external_api',
+      'employees' => $formatted_employees,
+      'search_terms' => $search_terms
+    );
 
     return new WP_REST_Response($formatted_employees, 200);
   }
