@@ -918,7 +918,7 @@ class StaffDirectory
 
     $search_terms = array();
     if(!empty($search) && !empty($search_mappings['Name'])){
-      $search_terms[$search_mappings['Name']] = $search;
+      $search_terms[urlencode($search_mappings['Name'])] = $search;
     }
 
     $api_url = get_option('staff_directory_use_external_api', '');
