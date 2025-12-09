@@ -928,7 +928,7 @@ class StaffDirectory
       return;
     }
 
-    $search_string = add_query_arg('name_cont', $search, $api_url);
+    $search_string = add_query_arg($search_terms, $api_url);
 
     $response = wp_remote_get($search_string);
 
@@ -975,7 +975,7 @@ class StaffDirectory
 
     // Additional formatting can be done here if needed
 
-    $formatted_employee['assignments'] = array() || $employee['assignments'];
+    $formatted_employee['assignments'] = array();
 
     return $formatted_employee;
   }
