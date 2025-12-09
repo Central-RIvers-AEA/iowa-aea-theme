@@ -1,7 +1,7 @@
 import { store, getContext, getElement } from '@wordpress/interactivity';
 
 
-const { actions } = store( 'iowa-aea-theme/staff-directory-search', {
+const { actions, callbacks } = store( 'iowa-aea-theme/staff-directory-search', {
   actions: {
     searchStaff: (e) => {
       e.preventDefault();
@@ -143,6 +143,18 @@ const { actions } = store( 'iowa-aea-theme/staff-directory-search', {
           form.ref.querySelector('select[name="content-area"]').appendChild(option);
         }
       })
+    },
+    loadStaffData: () => {
+      let context = getContext();
+
+      // Initial fetch of all staff
+      fetch(`${context.staffEndpoint}`)
+        .then(response => response.json())
+        .then(data => {
+          context.staff = data;
+        });
+
+      callbacks.renderStaffList();
     }
   }
 });

@@ -23,6 +23,8 @@ class StaffDirectory
     add_action('admin_enqueue_scripts', array($this, 'enqueue_assignment_script'));
     
     add_action('rest_api_init', array($this, 'register_staff_rest_routes'));
+
+    add_action('admin_init', array($this, 'directory_settings_init'));
   }
 
   // import employees page
@@ -90,8 +92,7 @@ class StaffDirectory
 
 
   /* register employee custom post type */
-  public function register_employee_post_type()
-  {
+  public function register_employee_post_type(){
     $options = array(
       'label' => 'Staff Directory',
       'labels' => array(
@@ -119,8 +120,7 @@ class StaffDirectory
   }
 
   /* register meta boxes for employee post type */
-  public function employee_meta_boxes()
-  {
+  public function employee_meta_boxes(){
     add_meta_box(
       'employee_details',
       'Employee Details',
@@ -381,6 +381,28 @@ class StaffDirectory
 
   }
 
+  public function directory_settings_init(){
+    register_setting(
+      'staff_directory_options_group',
+      'staff_directory_options'
+    );
+
+    register_setting(
+      'staff_directory_options_group',
+      'staff_directory_use_external_api_enabled'
+    );
+
+    register_setting(
+      'staff_directory_options_group',
+      'staff_directory_use_external_api'
+    );
+
+    register_setting(
+      'staff_directory_options_group',
+      'staff_directory_api_mappings'
+    );
+  }
+
   public function directory_config_page_callback(){
     if (!current_user_can('manage_options')) {
       wp_die(__('You do not have sufficient permissions to access this page.'));
@@ -403,6 +425,13 @@ class StaffDirectory
           <h2>General Settings</h2>
           <table class="form-table">
             <tr>
+              <th><label for="staff_directory_use_external_api">Use External API</label></th>
+              <td>
+                <input type="checkbox" name="staff_directory_use_external_api_enabled" value="1" <?php checked(1, get_option('staff_directory_use_external_api_enabled', 0)); ?> />
+                <p class="description">Check this box to enable using an external API for staff directory data.</p>
+              </td>
+            </tr>
+            <tr>
               <th><label for="staff_directory_use_external_api">External API URL</label></th>
               <td>
                 <input type="text" name="staff_directory_use_external_api" value="<?php echo esc_attr(get_option('staff_directory_use_external_api', '')); ?>" class="regular-text" />
@@ -412,22 +441,17 @@ class StaffDirectory
             <tr>
               <th>API Mapping</th>
               <td>
-                <button type="button" id="queryAPIForFields" class="button">Query API for Fields</button>
                 <input type="hidden" id="apiFieldMappingsNonce" value="<?php echo wp_create_nonce('api_field_mappings_nonce'); ?>" />
                 <input type='hidden' id='apiFieldsRecieved' value='<?php echo get_option('staff_directory_api_fields_received', '') ?>' name='staff_directory_api_fields_received' />
                 <div id="apiFieldMappings">
                   <?php
-                  $api_mappings = get_option('staff_directory_api_mappings', array());
-                  if (!empty($api_mappings)) {
+                    $api_mappings = get_option('staff_directory_api_mappings', ['First Name' => '', 'Last Name' => '', 'Position' => '', 'Email' => '', 'Phone' => '', 'Photo' => '']);
                     foreach ($api_mappings as $field => $mapping) {
                       echo '<div class="api-mapping-row">';
                       echo '<label>' . esc_html($field) . ':</label> ';
                       echo '<input type="text" name="staff_directory_api_mappings[' . esc_attr($field) . ']" value="' . esc_attr($mapping) . '" class="regular-text" />';
                       echo '</div>';
-                    }
-                  } else {
-                    echo '<p>No API field mappings configured yet.</p>';
-                  }
+                    }        
                   ?>
                 </div>
               </td>
@@ -440,6 +464,8 @@ class StaffDirectory
       </div>
     <?php
   }
+
+
 
   public function enqueue_assignment_script(){
     if ('employee' != get_post_type()) {
@@ -839,6 +865,47 @@ class StaffDirectory
    * REST API callback to get all employees
    */
   public function get_employees_rest($request) {
+    if($this->check_if_using_external_api()){
+      return $this->get_employees_from_external_api($request);
+    } else {
+      return $this->get_employees_from_internal_api($request);
+    }
+  }
+
+    public function check_if_using_external_api(){
+    $use_api = get_option('staff_directory_use_external_api_enabled', 0);
+    return $use_api == 1;
+  }
+
+  public function get_employees_from_external_api($request){
+    $search_term = isset($request['search_term']) ? sanitize_text_field($request['search_term']) : '';
+
+    $api_url = get_option('staff_directory_use_external_api', '');
+
+    if (empty($api_url)) {
+      wp_send_json_error('API URL not configured', 500);
+      return;
+    }
+
+    $response = wp_remote_get(add_query_arg('search', $search_term, $api_url));
+
+    if (is_wp_error($response)) {
+      return new WP_REST_Response($response, 500);
+      return;
+    }
+
+    $data = wp_remote_retrieve_body($response);
+    $employees = json_decode($data, true);
+
+    if (json_last_error() !== JSON_ERROR_NONE) {
+      wp_send_json_error('Invalid JSON response from API', 500);
+      return;
+    }
+
+    return new WP_REST_Response($employees, 200);
+  }
+
+  public function get_employees_from_internal_api($request){
     $params = $request->get_params();
     
     $args = array(

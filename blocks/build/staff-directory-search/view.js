@@ -60,7 +60,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/interactivity */ "@wordpress/interactivity");
 
 const {
-  actions
+  actions,
+  callbacks
 } = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.store)('iowa-aea-theme/staff-directory-search', {
   actions: {
     searchStaff: e => {
@@ -175,6 +176,15 @@ const {
           form.ref.querySelector('select[name="content-area"]').appendChild(option);
         }
       });
+    },
+    loadStaffData: () => {
+      let context = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.getContext)();
+
+      // Initial fetch of all staff
+      fetch(`${context.staffEndpoint}`).then(response => response.json()).then(data => {
+        context.staff = data;
+      });
+      callbacks.renderStaffList();
     }
   }
 });

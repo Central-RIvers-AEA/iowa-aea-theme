@@ -15,18 +15,7 @@ $context = [
 $context['positions'] = StaffDirectory::get_positions();
 $context['contentAreas'] = StaffDirectory::get_content_areas();
 
-$employees = get_posts([
-  'post_type' => 'employee',
-  'numberposts' => 10,
-  'orderby' => 'title',
-  'order' => 'ASC'
-]);
-
 $staff = [];
-
-foreach($employees as $employee) {
-  $staff[] = StaffDirectory::format_employee_data($employee);
-}
 
 // Districts
 $districts = get_posts([
@@ -68,7 +57,7 @@ $context['staff'] = $staff;
   data-wp-interactive="iowa-aea-theme/staff-directory-search"
   <?php echo wp_interactivity_data_wp_context( $context ); ?>
   aria-live='polite'
-  data-wp-watch="callbacks.renderStaffList"
+  data-wp-watch="callbacks.loadStaffData"
 >
   <form class='staff-directory-search' data-wp-on--submit='actions.searchStaff' data-wp-init='callbacks.fillFormOptions'>
     <div class='staff-directory-search-input'>
