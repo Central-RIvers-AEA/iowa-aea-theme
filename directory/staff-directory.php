@@ -915,18 +915,10 @@ class StaffDirectory
     }
 
     $search_terms = array();
-    if(!empty($name) && !empty($search_mappings['Name'])){
-      $search_terms[$search_mappings['Name']] = $name;
-    }
-    if(!empty($school_district) && !empty($search_mappings['District'])){
-      $search_terms[$search_mappings['District']] = $school_district;
-    }
-    if(!empty($school_building) && !empty($search_mappings['Building'])){
-      $search_terms[$search_mappings['Building']] = $school_building;
-    }
-    if(!empty($position) && !empty($search_mappings['Position'])){
-      $search_terms[$search_mappings['Position']] = $position;
-    }
+    $search_terms[$search_mappings['Name']] = $name;
+    $search_terms[$search_mappings['District']] = $school_district;
+    $search_terms[$search_mappings['Building']] = $school_building;
+    $search_terms[$search_mappings['Position']] = $position;
 
 
     $api_url = get_option('staff_directory_use_external_api', '');
