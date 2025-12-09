@@ -904,6 +904,8 @@ class StaffDirectory
   public function get_employees_from_external_api($request){
     $search_mappings = get_option('staff_directory_api_search_mappings', array());
 
+    $search = isset($request['search']) ? sanitize_text_field($request['search']) : '';
+
     $name = isset($request['staff-name']) ? sanitize_text_field($request['staff-name']) : '';
     $school_district = isset($request['school-district']) ? sanitize_text_field($request['school-district']) : '';
     $school_building = isset($request['school-building']) ? sanitize_text_field($request['school-building']) : '';
@@ -915,10 +917,22 @@ class StaffDirectory
     }
 
     $search_terms = array();
-    $search_terms[$search_mappings['Name']] = $name;
-    $search_terms[$search_mappings['District']] = $school_district;
-    $search_terms[$search_mappings['Building']] = $school_building;
-    $search_terms[$search_mappings['Position']] = $position;
+    if(!empty($search) && !empty($search_mappings['Name'])){
+      $search_terms[$search_mappings['Name']] = $search;
+    }
+
+    if(!empty($name) && !empty($search_mappings['Name'])){
+      $search_terms[$search_mappings['Name']] = $name;
+    }
+    if(!empty($school_district) && !empty($search_mappings['District'])){
+      $search_terms[$search_mappings['District']] = $school_district;
+    }
+    if(!empty($school_building) && !empty($search_mappings['Building'])){
+      $search_terms[$search_mappings['Building']] = $school_building;
+    }
+    if(!empty($position) && !empty($search_mappings['Position'])){
+      $search_terms[$search_mappings['Position']] = $position;
+    }
 
 
     $api_url = get_option('staff_directory_use_external_api', '');
@@ -949,9 +963,9 @@ class StaffDirectory
     }
 
     $returns = array(
+      'search_terms' => $search_terms,
       'source' => 'external_api',
       'employees' => $formatted_employees,
-      'search_terms' => $search_terms
     );
 
     return new WP_REST_Response($returns, 200);
