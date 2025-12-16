@@ -394,6 +394,48 @@ class StaffDirectory
       'staff_directory_use_external_api'
     );
 
+
+    register_setting(
+      'staff_directory_options_group',
+      'staff_directory_use_external_district_api'
+    );
+
+    register_setting(
+      'staff_directory_options_group',
+      'staff_directory_use_external_district_api_key'
+    );
+
+
+    register_setting(
+      'staff_directory_options_group',
+      'staff_directory_use_external_building_api'
+    );
+
+    register_setting(
+      'staff_directory_options_group',
+      'staff_directory_use_external_building_api_key'
+    );
+
+    register_setting(
+      'staff_directory_options_group',
+      'staff_directory_use_external_positions_api'
+    );
+
+    register_setting(
+      'staff_directory_options_group',
+      'staff_directory_use_external_positions_api_key'
+    );
+
+    register_setting(
+      'staff_directory_options_group',
+      'staff_directory_use_external_content_areas_api'
+    );
+
+    register_setting(
+      'staff_directory_options_group',
+      'staff_directory_use_external_content_areas_api_key'
+    );
+
     register_setting(
       'staff_directory_options_group',
       'staff_directory_api_mappings'
@@ -440,15 +482,31 @@ class StaffDirectory
             <tr>
               <th><label for="staff_directory_use_external_api">Use External API</label></th>
               <td>
-                <input type="checkbox" name="staff_directory_use_external_api_enabled" value="1" <?php checked(1, get_option('staff_directory_use_external_api_enabled', 0)); ?> />
+                <input placeholder='staff data api' type="checkbox" name="staff_directory_use_external_api_enabled" value="1" <?php checked(1, get_option('staff_directory_use_external_api_enabled', 0)); ?> />
                 <p class="description">Check this box to enable using an external API for staff directory data.</p>
               </td>
             </tr>
             <tr>
-              <th><label for="staff_directory_use_external_api">External API URL</label></th>
+              <th>External APIs URLs</label></th>
               <td>
-                <input type="text" name="staff_directory_use_external_api" value="<?php echo esc_attr(get_option('staff_directory_use_external_api', '')); ?>" class="regular-text" />
-                <p class="description">Enter the URL of the external API to use for staff directory data.</p>
+                <input placeholder='Staff data api URL' type="text" name="staff_directory_use_external_api" value="<?php echo esc_attr(get_option('staff_directory_use_external_api', '')); ?>" class="regular-text" />
+                <p class="description">Enter the URL of the external API to use for staff directory Staff data.</p>
+
+                <input placeholder='Districts data api URL' type="text" name="staff_directory_use_external_district_api" value="<?php echo esc_attr(get_option('staff_directory_use_external_district_api', '')); ?>" class="regular-text" />
+                <input  type='text' placeholder='Districts key (leave blank if url returns a list of districts)' value="<?php echo esc_attr(get_option('staff_directory_use_external_district_api_key', '')); ?>" name='staff_directory_use_external_district_api_key' class='regular-text' />
+                <p class="description">Enter the URL of the external API to use for staff directory District data.</p>
+
+                <input placeholder='Buildings data api URL' type="text" name="staff_directory_use_external_building_api" value="<?php echo esc_attr(get_option('staff_directory_use_external_building_api', '')); ?>" class="regular-text" />
+                <input  type='text' placeholder='Buildings key (leave blank if url returns a list of buildings)' value="<?php echo esc_attr(get_option('staff_directory_use_external_building_api_key', '')); ?>" name='staff_directory_use_external_district_api_key' class='regular-text' />
+                <p class="description">Enter the URL of the external API to use for staff directory Building data.</p>
+
+                <input placeholder='Positions data api URL' type="text" name="staff_directory_use_external_positions_api" value="<?php echo esc_attr(get_option('staff_directory_use_external_positions_api', '')); ?>" class="regular-text" />
+                <input  type='text' placeholder='Positions key (leave blank if url returns a list of positions)' value="<?php echo esc_attr(get_option('staff_directory_use_external_positions_api_key', '')); ?>" name='staff_directory_use_external_district_api_key' class='regular-text' />
+                <p class="description">Enter the URL of the external API to use for staff directory position data.</p>
+
+                <input placeholder='Content Areas data api URL' type="text" name="staff_directory_use_external_content_areas_api" value="<?php echo esc_attr(get_option('staff_directory_use_external_content_areas_api', '')); ?>" class="regular-text" />
+                <input  type='text' placeholder='Content Areas key (leave blank if url returns a list of Content Areas)' value="<?php echo esc_attr(get_option('staff_directory_use_external_content_areas_api_key', '')); ?>" name='staff_directory_use_external_district_api_key' class='regular-text' />
+                <p class="description">Enter the URL of the external API to use for staff directory position data.</p>
               </td>
             </tr>
             <tr>
@@ -1097,23 +1155,84 @@ class StaffDirectory
   /** Staff Directory Employee Positions */
   public static function get_positions() {
     global $wpdb;
-    $results = $wpdb->get_results("SELECT DISTINCT meta_value FROM $wpdb->postmeta WHERE meta_key = 'position'");
-    return wp_list_pluck($results, 'meta_value');
+
+    $positions = [];
+
+    // if external api do blah
+    $api = get_option('staff_directory_use_external_positions_api', '');
+    if($api != ''){
+      $response = wp_remote_get($api);
+
+      if (is_wp_error($response)) {
+        return new WP_REST_Response($response, 500);
+        return;
+      }
+
+      $data = wp_remote_retrieve_body($response);
+      $apiKey = get_option('staff_directory_use_external_positions_api_key', '');
+
+      if($apiKey != ''){
+        $positions = json_decode($data, true)[$apiKey];
+      } else {
+        $positions = json_decode($data, true);
+      }
+
+      if (json_last_error() !== JSON_ERROR_NONE) {
+        wp_send_json_error('Invalid JSON response from API', 500);
+        return;
+      }
+    }
+    //otherwise
+    else {
+      $results = $wpdb->get_results("SELECT DISTINCT meta_value FROM $wpdb->postmeta WHERE meta_key = 'position'");
+      $positions = wp_list_pluck($results, 'meta_value');
+    }
+    
+    return $positions;
   }
 
   /** Staff Directory Employee Content Areas */
   public static function get_content_areas() {
     global $wpdb;
-    $results = $wpdb->get_results("SELECT DISTINCT meta_value FROM $wpdb->postmeta WHERE meta_key = 'assignments'");
-
-    $unserialized_assignments = array_map('maybe_unserialize', wp_list_pluck($results, 'meta_value'));
-    $unArrayed_assignments = array_map('maybe_unserialize', $unserialized_assignments);
-    $flattened_assignments = array_merge(...$unArrayed_assignments);
-
     $assignments = [];
 
-    foreach($flattened_assignments as $key => $assignment) {
-      $assignments[] = $assignment['content_area'];
+    // if external api do blah
+    $api = get_option('staff_directory_use_external_content_areas_api', '');
+    if($api != ''){
+      $response = wp_remote_get($api);
+
+      if (is_wp_error($response)) {
+        return new WP_REST_Response($response, 500);
+        return;
+      }
+
+      $data = wp_remote_retrieve_body($response);
+      $apiKey = get_option('staff_directory_use_external_content_areas_api_key', '');
+
+      if($apiKey != ''){
+        $assignments = json_decode($data, true)[$apiKey];
+      } else {
+        $assignments = json_decode($data, true);
+      }
+
+      if (json_last_error() !== JSON_ERROR_NONE) {
+        wp_send_json_error('Invalid JSON response from API', 500);
+        return;
+      }
+    }
+    //otherwise
+    else {
+      $results = $wpdb->get_results("SELECT DISTINCT meta_value FROM $wpdb->postmeta WHERE meta_key = 'assignments'");
+  
+      $unserialized_assignments = array_map('maybe_unserialize', wp_list_pluck($results, 'meta_value'));
+      $unArrayed_assignments = array_map('maybe_unserialize', $unserialized_assignments);
+      $flattened_assignments = array_merge(...$unArrayed_assignments);
+  
+  
+      foreach($flattened_assignments as $key => $assignment) {
+        $assignments[] = $assignment['content_area'];
+      }
+
     }
 
     return $assignments;
@@ -1121,24 +1240,81 @@ class StaffDirectory
 
   /** Staff Directory Employee Districts (SETUP Lookups for EXTERNAL API) */
   public static function get_districts() {
-    $districts = get_posts(array(
-      'post_type' => 'district',
-      'numberposts' => -1,
-      'orderby' => 'title',
-      'order' => 'ASC'
-    ));
+    $districts = [];
+
+    // if external api do blah
+    $api = get_option('staff_directory_use_external_district_api', '');
+    if($api != ''){
+      $response = wp_remote_get($api);
+
+      if (is_wp_error($response)) {
+        return new WP_REST_Response($response, 500);
+        return;
+      }
+
+      $data = wp_remote_retrieve_body($response);
+      $apiKey = get_option('staff_directory_use_external_district_api_key', '');
+
+      if($apiKey != ''){
+        $districts = json_decode($data, true)[$apiKey];
+      } else {
+        $districts = json_decode($data, true);
+      }
+
+      if (json_last_error() !== JSON_ERROR_NONE) {
+        wp_send_json_error('Invalid JSON response from API', 500);
+        return;
+      }
+    }
+    //otherwise
+    else {
+      $districts = get_posts(array(
+        'post_type' => 'district',
+        'numberposts' => -1,
+        'orderby' => 'title',
+        'order' => 'ASC'
+      ));
+    }
 
     return $districts;
   }
 
   /** Staff Directory Employee Buildings */
   public static function get_buildings() {
-    $buildings = get_posts(array(
-      'post_type' => 'school',
-      'numberposts' => -1,
-      'orderby' => 'title',
-      'order' => 'ASC'
-    ));
+    $buildings = [];
+
+    // if external api do blah
+    $api = get_option('staff_directory_use_external_building_api', '');
+    if($api != ''){
+      $response = wp_remote_get($api);
+
+      if (is_wp_error($response)) {
+        return new WP_REST_Response($response, 500);
+        return;
+      }
+
+      $data = wp_remote_retrieve_body($response);
+      $apiKey = get_option('staff_directory_use_external_building_api_key', '');
+
+      if($apiKey != ''){
+        $buildings = json_decode($data, true)[$apiKey];
+      } else {
+        $buildings = json_decode($data, true);
+      }
+
+      if (json_last_error() !== JSON_ERROR_NONE) {
+        wp_send_json_error('Invalid JSON response from API', 500);
+        return;
+      }
+    }
+    else {
+      $buildings = get_posts(array(
+        'post_type' => 'school',
+        'numberposts' => -1,
+        'orderby' => 'title',
+        'order' => 'ASC'
+      ));
+    }
 
     return $buildings;
   }

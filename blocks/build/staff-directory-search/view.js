@@ -1,23 +1,240 @@
+import * as __WEBPACK_EXTERNAL_MODULE__wordpress_interactivity_8e89b257__ from "@wordpress/interactivity";
 /******/ var __webpack_modules__ = ({
 
-/***/ "./src/staff-directory-search/view.js":
-/*!********************************************!*\
-  !*** ./src/staff-directory-search/view.js ***!
-  \********************************************/
-/***/ (() => {
+/***/ "@wordpress/interactivity":
+/*!*******************************************!*\
+  !*** external "@wordpress/interactivity" ***!
+  \*******************************************/
+/***/ ((module) => {
 
-throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nSyntaxError: /Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/src/staff-directory-search/view.js: Unexpected token, expected \",\" (164:4)\n\n\u001b[0m \u001b[90m 162 |\u001b[39m       callbacks\u001b[33m.\u001b[39mrenderStaffList()\u001b[33m;\u001b[39m\n \u001b[90m 163 |\u001b[39m     }\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 164 |\u001b[39m     loadSearchData\u001b[33m:\u001b[39m () \u001b[33m=>\u001b[39m {\n \u001b[90m     |\u001b[39m     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 165 |\u001b[39m       \u001b[36mlet\u001b[39m context \u001b[33m=\u001b[39m getContext()\u001b[33m;\u001b[39m\n \u001b[90m 166 |\u001b[39m\n \u001b[90m 167 |\u001b[39m       \u001b[90m// Initial fetch of all staff\u001b[39m\u001b[0m\n    at constructor (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:367:19)\n    at JSXParserMixin.raise (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:6630:19)\n    at JSXParserMixin.unexpected (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:6650:16)\n    at JSXParserMixin.expect (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:6930:12)\n    at JSXParserMixin.parseObjectLike (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:11830:14)\n    at JSXParserMixin.parseExprAtom (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:11343:23)\n    at JSXParserMixin.parseExprAtom (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:4797:20)\n    at JSXParserMixin.parseExprSubscripts (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:11085:23)\n    at JSXParserMixin.parseUpdate (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:11070:21)\n    at JSXParserMixin.parseMaybeUnary (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:11050:23)\n    at JSXParserMixin.parseMaybeUnaryOrPrivate (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:10903:61)\n    at JSXParserMixin.parseExprOps (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:10908:23)\n    at JSXParserMixin.parseMaybeConditional (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:10885:23)\n    at JSXParserMixin.parseMaybeAssign (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:10835:21)\n    at /Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:10804:39\n    at JSXParserMixin.allowInAnd (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:12436:12)\n    at JSXParserMixin.parseMaybeAssignAllowIn (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:10804:17)\n    at JSXParserMixin.parseMaybeAssignAllowInOrVoidPattern (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:12503:17)\n    at JSXParserMixin.parseObjectProperty (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:11960:83)\n    at JSXParserMixin.parseObjPropValue (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:11988:100)\n    at JSXParserMixin.parsePropertyDefinition (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:11925:17)\n    at JSXParserMixin.parseObjectLike (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:11840:21)\n    at JSXParserMixin.parseExprAtom (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:11343:23)\n    at JSXParserMixin.parseExprAtom (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:4797:20)\n    at JSXParserMixin.parseExprSubscripts (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:11085:23)\n    at JSXParserMixin.parseUpdate (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:11070:21)\n    at JSXParserMixin.parseMaybeUnary (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:11050:23)\n    at JSXParserMixin.parseMaybeUnaryOrPrivate (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:10903:61)\n    at JSXParserMixin.parseExprOps (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:10908:23)\n    at JSXParserMixin.parseMaybeConditional (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:10885:23)\n    at JSXParserMixin.parseMaybeAssign (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:10835:21)\n    at /Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:10804:39\n    at JSXParserMixin.allowInAnd (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:12436:12)\n    at JSXParserMixin.parseMaybeAssignAllowIn (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:10804:17)\n    at JSXParserMixin.parseMaybeAssignAllowInOrVoidPattern (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:12503:17)\n    at JSXParserMixin.parseExprListItem (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:12185:18)\n    at JSXParserMixin.parseCallExpressionArguments (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:11256:22)\n    at JSXParserMixin.parseCoverCallAndAsyncArrowHead (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:11190:29)\n    at JSXParserMixin.parseSubscript (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:11124:19)\n    at JSXParserMixin.parseSubscripts (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:11098:19)\n    at JSXParserMixin.parseExprSubscripts (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:11089:17)\n    at JSXParserMixin.parseUpdate (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:11070:21)\n    at JSXParserMixin.parseMaybeUnary (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:11050:23)\n    at JSXParserMixin.parseMaybeUnaryOrPrivate (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:10903:61)\n    at JSXParserMixin.parseExprOps (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:10908:23)\n    at JSXParserMixin.parseMaybeConditional (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:10885:23)\n    at JSXParserMixin.parseMaybeAssign (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:10835:21)\n    at /Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:10804:39\n    at JSXParserMixin.allowInAnd (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:12431:16)\n    at JSXParserMixin.parseMaybeAssignAllowIn (/Users/phendricks/apps/php/wordpress/aea-websites/wordpress/wp-content/themes/iowa-aea-theme-main/blocks/node_modules/@babel/parser/lib/index.js:10804:17)");
+module.exports = __WEBPACK_EXTERNAL_MODULE__wordpress_interactivity_8e89b257__;
 
 /***/ })
 
 /******/ });
 /************************************************************************/
+/******/ // The module cache
+/******/ var __webpack_module_cache__ = {};
 /******/ 
-/******/ // startup
-/******/ // Load entry module and return exports
-/******/ // This entry module doesn't tell about it's top-level declarations so it can't be inlined
-/******/ var __webpack_exports__ = {};
-/******/ __webpack_modules__["./src/staff-directory-search/view.js"]();
+/******/ // The require function
+/******/ function __webpack_require__(moduleId) {
+/******/ 	// Check if module is in cache
+/******/ 	var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 	if (cachedModule !== undefined) {
+/******/ 		return cachedModule.exports;
+/******/ 	}
+/******/ 	// Create a new module (and put it into the cache)
+/******/ 	var module = __webpack_module_cache__[moduleId] = {
+/******/ 		// no module.id needed
+/******/ 		// no module.loaded needed
+/******/ 		exports: {}
+/******/ 	};
 /******/ 
+/******/ 	// Execute the module function
+/******/ 	__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 
+/******/ 	// Return the exports of the module
+/******/ 	return module.exports;
+/******/ }
+/******/ 
+/************************************************************************/
+/******/ /* webpack/runtime/make namespace object */
+/******/ (() => {
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = (exports) => {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/ })();
+/******/ 
+/************************************************************************/
+var __webpack_exports__ = {};
+// This entry needs to be wrapped in an IIFE because it needs to be isolated against other modules in the chunk.
+(() => {
+/*!********************************************!*\
+  !*** ./src/staff-directory-search/view.js ***!
+  \********************************************/
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/interactivity */ "@wordpress/interactivity");
+
+const {
+  actions,
+  callbacks
+} = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.store)('iowa-aea-theme/staff-directory-search', {
+  actions: {
+    searchStaff: e => {
+      e.preventDefault();
+      let context = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.getContext)();
+      let formData = new FormData(e.target);
+      let query = formData.get('staff-name');
+      let queryObj = {};
+      if (query) queryObj.search = query;
+      let queryString = new URLSearchParams(queryObj).toString();
+
+      // Query Employee Endpoint
+      fetch(`${context.staffEndpoint}?${queryString}`).then(response => response.json()).then(data => {
+        context.staff = data;
+      });
+    },
+    filterBuildings: () => {
+      let context = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.getContext)();
+      let districtSelect = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.getElement)();
+      let district = districtSelect.ref.value;
+
+      // Clear existing options
+      let form = districtSelect.ref.closest('form');
+      let buildingSelect = form.querySelector('select[name="school-building"]');
+      let buildings = context.buildings.filter(building => building.district_id == district);
+      if (district) {
+        buildingSelect.innerHTML = '<option value="">Select a Building</option>';
+        buildings.forEach(building => {
+          let option = document.createElement('option');
+          option.value = building.id;
+          option.textContent = building.name;
+          buildingSelect.appendChild(option);
+        });
+        buildingSelect.disabled = false;
+      } else {
+        buildingSelect.innerHTML = '<option value="">Select a District to view Buildings</option>';
+        buildingSelect.disabled = true;
+      }
+    },
+    filterStaff: () => {
+      let context = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.getContext)();
+      let form = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.getElement)();
+      let query = form.ref.querySelector('input[name="staff-name"]').value;
+      let district = form.ref.querySelector('select[name="school-district"]').value;
+      let building = form.ref.querySelector('select[name="school-building"]').value;
+      let area = form.ref.querySelector('select[name="content-area"]').value;
+      let position = form.ref.querySelector('select[name="position"]').value;
+      let filteredStaff = context.staff.filter(member => {
+        let assignments = Object.keys(member.assignments).map(key => member.assignments[key]);
+        return (!query || member.full_name.toLowerCase().includes(query.toLowerCase())) && (!district || assignments.some(assignment => assignment.district == district)) && (!building || assignments.some(assignment => assignment.building == building)) && (!area || assignments.some(assignment => assignment.content_area == area)) && (!position || member.position == position);
+      });
+
+      // limit to 10 results if no filters are applied
+      if (!query && !district && !building && !area && !position) {
+        filteredStaff = filteredStaff.slice(0, 10);
+      }
+      return filteredStaff;
+    },
+    formReset: e => {
+      e.preventDefault();
+      let form = e.target.closest('form');
+      form.reset();
+
+      // Reset building select
+      let buildingSelect = form.querySelector('select[name="school-building"]');
+      buildingSelect.innerHTML = '<option value="">Select a District to view Buildings</option>';
+      buildingSelect.disabled = true;
+    }
+  },
+  callbacks: {
+    renderStaffList: () => {
+      let context = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.getContext)();
+      let staffList = document.querySelector('.staff-directory-results ul');
+      staffList.innerHTML = '';
+      let filteredStaff = actions.filterStaff();
+      let sortedStaff = sortByAssignmentPriority(filteredStaff);
+      sortedStaff.forEach(member => {
+        // Render each staff member
+        let li = document.createElement('li');
+        let staffMemberTemplate = `
+          <div class='staff-member'>
+            <figure class='staff-image'>
+              <img src='${member.image}' width='135' height='154' alt='${member.full_name}' />
+            </figure>
+            <div class='staff-info'>
+              <h3 class='staff-name'>${member.full_name}</h3>
+              <div class='staff-position'>${member.position}</div>
+              <div class='staff-email'>${member.email}</div>
+              <div class='staff-phone'>${member.phone}</div>
+            </div>
+          </div>
+        `;
+        li.innerHTML = staffMemberTemplate;
+        staffList.appendChild(li);
+      });
+    },
+    fillFormOptions: () => {
+      let context = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.getContext)();
+      let form = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.getElement)();
+      context.districts.forEach(district => {
+        let option = document.createElement('option');
+        option.value = district.id;
+        option.textContent = district.name;
+        form.ref.querySelector('select[name="school-district"]').appendChild(option);
+      });
+      context.positions.sort().forEach(position => {
+        if (position.trim() != '') {
+          let option = document.createElement('option');
+          option.innerText = position.trim();
+          form.ref.querySelector('select[name="position"]').appendChild(option);
+        }
+      });
+      context.contentAreas.sort().forEach(area => {
+        if (area.trim() != '') {
+          let option = document.createElement('option');
+          option.innerText = area.trim();
+          form.ref.querySelector('select[name="content-area"]').appendChild(option);
+        }
+      });
+    },
+    loadStaffData: () => {
+      let context = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.getContext)();
+
+      // Initial fetch of all staff
+      fetch(`${context.staffEndpoint}`).then(response => response.json()).then(data => {
+        context.staff = data;
+      });
+      callbacks.renderStaffList();
+    },
+    loadSearchData: () => {
+      let context = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.getContext)();
+
+      // Initial fetch of all staff
+      fetch(`${context.searchablesEndpoint}`).then(response => response.json()).then(data => {
+        context.staff = data;
+      });
+    }
+  }
+});
+function sortByAssignmentPriority(staff) {
+  let districtSelect = document.querySelector('#school-district');
+  let buildingSelect = document.querySelector('#school-building');
+  let contentAreaSelect = document.querySelector('#content-area');
+  let adjustedItems = staff.map(item => {
+    let newItem = {
+      ...item
+    };
+    newItem.assignments_array = [];
+    if (newItem.assignments) {
+      Object.keys(newItem.assignments).forEach(assignment => {
+        newItem.assignments_array.push(newItem.assignments[assignment]);
+      });
+    }
+    return newItem;
+  });
+  let sortedItems = adjustedItems.sort((itemA, itemB) => {
+    if (districtSelect.value != '') {
+      let assignmentA = itemA.assignments_array.find(assignment => assignment.district == districtSelect.value);
+      let assignmentB = itemB.assignments_array.find(assignment => assignment.district == districtSelect.value);
+      if (assignmentA.search_priority == '') {
+        assignmentA.search_priority = 100;
+      }
+      if (assignmentB.search_priority == '') {
+        assignmentB.search_priority = 100;
+      }
+      return assignmentA.search_priority - assignmentB.search_priority || itemA.last_name.localeCompare(itemB.last_name);
+    } else {
+      return 0;
+    }
+  });
+  return sortedItems;
+}
+})();
+
 
 //# sourceMappingURL=view.js.map

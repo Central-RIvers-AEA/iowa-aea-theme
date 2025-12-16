@@ -160,7 +160,7 @@ const { actions, callbacks } = store( 'iowa-aea-theme/staff-directory-search', {
         });
 
       callbacks.renderStaffList();
-    }
+    },
     loadSearchData: () => {
       let context = getContext();
 
