@@ -57,15 +57,8 @@ class StaffDirectory
     ?>
     <div class="wrap">
       <h1>Import Employees from CSV</h1>
-      <p>Please upload a CSV file containing employee data. The columns should be as below</p>
-      <ul>
-        <li>first_name</li>
-        <li>last_name</li>
-        <li>position</li>
-        <li>email</li>
-        <li>phone</li>
-        <li>photo url (if applicable)</li>
-      </ul>
+      <p>Please upload a CSV file containing employee data. You can find an <a href='https://docs.google.com/spreadsheets/d/13-kR-uO8mrngK9jqcjOAEi97CYVdKVTtNj2udiX_HoA/edit?usp=sharing'>Example CSV for Upload here<a>.</p>
+
       <form method="post" enctype="multipart/form-data">
         <input type="file" name="employee_csv" accept=".csv" required />
         <input type="hidden" name="action" value="import_employees_from_csv">
@@ -207,35 +200,9 @@ class StaffDirectory
         </td>
       </tr>
 
-      <tr>
-        <th><label for="location">Location</label></th>
-        <td>
-          <select id='location' name='location'>
-            <option value=''>Select a Location</option>
-            <?php
-            $locations = array(
-              'Decorah',
-              'Delhi',
-              'Dubuque',
-              'Elkader',
-              'New Hampton',
-              'Oelwein',
-              'Waukon',
-              'West Union'
-            );
-
-            foreach ($locations as $local) {
-              $selected = $local == $location ? 'selected=selected' : '';
-
-              echo "<option $selected>$local</option>";
-            }
-
-            ?>
-          </select>
-          <p class="description">Field Office</p>
-        </td>
-      </tr>
-
+      <?php 
+        do_action('staff_directory_fields');
+      ?>
     </table>
   <?php
   }
@@ -821,43 +788,145 @@ class StaffDirectory
         $csvData = array_map("utf8_encode", $csvData);
         $rowData = array();
         foreach ($csvData as $key => $value) {
-          $rowData[strtolower($headers[$key])] = $value;
+          $rowData[$headers[$key]] = $value;
         }
 
         array_push($dataArray, $rowData);
       }
 
-      echo var_dump($dataArray);
-
       foreach ($dataArray as $row) {
-        $first_name = trim($row['first_name']);
-        $last_name = trim($row['last_name']);
-        $name = $first_name . ' ' . $last_name;
-        $position = trim($row['position']);
-        $email = trim($row['email']);
-        $phone = trim($row['phone']);
-        $photo = trim($row['photo']);
+        $previous_post_id = trim($row['Previous Post Id']);
+        $post_id = trim($row['Post Id']);
+        $first_name = trim($row['First Name']);
+        $last_name = trim($row['Last Name']);
+        $name = trim($row['Full Name']);
+        $position = trim($row['Position']);
+        $email = trim($row['Email']);
+        $phone = trim($row['Phone']);
+        $photo = trim($row['Photo Url (optional)']);
 
-        $meta_data = array(
-          'position' => $position,
-          'email' => $email,
-          'phone' => $phone,
-          'first_name' => $first_name,
-          'last_name' => $last_name
-        );
+        // Data for assignment
+        $assignment_content_area = trim($row['Assignment Content Area']);
+        $assignment_district = trim($row['Assignment District']);
+        $assignment_district_wide = trim($row['Assignment District Wide']);
+        $assignment_building = trim($row['Assignment Building']);
+        $assignment_agency_wide = trim($row['Assignment Agency Wide']);
+        $assignment_search_priority = trim($row['Assignment Search Priority']);
 
-        if(!empty($photo)){
-          $meta_data['photo'] = $photo;
+        // Query if person exists already
+        if(isset($post_id)){
+          wp_update_post([
+            'ID' => $post_id,
+            'post_title' => $name,
+          ]);
+
+          $assignment = [
+            'content_area' => $assignment_content_area,
+            'district' => $assignment_district,
+            'district_wide' => $assignment_district_wide,
+            'building' => $assignment_building,
+            'agency_wide' => $assignment_agency_wide,
+            'search_priority' => $assignment_search_priority,
+          ];
+
+          $assignments = get_post_meta($post_id, 'assignments', true);
+          $assignments[] = $assignment;
+          
+          update_post_meta($post_id, 'assignments', $assignments);
+
+          update_post_meta($post_id, 'email', $email);
+          update_post_meta($post_id, 'first_name', $first_name);
+          update_post_meta($post_id, 'last_name', $last_name);
+          update_post_meta($post_id, 'position', $position);
+          update_post_meta($post_id, 'phone', $phone);
+          update_post_meta($post_id, 'photo', $photo);
+
+
+        } else if (isset($previous_post_id)){
+          // look for post
+          $posts = get_posts(['post_type' => 'employee', 'meta_query' => [ 'key' => 'previous_post_id', 'value' => $previous_post_id, 'compare' => '=' ] ]);
+
+          if(count($posts) > 0){
+            // if post update it
+            $post = $posts[0];
+            $post_id = $post->ID;
+
+            wp_update_post([
+            'ID' => $post_id,
+            'post_title' => $name,
+          ]);
+
+          $assignment = [
+            'content_area' => $assignment_content_area,
+            'district' => $assignment_district,
+            'district_wide' => $assignment_district_wide,
+            'building' => $assignment_building,
+            'agency_wide' => $assignment_agency_wide,
+            'search_priority' => $assignment_search_priority,
+          ];
+
+          $assignments = get_post_meta($post_id, 'assignments', true);
+          $assignments[] = $assignment;
+          
+          update_post_meta($post_id, 'assignments', $assignments);
+
+          update_post_meta($post_id, 'email', $email);
+          update_post_meta($post_id, 'first_name', $first_name);
+          update_post_meta($post_id, 'last_name', $last_name);
+          update_post_meta($post_id, 'position', $position);
+          update_post_meta($post_id, 'phone', $phone);
+          update_post_meta($post_id, 'photo', $photo);
+
+
+          }else {
+            $meta_data = array(
+              'position' => $position,
+              'email' => $email,
+              'phone' => $phone,
+              'first_name' => $first_name,
+              'last_name' => $last_name,
+              'previous_post_id' => $previous_post_id
+            );
+  
+            if(!empty($photo)){
+              $meta_data['photo'] = $photo;
+            }
+  
+            $postArray = array(
+              'post_title' => $name,
+              'post_content' => '',
+              'post_type' => 'employee',
+              'post_status' => 'publish',
+              'meta_input' => $meta_data
+            );
+  
+            wp_insert_post($postArray);
+          }
+        } else {
+          $meta_data = array(
+            'position' => $position,
+            'email' => $email,
+            'phone' => $phone,
+            'first_name' => $first_name,
+            'last_name' => $last_name,
+            'previous_post_id' => $previous_post_id
+          );
+
+          if(!empty($photo)){
+            $meta_data['photo'] = $photo;
+          }
+
+          $postArray = array(
+            'post_title' => $name,
+            'post_content' => '',
+            'post_type' => 'employee',
+            'post_status' => 'publish',
+            'meta_input' => $meta_data
+          );
+
+          wp_insert_post($postArray);
+
         }
-
-        $postArray = array(
-          'post_title' => $name,
-          'post_content' => '',
-          'post_type' => 'employee',
-          'post_status' => 'publish',
-          'meta_input' => $meta_data
-        );
-        wp_insert_post($postArray);
       }
       fclose($csvFile);
       return true;
