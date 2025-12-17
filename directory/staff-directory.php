@@ -74,7 +74,9 @@ class StaffDirectory
         if (is_wp_error($result)) {
           echo '<div class="error"><p>' . $result->get_error_message() . '</p></div>';
         } else {
-          echo '<div class="updated"><p>Employees imported successfully!</p></div>';
+          $created_count = $result[0];
+          $updated_count = $result[1];
+          echo "<div class='updated'><p>$created_count Employees imported & $updated_count updated successfully!</p></div>";
         }
       } else {
         echo '<div class="error"><p>Error uploading file: ' . $file["error"] . '</p></div>';
@@ -775,6 +777,9 @@ class StaffDirectory
   public function import_employees(){
     $post = $_POST;
     $extension = pathinfo($_FILES['employee_csv']['name'], PATHINFO_EXTENSION);
+
+    $import_created_count = 0;
+    $import_updated_count = 0;
     // echo 'hello';
     // echo var_dump($_FILES['district_import_file']);
     if (!empty($_FILES['employee_csv']['name']) && $extension == 'csv') {
@@ -808,26 +813,27 @@ class StaffDirectory
         // Data for assignment
         $assignment_content_area = trim($row['Assignment Content Area']);
         $assignment_district = trim($row['Assignment District']);
-        $assignment_district_wide = trim($row['Assignment District Wide']);
+        $assignment_district_wide = trim($row['Assignment District Wide']) == 'TRUE';
         $assignment_building = trim($row['Assignment Building']);
-        $assignment_agency_wide = trim($row['Assignment Agency Wide']);
+        $assignment_agency_wide = trim($row['Assignment Agency Wide']) == 'TRUE';
         $assignment_search_priority = trim($row['Assignment Search Priority']);
+
+        $assignment = [
+          'content_area' => $assignment_content_area,
+          'district' => $assignment_district,
+          'district_wide' => $assignment_district_wide,
+          'building' => $assignment_building,
+          'agency_wide' => $assignment_agency_wide,
+          'search_priority' => $assignment_search_priority,
+        ];
 
         // Query if person exists already
         if(isset($post_id)){
           wp_update_post([
             'ID' => $post_id,
             'post_title' => $name,
+            'post_type' => 'employee'
           ]);
-
-          $assignment = [
-            'content_area' => $assignment_content_area,
-            'district' => $assignment_district,
-            'district_wide' => $assignment_district_wide,
-            'building' => $assignment_building,
-            'agency_wide' => $assignment_agency_wide,
-            'search_priority' => $assignment_search_priority,
-          ];
 
           $assignments = get_post_meta($post_id, 'assignments', true);
           $assignments[] = $assignment;
@@ -840,7 +846,7 @@ class StaffDirectory
           update_post_meta($post_id, 'position', $position);
           update_post_meta($post_id, 'phone', $phone);
           update_post_meta($post_id, 'photo', $photo);
-
+          $import_updated_count++;
 
         } else if (isset($previous_post_id)){
           // look for post
@@ -852,31 +858,23 @@ class StaffDirectory
             $post_id = $post->ID;
 
             wp_update_post([
-            'ID' => $post_id,
-            'post_title' => $name,
-          ]);
+              'ID' => $post_id,
+              'post_title' => $name,
+            ]);
 
-          $assignment = [
-            'content_area' => $assignment_content_area,
-            'district' => $assignment_district,
-            'district_wide' => $assignment_district_wide,
-            'building' => $assignment_building,
-            'agency_wide' => $assignment_agency_wide,
-            'search_priority' => $assignment_search_priority,
-          ];
+            $assignments = get_post_meta($post_id, 'assignments', true);
+            $assignments[] = $assignment;
+            
+            update_post_meta($post_id, 'assignments', $assignments);
 
-          $assignments = get_post_meta($post_id, 'assignments', true);
-          $assignments[] = $assignment;
-          
-          update_post_meta($post_id, 'assignments', $assignments);
+            update_post_meta($post_id, 'email', $email);
+            update_post_meta($post_id, 'first_name', $first_name);
+            update_post_meta($post_id, 'last_name', $last_name);
+            update_post_meta($post_id, 'position', $position);
+            update_post_meta($post_id, 'phone', $phone);
+            update_post_meta($post_id, 'photo', $photo);
 
-          update_post_meta($post_id, 'email', $email);
-          update_post_meta($post_id, 'first_name', $first_name);
-          update_post_meta($post_id, 'last_name', $last_name);
-          update_post_meta($post_id, 'position', $position);
-          update_post_meta($post_id, 'phone', $phone);
-          update_post_meta($post_id, 'photo', $photo);
-
+            $import_updated_count++;
 
           }else {
             $meta_data = array(
@@ -885,7 +883,8 @@ class StaffDirectory
               'phone' => $phone,
               'first_name' => $first_name,
               'last_name' => $last_name,
-              'previous_post_id' => $previous_post_id
+              'previous_post_id' => $previous_post_id,
+              'assignments' => [$assignment]
             );
   
             if(!empty($photo)){
@@ -901,6 +900,7 @@ class StaffDirectory
             );
   
             wp_insert_post($postArray);
+            $import_created_count++;
           }
         } else {
           $meta_data = array(
@@ -909,7 +909,8 @@ class StaffDirectory
             'phone' => $phone,
             'first_name' => $first_name,
             'last_name' => $last_name,
-            'previous_post_id' => $previous_post_id
+            'previous_post_id' => $previous_post_id,
+            'assignments' => [$assignment]
           );
 
           if(!empty($photo)){
@@ -925,11 +926,11 @@ class StaffDirectory
           );
 
           wp_insert_post($postArray);
-
+          $import_created_count++;
         }
       }
       fclose($csvFile);
-      return true;
+      return [$import_created_count, $import_updated_count];
     } else {
       return new WP_Error('invalid_file', 'Please upload a valid CSV file.');
     }
