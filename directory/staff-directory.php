@@ -438,7 +438,7 @@ class StaffDirectory
 
           $api_mappings = array_merge($initial_api_mappings, $saved_api_mappings);
 
-          $initial_api_search_mappings = ['Name' => '', 'Position' => '', 'District' => '', 'Building' => ''];
+          $initial_api_search_mappings = ['Name' => '', 'Position' => '', 'District' => '', 'Building' => '', 'Content Area' => ''];
           $saved_api_search_mappings = get_option('staff_directory_api_search_mappings', $initial_api_search_mappings);
           $api_search_mappings = array_merge($initial_api_search_mappings, $saved_api_search_mappings);
           
@@ -828,7 +828,7 @@ class StaffDirectory
         ];
 
         // Query if person exists already
-        if(isset($post_id)){
+        if(isset($post_id) && $post_id != ''){
           wp_update_post([
             'ID' => $post_id,
             'post_title' => $name,
@@ -848,11 +848,18 @@ class StaffDirectory
           update_post_meta($post_id, 'photo', $photo);
           $import_updated_count++;
 
-        } else if (isset($previous_post_id)){
+        } else if (isset($previous_post_id) && $previous_post_id != ''){
           // look for post
-          $posts = get_posts(['post_type' => 'employee', 'meta_query' => [ 'key' => 'previous_post_id', 'value' => $previous_post_id, 'compare' => '=' ] ]);
+          $posts = get_posts([
+            'post_type' => 'employee', 
+            'meta_query' => [
+                [ 'key' => 'previous_post_id', 'value' => $previous_post_id, 'compare' => '=' ]
+              ] 
+          ]);
 
-          if(count($posts) > 0){
+          var_dump($posts);
+
+          if(count($posts) > 0 && get_post_type($posts[0]) == 'employee'){
             // if post update it
             $post = $posts[0];
             $post_id = $post->ID;
@@ -862,7 +869,12 @@ class StaffDirectory
               'post_title' => $name,
             ]);
 
-            $assignments = get_post_meta($post_id, 'assignments', true);
+            $assignments = get_post_meta($post_id, 'assignments');
+
+            if(empty($assignments)){
+              $assignments = [];
+            }
+
             $assignments[] = $assignment;
             
             update_post_meta($post_id, 'assignments', $assignments);
@@ -1034,10 +1046,10 @@ class StaffDirectory
 
     $search = isset($request['search']) ? sanitize_text_field($request['search']) : '';
 
-    $name = isset($request['staff-name']) ? sanitize_text_field($request['staff-name']) : '';
     $school_district = isset($request['school-district']) ? sanitize_text_field($request['school-district']) : '';
     $school_building = isset($request['school-building']) ? sanitize_text_field($request['school-building']) : '';
     $position = isset($request['position']) ? sanitize_text_field($request['position']) : '';
+    $content_area = isset($request['content_area']) ? sanitize_text_field($request['content_area']) : '';
 
     if(empty($search_mappings)){
       wp_send_json_error('API Search Mappings not configured', 500);
@@ -1045,12 +1057,10 @@ class StaffDirectory
     }
 
     $search_terms = array();
+
     if(!empty($search) && !empty($search_mappings['Name'])){
       $search_terms[urlencode($search_mappings['Name'])] = $search;
     }
-    // if(!empty($search_mappings['Name'])){
-    //   $search_terms[urlencode($search_mappings['Name'])] = $name;
-    // }
     if(!empty($search_mappings['District'])){
       $search_terms[urlencode($search_mappings['District'])] = $school_district;
     }
@@ -1059,6 +1069,9 @@ class StaffDirectory
     }
     if(!empty($search_mappings['Position'])){
       $search_terms[urlencode($search_mappings['Position'])] = $position;
+    }
+    if(!empty($search_mappings['Content Area'])){
+      $search_terms[urlencode($search_mappings['Content Area'])] = $content_area;
     }
 
     $search_string = '';
@@ -1103,6 +1116,10 @@ class StaffDirectory
       'source' => 'external_api',
       'employees' => $formatted_employees,
     );
+
+    if($search == '' && $school_district == '' && $school_building == '' && $position == '' && $content_area == ''){
+      $formatted_employees = array_slice($formatted_employees, 0, 10);
+    }
 
     return new WP_REST_Response($formatted_employees, 200);
   }
@@ -1313,7 +1330,7 @@ class StaffDirectory
     $districts = [];
 
     // if external api do blah
-    $api = get_option('staff_directory_use_external_district_api', '');
+    $api = get_option('staff_directory_use_external_districts_api', '');
     if($api != ''){
       $response = wp_remote_get($api);
 
@@ -1323,7 +1340,7 @@ class StaffDirectory
       }
 
       $data = wp_remote_retrieve_body($response);
-      $apiKey = get_option('staff_directory_use_external_district_api_key', '');
+      $apiKey = get_option('staff_directory_use_external_districts_api_key', '');
 
       if($apiKey != ''){
         $districts = json_decode($data, true)[$apiKey];

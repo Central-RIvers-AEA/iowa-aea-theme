@@ -9,11 +9,20 @@ const { actions, callbacks } = store( 'iowa-aea-theme/staff-directory-search', {
       let context = getContext();
 
       let formData = new FormData(e.target);
-      let query = formData.get('staff-name');
-
+      
       let queryObj = {}
-
+      
+      let query = formData.get('staff-name');
       if(query) queryObj.search = query;
+
+      let contentArea = formData.get('content-area')
+      if(contentArea) queryObj.content_area = contentArea
+
+      let position = formData.get('position')
+      if(position) queryObj.position = position
+
+      let district = formData.get('district')
+      if(district) queryObj.district = district
 
       let queryString = new URLSearchParams(queryObj).toString();
 
@@ -97,7 +106,7 @@ const { actions, callbacks } = store( 'iowa-aea-theme/staff-directory-search', {
       let staffList = document.querySelector('.staff-directory-results ul');
       staffList.innerHTML = '';
 
-      let filteredStaff = actions.filterStaff()
+      let filteredStaff = context.staff
       let sortedStaff = sortByAssignmentPriority(filteredStaff);
 
       sortedStaff.forEach( member => {
@@ -134,7 +143,13 @@ const { actions, callbacks } = store( 'iowa-aea-theme/staff-directory-search', {
       });
       
       context.positions.sort().forEach(position => {
-        if(position.trim() != '') {
+        if(typeof position == 'object'){
+          let option = document.createElement('option');
+          option.value = position.name;
+          option.innerText = position.name;
+          form.ref.querySelector('select[name="position"]').appendChild(option);
+
+        } else if(position.trim() != '') {
           let option = document.createElement('option');
           option.innerText = position.trim();
           form.ref.querySelector('select[name="position"]').appendChild(option);
@@ -142,7 +157,13 @@ const { actions, callbacks } = store( 'iowa-aea-theme/staff-directory-search', {
       })
 
       context.contentAreas.sort().forEach(area => {
-        if(area.trim() != '') {
+        if(typeof area == 'object'){
+          let option = document.createElement('option');
+          option.value = area.id;
+          option.innerText = area.name;
+          form.ref.querySelector('select[name="content-area"]').appendChild(option);
+
+        } else if(area.trim() != '') {
           let option = document.createElement('option');
           option.innerText = area.trim();
           form.ref.querySelector('select[name="content-area"]').appendChild(option);
