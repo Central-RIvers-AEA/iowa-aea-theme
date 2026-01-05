@@ -1046,8 +1046,8 @@ class StaffDirectory
 
     $search = isset($request['search']) ? sanitize_text_field($request['search']) : '';
 
-    $school_district = isset($request['school-district']) ? sanitize_text_field($request['school-district']) : '';
-    $school_building = isset($request['school-building']) ? sanitize_text_field($request['school-building']) : '';
+    $school_district = isset($request['district']) ? sanitize_text_field($request['district']) : '';
+    $school_building = isset($request['building']) ? sanitize_text_field($request['building']) : '';
     $position = isset($request['position']) ? sanitize_text_field($request['position']) : '';
     $content_area = isset($request['content_area']) ? sanitize_text_field($request['content_area']) : '';
 
@@ -1330,7 +1330,7 @@ class StaffDirectory
     $districts = [];
 
     // if external api do blah
-    $api = get_option('staff_directory_use_external_districts_api', '');
+    $api = get_option('staff_directory_use_external_district_api', '');
     if($api != ''){
       $response = wp_remote_get($api);
 
@@ -1340,7 +1340,7 @@ class StaffDirectory
       }
 
       $data = wp_remote_retrieve_body($response);
-      $apiKey = get_option('staff_directory_use_external_districts_api_key', '');
+      $apiKey = get_option('staff_directory_use_external_district_api_key', '');
 
       if($apiKey != ''){
         $districts = json_decode($data, true)[$apiKey];

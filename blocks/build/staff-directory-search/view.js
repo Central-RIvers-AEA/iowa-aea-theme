@@ -75,9 +75,12 @@ const {
       if (contentArea) queryObj.content_area = contentArea;
       let position = formData.get('position');
       if (position) queryObj.position = position;
-      let district = formData.get('district');
+      let district = formData.get('school-district');
       if (district) queryObj.district = district;
+      let building = formData.get('school-building');
+      if (building) queryObj.building = building;
       let queryString = new URLSearchParams(queryObj).toString();
+      console.log(queryString);
 
       // Query Employee Endpoint
       fetch(`${context.staffEndpoint}?${queryString}`).then(response => response.json()).then(data => {
@@ -237,11 +240,17 @@ function sortByAssignmentPriority(staff) {
     if (districtSelect.value != '') {
       let assignmentA = itemA.assignments_array.find(assignment => assignment.district == districtSelect.value);
       let assignmentB = itemB.assignments_array.find(assignment => assignment.district == districtSelect.value);
-      if (assignmentA.search_priority == '') {
-        assignmentA.search_priority = 100;
+      if (!Object.hasOwnProperty(assignmentA, 'search_priority') || assignmentA.search_priority == '') {
+        assignmentA = {
+          ...assignmentA,
+          search_priority: 100
+        };
       }
-      if (assignmentB.search_priority == '') {
-        assignmentB.search_priority = 100;
+      if (!Object.hasOwnProperty(assignmentB, 'search_priority') || assignmentB.search_priority == '') {
+        assignmentB = {
+          ...assignmentB,
+          search_priority: 100
+        };
       }
       return assignmentA.search_priority - assignmentB.search_priority || itemA.last_name.localeCompare(itemB.last_name);
     } else {

@@ -20,37 +20,6 @@ $context['buildings'] = StaffDirectory::get_buildings();
 
 $staff = [];
 
-// Districts
-// $districts = get_posts([
-//   'post_type' => 'district',
-//   'numberposts' => -1,
-//   'orderby' => 'title',
-//   'order' => 'ASC'
-// ]);
-
-// $context['districts'] = array_map(function ( $district ) {
-//   return [
-//     'id' => $district->ID,
-//     'name' => $district->post_title
-//   ];
-// }, $districts);
-
-// // Buildings with Districts
-// $buildings = get_posts([
-//   'post_type' => 'school',
-//   'numberposts' => -1,
-//   'orderby' => 'title',
-//   'order' => 'ASC'
-// ]);
-
-// $context['buildings'] = array_map(function ( $building ) {
-//   return [
-//     'id' => $building->ID,
-//     'name' => $building->post_title,
-//     'district_id' => get_post_meta( $building->ID, 'district', true )
-//   ];
-// }, $buildings);
-
 $context['staff'] = $staff;
 
 ?>
