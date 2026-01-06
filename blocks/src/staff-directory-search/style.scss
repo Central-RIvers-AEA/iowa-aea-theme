@@ -92,5 +92,20 @@
       }
     }
   }
+
+  .staff-directory-search-spinner{
+    &.hidden {
+      display: none;
+    }
+
+    .spinner {
+      display: grid;
+      place-items: center;
+      
+      svg {
+        width: 200px;
+      }
+    }
+  }
 }
 

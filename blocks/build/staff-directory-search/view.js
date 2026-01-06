@@ -67,6 +67,7 @@ const {
     searchStaff: e => {
       e.preventDefault();
       let context = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.getContext)();
+      context.loading = true;
       let formData = new FormData(e.target);
       let queryObj = {};
       let query = formData.get('staff-name');
@@ -81,10 +82,13 @@ const {
       if (building) queryObj.building = building;
       let queryString = new URLSearchParams(queryObj).toString();
       console.log(queryString);
+      let staffList = document.querySelector('.staff-directory-results ul');
+      staffList.innerHTML = '';
 
       // Query Employee Endpoint
       fetch(`${context.staffEndpoint}?${queryString}`).then(response => response.json()).then(data => {
         context.staff = data;
+        context.loading = false;
       });
     },
     filterBuildings: () => {
@@ -113,6 +117,7 @@ const {
     filterStaff: () => {
       let context = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.getContext)();
       let form = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.getElement)();
+      context.loading = true;
       let query = form.ref.querySelector('input[name="staff-name"]').value;
       let district = form.ref.querySelector('select[name="school-district"]').value;
       let building = form.ref.querySelector('select[name="school-building"]').value;
@@ -166,9 +171,15 @@ const {
         li.innerHTML = staffMemberTemplate;
         staffList.appendChild(li);
       });
+      if (sortedStaff.length === 0 && !context.loading) {
+        let li = document.createElement('li');
+        li.innerHTML = `<p>No staff members found matching your criteria. Please try adjusting your search.</p>`;
+        staffList.appendChild(li);
+      }
     },
     fillFormOptions: () => {
       let context = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.getContext)();
+      context.loading = true;
       let form = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.getElement)();
       context.districts.forEach(district => {
         let option = document.createElement('option');
@@ -203,19 +214,13 @@ const {
     },
     loadStaffData: () => {
       let context = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.getContext)();
+      context.loading = true;
 
       // Initial fetch of all staff
       fetch(`${context.staffEndpoint}`).then(response => response.json()).then(data => {
         context.staff = data;
-      });
-      callbacks.renderStaffList();
-    },
-    loadSearchData: () => {
-      let context = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.getContext)();
-
-      // Initial fetch of all staff
-      fetch(`${context.searchablesEndpoint}`).then(response => response.json()).then(data => {
-        context.staff = data;
+      }).finally(() => {
+        context.loading = false;
       });
     }
   }

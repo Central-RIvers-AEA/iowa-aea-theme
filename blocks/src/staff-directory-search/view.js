@@ -8,6 +8,8 @@ const { actions, callbacks } = store( 'iowa-aea-theme/staff-directory-search', {
 
       let context = getContext();
 
+      context.loading = true;
+
       let formData = new FormData(e.target);
       
       let queryObj = {}
@@ -31,11 +33,15 @@ const { actions, callbacks } = store( 'iowa-aea-theme/staff-directory-search', {
 
       console.log(queryString)
 
+      let staffList = document.querySelector('.staff-directory-results ul');
+      staffList.innerHTML = '';
+
       // Query Employee Endpoint
       fetch(`${context.staffEndpoint}?${queryString}`)
         .then(response => response.json())
         .then(data => {
           context.staff = data;
+          context.loading = false;
         });
     },
     filterBuildings: () => {
@@ -67,6 +73,8 @@ const { actions, callbacks } = store( 'iowa-aea-theme/staff-directory-search', {
     filterStaff: () => {
       let context = getContext();
       let form = getElement();
+
+      context.loading = true;
 
       let query = form.ref.querySelector('input[name="staff-name"]').value;
       let district = form.ref.querySelector('select[name="school-district"]').value;
@@ -136,9 +144,16 @@ const { actions, callbacks } = store( 'iowa-aea-theme/staff-directory-search', {
 
         staffList.appendChild(li);
       });
+
+      if(sortedStaff.length === 0 && !context.loading) {
+        let li = document.createElement('li');
+        li.innerHTML = `<p>No staff members found matching your criteria. Please try adjusting your search.</p>`;
+        staffList.appendChild(li);
+      }
     },
     fillFormOptions: () => {
       let context = getContext();
+      context.loading = true;
 
       let form = getElement();
 
@@ -180,23 +195,16 @@ const { actions, callbacks } = store( 'iowa-aea-theme/staff-directory-search', {
     loadStaffData: () => {
       let context = getContext();
 
+      context.loading = true;
+      
       // Initial fetch of all staff
       fetch(`${context.staffEndpoint}`)
         .then(response => response.json())
         .then(data => {
           context.staff = data;
-        });
-
-      callbacks.renderStaffList();
-    },
-    loadSearchData: () => {
-      let context = getContext();
-
-      // Initial fetch of all staff
-      fetch(`${context.searchablesEndpoint}`)
-        .then(response => response.json())
-        .then(data => {
-          context.staff = data;
+        })
+        .finally(() => {
+          context.loading = false;
         });
     }
   }
