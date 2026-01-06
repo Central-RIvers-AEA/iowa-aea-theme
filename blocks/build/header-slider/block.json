@@ -7,35 +7,7 @@
   "category": "widgets",
   "icon": "smiley",
   "description": "A block for displaying a header slider.",
-  "attributes": {
-    "slides": {
-      "default": [],
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "title": {
-            "type": "string"
-          },
-          "content": {
-            "type": "string"
-          },
-          "slide_label": {
-            "type": "string"
-          },
-          "image": {
-            "type": "string",
-            "format": "uri"
-          }
-        },
-        "required": [
-          "image",
-          "title",
-          "slide_label"
-        ]
-      }
-    }
-  },
+  "attributes": {},
   "example": {},
   "supports": {
     "interactivity": true

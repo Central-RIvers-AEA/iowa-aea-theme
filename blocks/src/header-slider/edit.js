@@ -11,7 +11,7 @@ import { __ } from '@wordpress/i18n';
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
-import { useBlockProps, RichText, MediaUpload } from '@wordpress/block-editor';
+import { useBlockProps, InnerBlocks, ButtonBlockAppender } from '@wordpress/block-editor';
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -30,101 +30,23 @@ import './editor.scss';
  * @return {Element} Element to render.
  */
 export default function Edit(props) {
-	const { attributes, setAttributes } = props;
-	const { slides } = attributes;
-
-	const MAX_CHARACTERS = 50;
-
-	// Handle slide changes
-	const handleSlideChange = (index, updatedSlide) => {
-		const updatedSlides = [...slides];
-		updatedSlides[index] = updatedSlide;
-		setAttributes({ slides: updatedSlides });
-	}
-
-	const handleLabelChange = (index, value) => {
-		const updatedSlides = [...slides];
-
-		if (value.length <= MAX_CHARACTERS) {
-			value = value.substring(0, MAX_CHARACTERS);
-			console.log(value)
-			updatedSlides[index].slide_label = value;
-			setAttributes({ slides: updatedSlides });
-		}
-	}
-
-	const addSlide = () => {
-		const newSlide = {
-			image: '',
-			title: '',
-			slide_label: '',
-			content: ''
-		};
-		setAttributes({ slides: [...slides, newSlide] });
-	}
-
-	const removeSlide = (index) => {
-		const updatedSlides = [...slides];
-		updatedSlides.splice(index, 1);
-		setAttributes({ slides: updatedSlides });
-	}
+	const allowed_blocks = ['iowa-aea-theme/header-slide']
+	const template = [
+		['iowa-aea-theme/header-slide', {}]
+	]
 
 	return (
-		<div { ...useBlockProps() } style={{ textAlign: 'center' }}>
-			{ slides && slides.map((slide, index) => (
-				<div key={ index } className='slide' style={{ textAlign: 'left' }}>
-					<div className='title-content'>
-						<button onClick={() => removeSlide(index)} style={{ background: 'red', color: 'white', border: 'none', padding: '5px 10px', borderRadius: '19px', fontWeight: 'bold', cursor: 'pointer' }}>Remove Slide</button>
-						<RichText
-							key={`slide-title-${index}`}
-							identifier={`slide-title-${index}`}
-							tagName="h3"
-							value={slide.title || ''}
-							onChange={(value) => handleSlideChange(index, { ...slide, title: value })}
-							placeholder={__('Enter heading text...', 'side-tabs')}
-							allowedFormats={['core/bold', 'core/italic']}
+			<div { ...useBlockProps({ className: 'header-slide-holder'}) }>
+				<InnerBlocks 
+					allowedBlocks={allowed_blocks}
+					template={template}
+					renderAppender={() => (
+						<ButtonBlockAppender
+							rootClientId={props.clientId}
+							className="header-slide-add-section"
 						/>
-						<RichText
-							key={`slide-content-${index}`}
-							identifier={`slide-content-${index}`}
-							tagName="div"
-							value={slide.content || ''}
-							onChange={(value) => handleSlideChange(index, { ...slide, content: value })}
-							placeholder={__('Enter content text...', 'side-tabs')}
-							allowedFormats={['core/bold', 'core/italic']}
-						/>
-					</div>
-					<div className='image-content'>
-						<MediaUpload
-							onSelect={(media) => handleSlideChange(index, { ...slide, image: media.url })}
-							allowedTypes={['image']}
-							render={({ open }) => (
-								<button onClick={open}>
-									{ slide.image ? <img src={slide.image} alt={slide.title} /> : __('Upload Image', 'header-slider') }
-								</button>
-							)}
-							key={`slide-image-${index}`}
-							identifier={`slide-image-${index}`}
-						/>
-					</div>
-					<div className='label-content'>
-						<RichText
-							key={`slide-label-${index}`}
-							identifier={`slide-label-${index}`}
-							tagName="div"
-							value={slide.slide_label || ''}
-							onChange={(value) => handleLabelChange(index, value)}
-							placeholder={__('Enter label text...', 'side-tabs')}
-							allowedFormats={['core/bold', 'core/italic']}
-						/>
-						<div className='characters-remaining'>Characters remaining: {MAX_CHARACTERS - slide.slide_label.length}</div>
-					</div>
-				</div>
-			)) }
-
-			<button onClick={ addSlide } style={{ background: 'var(--wp--preset--color--primary)', marginLeft: '4rem', color: 'white', border: 'none', padding: '10px 20px', borderRadius: '4px', cursor: 'pointer' }}>
-				{ __( 'Add Slide', 'header-slider' ) }
-			</button>
-		</div>
+					)}
+				/>
+			</div>
 	);
 }

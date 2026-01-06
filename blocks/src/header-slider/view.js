@@ -10,7 +10,7 @@ const { actions, state } = store( 'iowa-aea-theme/header-slider', {
     nextSlide: (context) => {
       let next = state.currentSlide + 1;
 
-      let slidesData = context.attributes.slides || [];
+      let slidesData = context.slides || [];
 
       if (next >= slidesData.length) {
         next = 0;
@@ -25,7 +25,7 @@ const { actions, state } = store( 'iowa-aea-theme/header-slider', {
       const context = getContext();
       const element = getElement();
 
-      let slidesData = context.attributes.slides || [];
+      let slidesData = context.slides || [];
 
       let slide = document.createElement('div');
       slide.classList.add('slide');
@@ -58,6 +58,9 @@ const { actions, state } = store( 'iowa-aea-theme/header-slider', {
         slideContent.innerHTML = `
           <h3>${slide.title}</h3>
           <p>${slide.content}</p>
+          <div class='wp-block-button'>
+            <a class='wp-block-button__link has-text-align-center' style='display: inline-block;' href="${slide.buttonUrl ? slide.buttonUrl : '#'}" class="button">${slide.buttonText ? slide.buttonText : 'Learn More'}</a>
+          </div>
         `;
         slideContent.dataset.slideIndex = index;
         slideContents.appendChild(slideContent);
@@ -65,7 +68,7 @@ const { actions, state } = store( 'iowa-aea-theme/header-slider', {
         // tab contents
         let tabContent = document.createElement('div');
         tabContent.classList.add('label-content');
-        tabContent.innerHTML = slide.slide_label;
+        tabContent.innerHTML = slide.slideLabel;
         tabContent.dataset.slideTabIndex = index;
         tabContent.addEventListener('click', () => {
           actions.setVisibleSlide(index);

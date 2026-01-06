@@ -69,7 +69,7 @@ const {
   actions: {
     nextSlide: context => {
       let next = state.currentSlide + 1;
-      let slidesData = context.attributes.slides || [];
+      let slidesData = context.slides || [];
       if (next >= slidesData.length) {
         next = 0;
       }
@@ -79,7 +79,7 @@ const {
     loadSlideShow: () => {
       const context = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.getContext)();
       const element = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.getElement)();
-      let slidesData = context.attributes.slides || [];
+      let slidesData = context.slides || [];
       let slide = document.createElement('div');
       slide.classList.add('slide');
       element.ref.appendChild(slide);
@@ -102,6 +102,9 @@ const {
         slideContent.innerHTML = `
           <h3>${slide.title}</h3>
           <p>${slide.content}</p>
+          <div class='wp-block-button'>
+            <a class='wp-block-button__link has-text-align-center' style='display: inline-block;' href="${slide.buttonUrl ? slide.buttonUrl : '#'}" class="button">${slide.buttonText ? slide.buttonText : 'Learn More'}</a>
+          </div>
         `;
         slideContent.dataset.slideIndex = index;
         slideContents.appendChild(slideContent);
@@ -109,7 +112,7 @@ const {
         // tab contents
         let tabContent = document.createElement('div');
         tabContent.classList.add('label-content');
-        tabContent.innerHTML = slide.slide_label;
+        tabContent.innerHTML = slide.slideLabel;
         tabContent.dataset.slideTabIndex = index;
         tabContent.addEventListener('click', () => {
           actions.setVisibleSlide(index);

@@ -158,6 +158,57 @@ return array(
 		'render' => 'file:./render.php',
 		'viewScriptModule' => 'file:./view.js'
 	),
+	'header-slide' => array(
+		'$schema' => 'https://schemas.wp.org/trunk/block.json',
+		'apiVersion' => 3,
+		'name' => 'iowa-aea-theme/header-slide',
+		'version' => '0.1.0',
+		'title' => 'Header Slide',
+		'category' => 'widgets',
+		'icon' => 'smiley',
+		'description' => 'A block for displaying a header slide.',
+		'attributes' => array(
+			'slide_label' => array(
+				'type' => 'string',
+				'default' => ''
+			),
+			'image' => array(
+				'type' => 'string',
+				'format' => 'uri'
+			),
+			'title' => array(
+				'type' => 'string',
+				'default' => ''
+			),
+			'content' => array(
+				'type' => 'string',
+				'default' => ''
+			),
+			'buttonUrl' => array(
+				'type' => 'string',
+				'default' => ''
+			),
+			'buttonText' => array(
+				'type' => 'string',
+				'default' => 'Learn More'
+			)
+		),
+		'example' => array(
+			
+		),
+		'supports' => array(
+			'interactivity' => true
+		),
+		'parent' => array(
+			'iowa-aea-theme/header-slider'
+		),
+		'textdomain' => 'header-slide',
+		'editorScript' => 'file:./index.js',
+		'editorStyle' => 'file:./index.css',
+		'style' => 'file:./style-index.css',
+		'render' => 'file:./render.php',
+		'viewScriptModule' => 'file:./view.js'
+	),
 	'header-slider' => array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'apiVersion' => 3,
@@ -168,35 +219,7 @@ return array(
 		'icon' => 'smiley',
 		'description' => 'A block for displaying a header slider.',
 		'attributes' => array(
-			'slides' => array(
-				'default' => array(
-					
-				),
-				'type' => 'array',
-				'items' => array(
-					'type' => 'object',
-					'properties' => array(
-						'title' => array(
-							'type' => 'string'
-						),
-						'content' => array(
-							'type' => 'string'
-						),
-						'slide_label' => array(
-							'type' => 'string'
-						),
-						'image' => array(
-							'type' => 'string',
-							'format' => 'uri'
-						)
-					),
-					'required' => array(
-						'image',
-						'title',
-						'slide_label'
-					)
-				)
-			)
+			
 		),
 		'example' => array(
 			
