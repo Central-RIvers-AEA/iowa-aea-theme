@@ -114,6 +114,33 @@ return array(
 		'render' => 'file:./render.php',
 		'viewScript' => 'file:./view.js'
 	),
+	'content-card' => array(
+		'$schema' => 'https://schemas.wp.org/trunk/block.json',
+		'apiVersion' => 3,
+		'name' => 'iowa-aea-theme/content-card',
+		'version' => '0.1.0',
+		'title' => 'Content Card',
+		'category' => 'widgets',
+		'icon' => 'smiley',
+		'attributes' => array(
+			'backgroundColor' => array(
+				'type' => 'string',
+				'default' => '#FFFFFF'
+			)
+		),
+		'description' => 'A block for displaying important contacts.',
+		'example' => array(
+			
+		),
+		'supports' => array(
+			'html' => false
+		),
+		'textdomain' => 'content-card',
+		'editorScript' => 'file:./index.js',
+		'editorStyle' => 'file:./index.css',
+		'style' => 'file:./style-index.css',
+		'viewScript' => 'file:./view.js'
+	),
 	'event-calendar' => array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'apiVersion' => 3,

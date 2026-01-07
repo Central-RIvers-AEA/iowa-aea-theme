@@ -1,0 +1,22 @@
+/*!****************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/content-card/style.scss ***!
+  \****************************************************************************************************************************************************************************************************************************************************/
+/**
+ * The following styles get applied inside the editor only.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+.wp-block-iowa-aea-theme-content-card {
+  --card-color: var(--wp--preset--color--primary);
+  background: white;
+  padding: 1rem;
+  border: 2px solid var(--card-color);
+  border-radius: 19px 19px 0 0;
+  border-bottom-width: 15px;
+}
+.wp-block-iowa-aea-theme-content-card figure {
+  display: block;
+  width: 100%;
+}
+
+/*# sourceMappingURL=style-index.css.map*/

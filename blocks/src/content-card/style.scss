@@ -1,0 +1,19 @@
+/**
+ * The following styles get applied inside the editor only.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.wp-block-iowa-aea-theme-content-card {
+  --card-color: var(--wp--preset--color--primary);
+  background: white;
+  padding: 1rem;
+  border: 2px solid var(--card-color);
+  border-radius: 19px 19px 0 0;
+  border-bottom-width: 15px;
+
+  figure {
+    display: block;
+    width: 100%;
+  }
+}
