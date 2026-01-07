@@ -8,7 +8,7 @@ return array(
 		'version' => '0.1.0',
 		'title' => 'Accordion',
 		'category' => 'widgets',
-		'icon' => 'smiley',
+		'icon' => 'list-view',
 		'description' => 'Example block scaffolded with Create Block tool.',
 		'example' => array(
 			
@@ -56,7 +56,7 @@ return array(
 		'version' => '0.1.0',
 		'title' => 'Big Card',
 		'category' => 'widgets',
-		'icon' => 'smiley',
+		'icon' => 'index-card',
 		'attributes' => array(
 			'linkText' => array(
 				'type' => 'string',
@@ -121,7 +121,7 @@ return array(
 		'version' => '0.1.0',
 		'title' => 'Content Card',
 		'category' => 'widgets',
-		'icon' => 'smiley',
+		'icon' => 'index-card',
 		'attributes' => array(
 			'backgroundColor' => array(
 				'type' => 'string',
@@ -148,7 +148,7 @@ return array(
 		'version' => '0.1.0',
 		'title' => 'Event Calendar',
 		'category' => 'widgets',
-		'icon' => 'smiley',
+		'icon' => 'calendar',
 		'description' => 'A block for displaying a calendar of events.',
 		'example' => array(
 			
@@ -170,7 +170,7 @@ return array(
 		'version' => '0.1.0',
 		'title' => 'Events List',
 		'category' => 'widgets',
-		'icon' => 'smiley',
+		'icon' => 'list-view',
 		'description' => 'A block for displaying a list of events.',
 		'example' => array(
 			
@@ -192,7 +192,7 @@ return array(
 		'version' => '0.1.0',
 		'title' => 'Header Slide',
 		'category' => 'widgets',
-		'icon' => 'smiley',
+		'icon' => 'images-alt',
 		'description' => 'A block for displaying a header slide.',
 		'attributes' => array(
 			'slide_label' => array(
@@ -243,7 +243,7 @@ return array(
 		'version' => '0.1.0',
 		'title' => 'Header Slider',
 		'category' => 'widgets',
-		'icon' => 'smiley',
+		'icon' => 'images-alt',
 		'description' => 'A block for displaying a header slider.',
 		'attributes' => array(
 			
@@ -268,7 +268,7 @@ return array(
 		'version' => '0.1.0',
 		'title' => 'Important Contacts',
 		'category' => 'widgets',
-		'icon' => 'smiley',
+		'icon' => 'businessperson',
 		'attributes' => array(
 			'contacts' => array(
 				'type' => 'array',
@@ -298,7 +298,7 @@ return array(
 		'version' => '0.1.0',
 		'title' => 'Interactive Map',
 		'category' => 'widgets',
-		'icon' => 'smiley',
+		'icon' => 'location-alt',
 		'description' => 'Example block scaffolded with Create Block tool.',
 		'example' => array(
 			
@@ -320,7 +320,7 @@ return array(
 		'version' => '0.1.0',
 		'title' => 'Link Card',
 		'category' => 'widgets',
-		'icon' => 'smiley',
+		'icon' => 'index-card',
 		'attributes' => array(
 			'linkText' => array(
 				'type' => 'string',
@@ -367,7 +367,7 @@ return array(
 		'version' => '0.1.0',
 		'title' => 'Page Children',
 		'category' => 'widgets',
-		'icon' => 'smiley',
+		'icon' => 'list-view',
 		'description' => 'A block for displaying page children.',
 		'example' => array(
 			
@@ -422,7 +422,7 @@ return array(
 		'version' => '0.1.0',
 		'title' => 'Side Tabs',
 		'category' => 'widgets',
-		'icon' => 'smiley',
+		'icon' => 'table-col-after',
 		'description' => 'A container block for side tabs with individual tab blocks.',
 		'example' => array(
 			
@@ -443,7 +443,7 @@ return array(
 		'version' => '0.1.0',
 		'title' => 'Staff Directory Search',
 		'category' => 'widgets',
-		'icon' => 'smiley',
+		'icon' => 'search',
 		'description' => 'A block for displaying a staff directory search.',
 		'example' => array(
 			

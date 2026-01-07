@@ -8,7 +8,7 @@
   \**********************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"iowa-aea-theme/side-tabs","version":"0.1.0","title":"Side Tabs","category":"widgets","icon":"smiley","description":"A container block for side tabs with individual tab blocks.","example":{},"supports":{"interactivity":true},"textdomain":"side-tabs","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","viewScript":"file:./view.js"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"iowa-aea-theme/side-tabs","version":"0.1.0","title":"Side Tabs","category":"widgets","icon":"table-col-after","description":"A container block for side tabs with individual tab blocks.","example":{},"supports":{"interactivity":true},"textdomain":"side-tabs","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","viewScript":"file:./view.js"}');
 
 /***/ }),
 

@@ -8,7 +8,7 @@
   \*************************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"iowa-aea-theme/header-slide","version":"0.1.0","title":"Header Slide","category":"widgets","icon":"smiley","description":"A block for displaying a header slide.","attributes":{"slide_label":{"type":"string","default":""},"image":{"type":"string","format":"uri"},"title":{"type":"string","default":""},"content":{"type":"string","default":""},"buttonUrl":{"type":"string","default":""},"buttonText":{"type":"string","default":"Learn More"}},"example":{},"supports":{"interactivity":true},"parent":["iowa-aea-theme/header-slider"],"textdomain":"header-slide","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScriptModule":"file:./view.js"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"iowa-aea-theme/header-slide","version":"0.1.0","title":"Header Slide","category":"widgets","icon":"images-alt","description":"A block for displaying a header slide.","attributes":{"slide_label":{"type":"string","default":""},"image":{"type":"string","format":"uri"},"title":{"type":"string","default":""},"content":{"type":"string","default":""},"buttonUrl":{"type":"string","default":""},"buttonText":{"type":"string","default":"Learn More"}},"example":{},"supports":{"interactivity":true},"parent":["iowa-aea-theme/header-slider"],"textdomain":"header-slide","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScriptModule":"file:./view.js"}');
 
 /***/ }),
 

@@ -8,7 +8,7 @@
   \**************************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"iowa-aea-theme/header-slider","version":"0.1.0","title":"Header Slider","category":"widgets","icon":"smiley","description":"A block for displaying a header slider.","attributes":{},"example":{},"supports":{"interactivity":true},"textdomain":"header-slider","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScriptModule":"file:./view.js"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"iowa-aea-theme/header-slider","version":"0.1.0","title":"Header Slider","category":"widgets","icon":"images-alt","description":"A block for displaying a header slider.","attributes":{},"example":{},"supports":{"interactivity":true},"textdomain":"header-slider","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScriptModule":"file:./view.js"}');
 
 /***/ }),
 

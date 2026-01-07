@@ -5,7 +5,7 @@
 	"version": "0.1.0",
 	"title": "Interactive Map",
 	"category": "widgets",
-	"icon": "smiley",
+	"icon": "location-alt",
 	"description": "Example block scaffolded with Create Block tool.",
 	"example": {},
 	"supports": {

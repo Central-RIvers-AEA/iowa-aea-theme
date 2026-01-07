@@ -18,7 +18,7 @@ module.exports = __webpack_require__.p + "images/iowa-map.49cd699c.png";
   \****************************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"iowa-aea-theme/interactive-map","version":"0.1.0","title":"Interactive Map","category":"widgets","icon":"smiley","description":"Example block scaffolded with Create Block tool.","example":{},"supports":{"html":false},"textdomain":"interactive-map","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScript":"file:./view.js"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"iowa-aea-theme/interactive-map","version":"0.1.0","title":"Interactive Map","category":"widgets","icon":"location-alt","description":"Example block scaffolded with Create Block tool.","example":{},"supports":{"html":false},"textdomain":"interactive-map","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScript":"file:./view.js"}');
 
 /***/ }),
 

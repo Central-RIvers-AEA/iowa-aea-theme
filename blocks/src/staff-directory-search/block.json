@@ -5,7 +5,7 @@
 	"version": "0.1.0",
 	"title": "Staff Directory Search",
 	"category": "widgets",
-	"icon": "smiley",
+	"icon": "search",
 	"description": "A block for displaying a staff directory search.",
 	"example": {},
 	"supports": {

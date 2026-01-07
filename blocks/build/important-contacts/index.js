@@ -8,7 +8,7 @@
   \*******************************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"iowa-aea-theme/important-contacts","version":"0.1.0","title":"Important Contacts","category":"widgets","icon":"smiley","attributes":{"contacts":{"type":"array","default":[]}},"description":"A block for displaying important contacts.","example":{},"supports":{"html":false},"textdomain":"important-contacts","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScript":"file:./view.js"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"iowa-aea-theme/important-contacts","version":"0.1.0","title":"Important Contacts","category":"widgets","icon":"businessperson","attributes":{"contacts":{"type":"array","default":[]}},"description":"A block for displaying important contacts.","example":{},"supports":{"html":false},"textdomain":"important-contacts","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScript":"file:./view.js"}');
 
 /***/ }),
 

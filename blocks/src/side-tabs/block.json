@@ -5,7 +5,7 @@
 	"version": "0.1.0",
 	"title": "Side Tabs",
 	"category": "widgets",
-	"icon": "smiley",
+	"icon": "table-col-after",
 	"description": "A container block for side tabs with individual tab blocks.",
 	"example": {},
 	"supports": {

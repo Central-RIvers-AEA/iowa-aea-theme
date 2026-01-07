@@ -5,7 +5,7 @@
 	"version": "0.1.0",
 	"title": "Header Slider",
 	"category": "widgets",
-	"icon": "smiley",
+	"icon": "images-alt",
 	"description": "A block for displaying a header slider.",
 	"attributes": {},
 	"example": {},

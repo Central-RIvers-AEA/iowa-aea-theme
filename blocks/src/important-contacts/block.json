@@ -5,7 +5,7 @@
 	"version": "0.1.0",
 	"title": "Important Contacts",
 	"category": "widgets",
-	"icon": "smiley",
+	"icon": "businessperson",
 	"attributes": {
 		"contacts": {
 			"type": "array",

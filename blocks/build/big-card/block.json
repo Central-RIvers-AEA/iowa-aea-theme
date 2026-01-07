@@ -5,7 +5,7 @@
   "version": "0.1.0",
   "title": "Big Card",
   "category": "widgets",
-  "icon": "smiley",
+  "icon": "index-card",
   "attributes": {
     "linkText": {
       "type": "string",
