@@ -48,7 +48,9 @@ export default function Edit(props) {
   ];
 
   let template = [
-    [ 'core/paragraph', {} ],
+    [ 'core/paragraph', {
+      placeholder: __('Add your content here...', 'content-card')
+    } ],
   ];
   
 

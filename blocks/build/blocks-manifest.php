@@ -99,7 +99,7 @@ return array(
 		'version' => '0.1.0',
 		'title' => 'Bread Crumbs',
 		'category' => 'widgets',
-		'icon' => 'smiley',
+		'icon' => 'ellipsis',
 		'description' => 'A block for displaying breadcrumb navigation.',
 		'example' => array(
 			
@@ -125,7 +125,7 @@ return array(
 		'attributes' => array(
 			'backgroundColor' => array(
 				'type' => 'string',
-				'default' => '#FFFFFF'
+				'default' => '#000000'
 			)
 		),
 		'description' => 'A block for displaying important contacts.',

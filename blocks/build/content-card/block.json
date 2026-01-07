@@ -9,7 +9,7 @@
   "attributes": {
     "backgroundColor": {
       "type": "string",
-      "default": "#FFFFFF"
+      "default": "#000000"
     }
   },
   "description": "A block for displaying important contacts.",

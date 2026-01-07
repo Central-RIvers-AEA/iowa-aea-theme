@@ -5,7 +5,7 @@
   "version": "0.1.0",
   "title": "Bread Crumbs",
   "category": "widgets",
-  "icon": "smiley",
+  "icon": "ellipsis",
   "description": "A block for displaying breadcrumb navigation.",
   "example": {},
   "supports": {
