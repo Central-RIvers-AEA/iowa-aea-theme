@@ -27,7 +27,7 @@ export default function save({ attributes }) {
 	const blockProps = useBlockProps.save({
 		className: 'impact-tab',
 		'data-tab-num': tabNumber || 1,
-    'style': { backgroundColor: tabBgColor }
+    'style': { backgroundColor: tabBgColor, '--tab-text-color': attributes.textColor },
 	});
 
 	return (

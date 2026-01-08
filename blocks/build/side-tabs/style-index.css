@@ -54,7 +54,7 @@
   content: attr(data-tab-num);
   display: grid;
   place-items: center;
-  border: 2px solid white;
+  border: 2px solid var(--tab-text-color, white);
   border-radius: 50%;
   height: calc(1.5 * var(--font-size));
   width: calc(1.5 * var(--font-size));
