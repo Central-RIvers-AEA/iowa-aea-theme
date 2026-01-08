@@ -11,8 +11,8 @@ import { __ } from '@wordpress/i18n';
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
-import { useBlockProps, InspectorControls, withColorContext, useSetting, InnerBlocks } from '@wordpress/block-editor';
-import { PanelBody, ToggleControl, SelectControl, TextControl, ColorPalette } from '@wordpress/components';
+import { useBlockProps, InspectorControls, useSetting, InnerBlocks } from '@wordpress/block-editor';
+import { PanelBody, ColorPalette } from '@wordpress/components';
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.

@@ -8,7 +8,7 @@
   \*********************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"iowa-aea-theme/side-tab","version":"0.1.0","title":"Side Tab","category":"widgets","icon":"smiley","parent":["iowa-aea-theme/side-tabs"],"attributes":{"tabNumber":{"type":"number","default":1},"backgroundColor":{"type":"string","default":"#f28b82"}},"description":"An individual tab block for use within the Side Tabs container.","example":{},"supports":{"reusable":false},"textdomain":"side-tab","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"iowa-aea-theme/side-tab","version":"0.1.0","title":"Side Tab","category":"widgets","icon":"smiley","parent":["iowa-aea-theme/side-tabs"],"attributes":{"tabNumber":{"type":"number","default":1},"backgroundColor":{"type":"string","default":"#f28b82"},"textColor":{"type":"string","default":"#000000"}},"description":"An individual tab block for use within the Side Tabs container.","example":{},"supports":{"reusable":false},"textdomain":"side-tab","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css"}');
 
 /***/ }),
 
@@ -123,13 +123,53 @@ function Edit(props) {
   }]];
   const bgColors = ['var(--wp--preset--color--primary)', 'var(--wp--preset--color--alt-four)', 'var(--wp--preset--color--alt-one)', 'var(--wp--preset--color--alt-three)'];
 
+  // Get theme color palette
+  const colorPalette = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useSetting)('color.palette') || [{
+    name: 'Primary',
+    slug: 'primary',
+    color: '#9b2246'
+  }, {
+    name: 'Secondary',
+    slug: 'secondary',
+    color: '#f0b52b'
+  }, {
+    name: 'Alt One',
+    slug: 'alt-one',
+    color: '#001777'
+  }, {
+    name: 'Alt Two',
+    slug: 'alt-two',
+    color: '#582c63'
+  }, {
+    name: 'Alt Three',
+    slug: 'alt-three',
+    color: '#00826e'
+  }, {
+    name: 'Alt Four',
+    slug: 'alt-four',
+    color: '#d17829'
+  }, {
+    name: 'Background Color',
+    slug: 'background-color',
+    color: '#ffffff'
+  }, {
+    name: 'Base',
+    slug: 'base',
+    color: '#FFFFFF'
+  }, {
+    name: 'Text Color',
+    slug: 'text-color',
+    color: '#333333'
+  }];
+
   // Set background color based on tab index
   const tabBgColor = bgColors[(tabIndex - 1) % bgColors.length];
   const blockProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps)({
     className: 'impact-tab',
     'data-tab-num': tabIndex,
     style: {
-      '--tab-background': tabBgColor
+      '--tab-background': attributes.backgroundColor || tabBgColor,
+      '--tab-text-color': attributes.textColor || '#000000'
     }
   });
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {
@@ -139,6 +179,33 @@ function Edit(props) {
           label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Remove This Tab', 'side-tab'),
           onClick: removeThisTab
         })
+      })
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InspectorControls, {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
+        title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Settings', 'content-card'),
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+          children: "Background Color"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ColorPalette, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Background Color', 'link-card'),
+          value: attributes.backgroundColor,
+          onChange: value => setAttributes({
+            backgroundColor: value
+          }),
+          colors: colorPalette,
+          enableAlpha: false,
+          clearable: true
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+          children: "Text Color"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ColorPalette, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Text Color', 'link-card'),
+          value: attributes.textColor,
+          onChange: value => setAttributes({
+            textColor: value
+          }),
+          colors: colorPalette,
+          enableAlpha: false,
+          clearable: true
+        })]
       })
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
       ...blockProps,
@@ -290,10 +357,9 @@ function save({
   const {
     tabNumber
   } = attributes;
-  const bgColors = ['var(--wp--preset--color--primary)', 'var(--wp--preset--color--alt-four)', 'var(--wp--preset--color--alt-one)', 'var(--wp--preset--color--alt-three)'];
 
   // Set background color based on tab index
-  const tabBgColor = bgColors[(tabNumber - 1) % bgColors.length];
+  const tabBgColor = attributes.backgroundColor;
   const blockProps = _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_0__.useBlockProps.save({
     className: 'impact-tab',
     'data-tab-num': tabNumber || 1,

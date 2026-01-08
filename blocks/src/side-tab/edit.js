@@ -11,8 +11,8 @@ import { __ } from '@wordpress/i18n';
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
-import { useBlockProps, InnerBlocks, BlockControls } from '@wordpress/block-editor';
-import { ToolbarGroup, ToolbarButton } from '@wordpress/components';
+import { useBlockProps, InnerBlocks, BlockControls, InspectorControls, useSetting } from '@wordpress/block-editor';
+import { ToolbarGroup, ToolbarButton, ColorPalette, PanelBody } from '@wordpress/components';
 import { useSelect, useDispatch } from '@wordpress/data';
 
 /**
@@ -84,6 +84,19 @@ export default function Edit(props) {
 		'var(--wp--preset--color--alt-three)'
 	];
 
+	// Get theme color palette
+	const colorPalette = useSetting('color.palette') || [
+		{ name: 'Primary', slug: 'primary', color: '#9b2246' },
+		{ name: 'Secondary', slug: 'secondary', color: '#f0b52b' },
+		{ name: 'Alt One', slug: 'alt-one', color: '#001777' },
+		{ name: 'Alt Two', slug: 'alt-two', color: '#582c63' },
+		{ name: 'Alt Three', slug: 'alt-three', color: '#00826e' },
+		{ name: 'Alt Four', slug: 'alt-four', color: '#d17829' },
+		{ name: 'Background Color', slug: 'background-color', color: '#ffffff' },
+		{ name: 'Base', slug: 'base', color: '#FFFFFF' },
+		{ name: 'Text Color', slug: 'text-color', color: '#333333' }
+	];
+
 	// Set background color based on tab index
 	const tabBgColor = bgColors[(tabIndex - 1) % bgColors.length];
 
@@ -91,7 +104,8 @@ export default function Edit(props) {
 		className: 'impact-tab',
 		'data-tab-num': tabIndex,
 		style: {
-			'--tab-background': tabBgColor
+			'--tab-background': attributes.backgroundColor || tabBgColor,
+			'--tab-text-color': attributes.textColor || '#000000'
 		}
 	});
 
@@ -107,6 +121,30 @@ export default function Edit(props) {
 					</ToolbarGroup>
 				)}
 			</BlockControls>
+
+			<InspectorControls>
+				<PanelBody title={__('Settings', 'content-card')}>
+					
+					<span>Background Color</span>
+					<ColorPalette
+						label={__('Background Color', 'link-card')}
+						value={attributes.backgroundColor}
+						onChange={(value) => setAttributes({ backgroundColor: value })}
+						colors={colorPalette}
+						enableAlpha={false}
+						clearable={true}
+					/>
+					<span>Text Color</span>
+					<ColorPalette
+						label={__('Text Color', 'link-card')}
+						value={attributes.textColor}
+						onChange={(value) => setAttributes({ textColor: value })}
+						colors={colorPalette}
+						enableAlpha={false}
+						clearable={true}
+					/>
+				</PanelBody>
+			</InspectorControls>
 			
 			<div {...blockProps}>
 				<div style={{ 

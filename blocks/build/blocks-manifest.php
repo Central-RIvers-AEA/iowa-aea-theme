@@ -401,6 +401,10 @@ return array(
 			'backgroundColor' => array(
 				'type' => 'string',
 				'default' => '#f28b82'
+			),
+			'textColor' => array(
+				'type' => 'string',
+				'default' => '#000000'
 			)
 		),
 		'description' => 'An individual tab block for use within the Side Tabs container.',

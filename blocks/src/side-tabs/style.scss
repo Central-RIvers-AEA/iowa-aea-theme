@@ -7,7 +7,7 @@
 
 .wp-block-iowa-aea-theme-side-tabs {
 	background-color: transparent;
-	color: #fff;
+	color: var(--tab-text-color, black);
 	padding: 2px;
 	display: flex;
 	flex-direction: column;
@@ -47,9 +47,9 @@
 	}
 
 	h3 {
-		color: white;
+		color: var(--tab-text-color, white);
 	}
-	color: white;
+	color: var(--tab-text-color, white);
 
 	&:before {
 		--font-size: 1.5rem;

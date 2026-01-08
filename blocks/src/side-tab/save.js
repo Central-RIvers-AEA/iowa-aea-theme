@@ -21,15 +21,8 @@ export default function save({ attributes }) {
 
   const { tabNumber } = attributes;
 
-  const bgColors = [
-		'var(--wp--preset--color--primary)',
-		'var(--wp--preset--color--alt-four)',
-		'var(--wp--preset--color--alt-one)',
-		'var(--wp--preset--color--alt-three)'
-	];
-
 	// Set background color based on tab index
-	const tabBgColor = bgColors[(tabNumber - 1) % bgColors.length];
+	const tabBgColor = attributes.backgroundColor;
 
 	const blockProps = useBlockProps.save({
 		className: 'impact-tab',
