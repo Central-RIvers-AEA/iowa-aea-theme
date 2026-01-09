@@ -102,13 +102,13 @@ function add_notice_to_front_of_website() {
       'relation' => 'AND',
       [
         'key' => 'alert_start_date',
-        'value' => current_time('Y-m-d H:i:s'),
+        'value' => current_time('mysql'),
         'compare' => '<=',
         'type' => 'DATETIME'
       ],
       [
         'key' => 'alert_end_date',
-        'value' => current_time('Y-m-d H:i:s'),
+        'value' => current_time('mysql'),
         'compare' => '>=',
         'type' => 'DATETIME'
       ]
