@@ -99,34 +99,40 @@ const fetchGoogleCalendarEvents = async (start_date, end_date) => {
   if (!calendarIDs.length || !apiKey) {
     return [];
   }
-
-  // For simplicity, fetch from the first calendar ID only
-  let calendarID = calendarIDs[0];
-  try {
-    let calendarURL = `https://www.googleapis.com/calendar/v3/calendars/${calendarID}/events?key=${apiKey}&timeMin=${start_date}T00:00:00Z&timeMax=${end_date}T23:59:59Z`;
-
-    // Fetch events from Google Calendar API
-    const response = await fetch(calendarURL);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+  for (let calendarID of calendarIDs) {
+    console.log(calendarID);
+    if (!calendarID || calendarID.trim() === '') {
+      return [];
     }
-    const data = await response.json();
 
-    // Convert Google Calendar events to local format
-    events = data.items.map(gEvent => {
-      let event = {
-        id: gEvent.id,
-        title: {
-          rendered: gEvent.summary
-        },
-        event_date: gEvent.start.date || gEvent.start.dateTime.split('T')[0],
-        event_time: gEvent.start.dateTime ? formatTime(gEvent.start.dateTime.split('T')[1]) : 'All Day'
-      };
-      return event;
-    });
-  } catch (error) {
-    console.error('Error fetching Google Calendar events:', error);
-    return events;
+    // make url safe
+    calendarID = encodeURIComponent(calendarID);
+    try {
+      let calendarURL = `https://content.googleapis.com/calendar/v3/calendars/${calendarID}/events?key=${apiKey}&timeMin=${start_date}T00:00:00Z&timeMax=${end_date}T23:59:59Z`;
+
+      // Fetch events from Google Calendar API
+      const response = await fetch(calendarURL);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+
+      // Convert Google Calendar events to local format
+      let calEvents = data.items.map(gEvent => {
+        let event = {
+          id: gEvent.id,
+          title: {
+            rendered: gEvent.summary
+          },
+          event_date: gEvent.start.date || gEvent.start.dateTime.split('T')[0],
+          event_time: gEvent.start.dateTime ? formatTime(gEvent.start.dateTime.split('T')[1]) : 'All Day'
+        };
+        return event;
+      });
+      events = events.concat(calEvents);
+    } catch (error) {
+      console.error('Error fetching Google Calendar events:', error);
+    }
   }
   return events;
 };
