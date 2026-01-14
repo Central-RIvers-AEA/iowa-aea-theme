@@ -12,6 +12,10 @@
 
 	.contact-image-btn{
 		cursor: pointer;
+
+		img {
+			max-height: 160px;
+		}
 	}
 
 	.contact-item {

@@ -295,28 +295,28 @@ add_action('save_post_district', 'sd_handle_save', 10, 1);
 add_action('save_post_school', 'sd_handle_save', 10, 1);
 
 // Template
-add_filter( 'theme_page_templates', 'sd_add_page_template_to_dropdown' );
-function sd_add_page_template_to_dropdown( $templates ){
-  $templates[plugin_dir_path( __FILE__ ) . 'templates/school-directory-template.php'] = __( 'School Directory Page', 'school-directory' );
+// add_filter( 'theme_page_templates', 'sd_add_page_template_to_dropdown' );
+// function sd_add_page_template_to_dropdown( $templates ){
+//   $templates[plugin_dir_path( __FILE__ ) . 'templates/school-directory-template.php'] = __( 'School Directory Page', 'school-directory' );
 
-  return $templates;
-}
+//   return $templates;
+// }
 
-add_filter( 'template_include', 'sd_change_page_template', 99 );
-function sd_change_page_template($template){
-  global $post;
+// add_filter( 'template_include', 'sd_change_page_template', 99 );
+// function sd_change_page_template($template){
+//   global $post;
 
   
-  if (is_page() && !is_front_page() && get_the_title( $post ) == 'School Directory') {
-    $meta = get_post_meta(get_the_ID());
+//   if (is_page() && !is_front_page() && get_the_title( $post ) == 'School Directory') {
+//     $meta = get_post_meta(get_the_ID());
 
-    if (!empty($meta['_wp_page_template'][0]) && $meta['_wp_page_template'][0] != $template) {
-      $template = $meta['_wp_page_template'][0];
-    }
-  }
+//     if (!empty($meta['_wp_page_template'][0]) && $meta['_wp_page_template'][0] != $template) {
+//       $template = $meta['_wp_page_template'][0];
+//     }
+//   }
 
-  return $template;
-}
+//   return $template;
+// }
 
 // Importing
 function sd_add_district_import_page(){
@@ -604,18 +604,18 @@ function sd_add_flash_notice( $notice = "", $type = "warning", $dismissible = tr
 
 // showing single district page when in district
 
-add_filter( 'single_template', 'sd_override_single_template' );
-function sd_override_single_template( $single_template ){
-    global $post;
+// add_filter( 'single_template', 'sd_override_single_template' );
+// function sd_override_single_template( $single_template ){
+//     global $post;
 
-    if($post->post_type == 'district'){
-      $file = dirname(__FILE__) .'/templates/single-'. $post->post_type .'.php';
+//     if($post->post_type == 'district'){
+//       $file = dirname(__FILE__) .'/templates/single-'. $post->post_type .'.php';
   
-      if( file_exists( $file ) ) $single_template = $file;
-    }
+//       if( file_exists( $file ) ) $single_template = $file;
+//     }
 
-    return $single_template;
-}
+//     return $single_template;
+// }
 
 // Register distict and school export endpoints
 add_action('rest_api_init', function(){
