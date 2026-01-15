@@ -52,7 +52,7 @@
 	position: relative;
 	overflow: hidden;
 	width: fit-content;
-	max-width: 440px;
+
 	h3{
 		margin: 0 0 1rem 0;
 		font-size: 1.5rem;
@@ -65,7 +65,9 @@
 
 		img {
 			width: 100%;
+			height: 100%;
 			object-fit: cover;
+			object-position: top;
 		}
 	}
 
