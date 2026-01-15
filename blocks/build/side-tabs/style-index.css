@@ -10,7 +10,6 @@
 .wp-block-iowa-aea-theme-side-tabs {
   background-color: transparent;
   color: var(--tab-text-color, black);
-  padding: 2px;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -18,38 +17,39 @@
 @media (min-width: 800px) {
   .wp-block-iowa-aea-theme-side-tabs {
     flex-direction: row;
+    max-width: 80% !important;
+    margin: auto;
   }
 }
-
-.impact-tab {
+.wp-block-iowa-aea-theme-side-tabs .impact-tab {
   background: var(--tab-background, white);
   border-radius: 0 0 19px 19px;
   padding: 3rem 2rem 3rem 3rem;
   position: relative;
   overflow: hidden;
 }
-.impact-tab:nth-child(1) {
+.wp-block-iowa-aea-theme-side-tabs .impact-tab:nth-child(1) {
   z-index: 4;
 }
-.impact-tab:nth-child(2) {
+.wp-block-iowa-aea-theme-side-tabs .impact-tab:nth-child(2) {
   margin-top: -1rem;
   z-index: 3;
 }
-.impact-tab:nth-child(3) {
+.wp-block-iowa-aea-theme-side-tabs .impact-tab:nth-child(3) {
   margin-top: -1rem;
   z-index: 2;
 }
-.impact-tab:nth-child(4) {
+.wp-block-iowa-aea-theme-side-tabs .impact-tab:nth-child(4) {
   margin-top: -1rem;
   z-index: 1;
 }
-.impact-tab h3 {
+.wp-block-iowa-aea-theme-side-tabs .impact-tab h3 {
   color: var(--tab-text-color, white);
 }
-.impact-tab {
+.wp-block-iowa-aea-theme-side-tabs .impact-tab {
   color: var(--tab-text-color, white);
 }
-.impact-tab:before {
+.wp-block-iowa-aea-theme-side-tabs .impact-tab:before {
   --font-size: 1.5rem;
   content: attr(data-tab-num);
   display: grid;
@@ -64,37 +64,37 @@
   line-height: 0;
 }
 @media (min-width: 800px) {
-  .impact-tab {
+  .wp-block-iowa-aea-theme-side-tabs .impact-tab {
     border-radius: 0 19px 19px 0;
     width: 2rem;
   }
-  .impact-tab:nth-child(1) {
+  .wp-block-iowa-aea-theme-side-tabs .impact-tab:nth-child(1) {
     z-index: 4;
   }
-  .impact-tab:nth-child(2) {
+  .wp-block-iowa-aea-theme-side-tabs .impact-tab:nth-child(2) {
     margin-top: unset;
     margin-left: -2rem;
     z-index: 3;
   }
-  .impact-tab:nth-child(3) {
+  .wp-block-iowa-aea-theme-side-tabs .impact-tab:nth-child(3) {
     margin-top: unset;
     margin-left: -2rem;
     z-index: 2;
   }
-  .impact-tab:nth-child(4) {
+  .wp-block-iowa-aea-theme-side-tabs .impact-tab:nth-child(4) {
     margin-top: unset;
     margin-left: -2rem;
     z-index: 1;
   }
-  .impact-tab * {
+  .wp-block-iowa-aea-theme-side-tabs .impact-tab * {
     width: 0;
     overflow: hidden;
     display: none;
   }
-  .impact-tab.open {
+  .wp-block-iowa-aea-theme-side-tabs .impact-tab.open {
     width: 100%;
   }
-  .impact-tab.open * {
+  .wp-block-iowa-aea-theme-side-tabs .impact-tab.open * {
     width: 100%;
     display: block;
   }

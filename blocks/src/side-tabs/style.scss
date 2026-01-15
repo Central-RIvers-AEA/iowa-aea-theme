@@ -8,104 +8,105 @@
 .wp-block-iowa-aea-theme-side-tabs {
 	background-color: transparent;
 	color: var(--tab-text-color, black);
-	padding: 2px;
 	display: flex;
 	flex-direction: column;
 	position: relative;
 
 	@media (min-width: 800px){
 		flex-direction: row;
+		max-width: 80% !important;
+		margin: auto;
 	}
 
+
+	.impact-tab{
+		background: var(--tab-background, white);
+		border-radius: 0 0 19px 19px ;
+		padding: 3rem 2rem 3rem 3rem;
+		position: relative;	
+		overflow: hidden;
 	
-}
-
-.impact-tab{
-	background: var(--tab-background, white);
-	border-radius: 0 0 19px 19px ;
-	padding: 3rem 2rem 3rem 3rem;
-	position: relative;	
-	overflow: hidden;
-
-	&:nth-child(1) {
-		z-index: 4;
-	}
-
-	&:nth-child(2) {
-		margin-top: -1rem;
-		z-index: 3
-	}
-
-	&:nth-child(3) {
-		margin-top: -1rem;
-		z-index: 2;
-	}
-
-	&:nth-child(4) {
-		margin-top: -1rem;
-		z-index: 1;
-	}
-
-	h3 {
-		color: var(--tab-text-color, white);
-	}
-	color: var(--tab-text-color, white);
-
-	&:before {
-		--font-size: 1.5rem;
-		content: attr(data-tab-num);
-		display: grid;
-		place-items: center;
-		border: 2px solid var(--tab-text-color, white);
-		border-radius: 50%;
-		height: calc(1.5 * var(--font-size));
-		width: calc(1.5 * var(--font-size));
-		margin-right: 1rem;
-		font-size: var(--font-size);
-		text-align: center;
-		line-height: 0;
-	}
-
-	@media (min-width: 800px){
-		border-radius: 0 19px 19px 0;
-		width: 2rem;
-
 		&:nth-child(1) {
 			z-index: 4;
 		}
-
+	
 		&:nth-child(2) {
-			margin-top: unset;
-			margin-left: -2rem;
+			margin-top: -1rem;
 			z-index: 3
 		}
-
+	
 		&:nth-child(3) {
-			margin-top: unset;
-			margin-left: -2rem;
+			margin-top: -1rem;
 			z-index: 2;
 		}
-
+	
 		&:nth-child(4) {
-			margin-top: unset;
-			margin-left: -2rem;
+			margin-top: -1rem;
 			z-index: 1;
 		}
-
-		* {
-			width: 0;
-			overflow: hidden;
-			display: none;
+	
+		h3 {
+			color: var(--tab-text-color, white);
 		}
-
-		&.open {
-			// Styles for open tab
-			width: 100%;
+		color: var(--tab-text-color, white);
+	
+		&:before {
+			--font-size: 1.5rem;
+			content: attr(data-tab-num);
+			display: grid;
+			place-items: center;
+			border: 2px solid var(--tab-text-color, white);
+			border-radius: 50%;
+			height: calc(1.5 * var(--font-size));
+			width: calc(1.5 * var(--font-size));
+			margin-right: 1rem;
+			font-size: var(--font-size);
+			text-align: center;
+			line-height: 0;
+		}
+	
+		@media (min-width: 800px){
+			border-radius: 0 19px 19px 0;
+			width: 2rem;
+	
+			&:nth-child(1) {
+				z-index: 4;
+			}
+	
+			&:nth-child(2) {
+				margin-top: unset;
+				margin-left: -2rem;
+				z-index: 3
+			}
+	
+			&:nth-child(3) {
+				margin-top: unset;
+				margin-left: -2rem;
+				z-index: 2;
+			}
+	
+			&:nth-child(4) {
+				margin-top: unset;
+				margin-left: -2rem;
+				z-index: 1;
+			}
+	
 			* {
+				width: 0;
+				overflow: hidden;
+				display: none;
+			}
+	
+			&.open {
+				// Styles for open tab
 				width: 100%;
-				display: block;
+				* {
+					width: 100%;
+					display: block;
+				}
 			}
 		}
+	
 	}
-
 }
+
