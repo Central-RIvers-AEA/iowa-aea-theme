@@ -60,8 +60,14 @@
   font-size: 1.5rem;
   color: var(--wp--preset--color--primary);
 }
-.contact-item img {
+.contact-item .staff-img {
   max-height: 160px;
+  margin: 0;
+}
+.contact-item .staff-img img {
+  width: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 .contact-item p {
   margin: 0.5rem 0;

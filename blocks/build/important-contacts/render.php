@@ -14,12 +14,14 @@
 			foreach ( $contacts as $contact ) {
 				?>
 					<div class='contact-item'>
-						<img src='<?php echo esc_url( $contact['image'] ); ?>' alt='<?php echo esc_attr( $contact['name'] ); ?>' />
+						<div class='staff-img'>
+							<img src='<?php echo esc_url( $contact['image'] ); ?>' alt='<?php echo esc_attr( $contact['name'] ); ?>' />
+						</div>
 						<div  class="contact-info">
 							<h3><?php echo esc_html( $contact['name'] ); ?></h3>
 							<p><?php echo esc_html( $contact['jobTitle'] ); ?></p>
-							<p><?php echo esc_html( $contact['email'] ); ?></p>
-							<p><?php echo esc_html( $contact['phone'] ); ?></p>
+							<p><a href="mailto:<?php echo esc_html( $contact['email'] ); ?>"><?php echo esc_html( $contact['email'] ); ?></a></p>
+							<p><a href="tel:<?php echo esc_html( $contact['phone'] ); ?>"><?php echo esc_html( $contact['phone'] ); ?></a></p>
 						</div>
 					</div>
 				<?php

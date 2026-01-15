@@ -58,9 +58,17 @@
 		font-size: 1.5rem;
 		color: var(--wp--preset--color--primary)
 	}
-	img {
+
+	.staff-img {
 		max-height: 160px;
+		margin: 0;
+
+		img {
+			width: 100%;
+			object-fit: cover;
+		}
 	}
+
 	p{
 		margin: 0.5rem 0;
 	}
