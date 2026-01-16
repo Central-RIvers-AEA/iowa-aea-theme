@@ -47,9 +47,25 @@
           display: none !important;
         }
 
-        @media(min-width: 1440px){
-          font-size: 1.5rem;
+        .slide-title {
+          font-weight: bold;
+          font-size: calc( 1.5 * var(--wp--preset--font-size--large, 2rem) );
+          margin-bottom: 1rem;
         }
+
+        @media (min-width: 2000px){
+          font-size: calc( 1.5 * var(--wp--preset--font-size--large, 2rem) );
+
+          .slide-title {
+            font-size: calc( 2 * var(--wp--preset--font-size--large, 2rem) );
+          }
+
+          .wp-block-button__link {
+            font-size: calc( 1.25 * var(--wp--preset--font-size--large, 2rem) );
+          }
+        }
+
+        
       }
 
     }
@@ -135,7 +151,7 @@
       .label-content{
         position: relative;
         z-index: 10;
-        font-size: 0.8rem;
+        font-size: inherit;
         padding: 0.5rem 1rem;
         max-width: 125px;
       }

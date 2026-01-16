@@ -106,7 +106,8 @@ function Edit(props) {
       className: "title-content",
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.RichText, {
         identifier: `slide-title`,
-        tagName: "h3",
+        tagName: "div",
+        className: "slide-title",
         value: attributes.title || '',
         onChange: value => handleSlideChange('title', value),
         placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Enter heading text...', 'side-tabs'),

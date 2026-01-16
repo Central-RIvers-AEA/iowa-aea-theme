@@ -100,7 +100,7 @@ const {
         let slideContent = document.createElement('div');
         slideContent.classList.add('slide-content');
         slideContent.innerHTML = `
-          <h3>${slide.title}</h3>
+          <div class='slide-title'>${slide.title}</div>
           <p>${slide.content}</p>
           <div class='wp-block-button'>
             <a class='wp-block-button__link has-text-align-center' style='display: inline-block;' href="${slide.buttonUrl ? slide.buttonUrl : '#'}" class="button">${slide.buttonText ? slide.buttonText : 'Learn More'}</a>

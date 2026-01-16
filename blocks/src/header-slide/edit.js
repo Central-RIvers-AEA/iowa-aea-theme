@@ -66,7 +66,8 @@ export default function Edit(props) {
 				<RichText
 					key={`slide-title`}
 					identifier={`slide-title`}
-					tagName="h3"
+					tagName="div"
+					className='slide-title'
 					value={attributes.title || ''}
 					onChange={(value) => handleSlideChange('title', value )}
 					placeholder={__('Enter heading text...', 'side-tabs')}

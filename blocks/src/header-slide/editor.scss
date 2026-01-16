@@ -37,6 +37,12 @@
     padding: 1rem 3rem;
     border-right: 5px solid var(--wp--preset--color--primary);
 		display: block;
+
+		.slide-title {
+			font-weight: bold;
+			font-size: calc( 2 * var(--wp--preset--font-size--large, 2rem) );
+			margin-bottom: 1rem;
+		}
   }
 
 	.label-content{
