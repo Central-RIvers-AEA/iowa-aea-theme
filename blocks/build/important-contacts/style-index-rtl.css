@@ -29,6 +29,12 @@
   background-color: white;
   color: var(--wp--preset--color--primary);
 }
+@media (max-width: 800px) {
+  .wp-block-iowa-aea-theme-important-contacts {
+    margin-right: -24%;
+    padding: 1rem 24% 2rem 2rem;
+  }
+}
 
 .contacts-block {
   display: flex;
@@ -81,4 +87,16 @@
 }
 .contact-item .contact-info {
   padding: 1rem 0 0 2rem;
+}
+@media (max-width: 600px) {
+  .contact-item {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .contact-item .staff-img {
+    max-height: none;
+  }
+  .contact-item .contact-info {
+    padding: 1rem 1rem 0 1rem;
+  }
 }
