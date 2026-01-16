@@ -5,7 +5,7 @@
     Author: Iowa AEAs
     Author URI: https://example.com/
     Template: twentytwentyfive
-    Version: 1.4.13
+    Version: 1.4.14
     License: GNU General Public License v2 or later
     License URI: http://www.gnu.org/licenses/gpl-2.0.html
     Text Domain: iowa-aea-theme
@@ -477,12 +477,20 @@ body {
 
   @media (min-width: 800px) {
     .wp-block-iowa-aea-theme-events-list {
-      width: 400px;
+      width: 30rem;
+      height: auto;
     }
   }
 
   @media (min-width: 1400px) {
     grid-template-columns: 1fr auto;
+  }
+
+  @media (min-width: 2000px) {
+    grid-template-columns: 1fr auto;
+    .wp-block-iowa-aea-theme-events-list {
+      width: 40rem;
+    }
   }
 }
 
