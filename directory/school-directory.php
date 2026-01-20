@@ -342,6 +342,7 @@ function sd_district_import_page(){
         Your File should include the following headings:
         <ul>
           <li>old_post_id</li>
+          <li>post_id (can be Blank)</li>
           <li>name</li>
           <li>address</li>
           <li>city_state_zip</li>
@@ -394,6 +395,7 @@ function sd_import_districts(){
     
     foreach($dataArray as $row){
       $old_post_id = trim($row['old_post_id']);
+      $post_id = trim($row['post_id']);
       $name = trim($row['name']);
       $address = $row['address'];
       $city_state_zip = $row['city_state_zip'];
@@ -435,7 +437,13 @@ function sd_import_districts(){
           'aea' => $aea
         )
       );
-      wp_insert_post( $postArray );
+
+      if(isset($post_id)){
+        $postArray['ID'] = $post_id;
+        wp_update_post( $postArray );
+      } else {
+        wp_insert_post( $postArray );
+      }
     }
     sd_add_flash_notice( 'Upload Complete', "info");
     wp_redirect( 'edit.php?post_type=employee&page=district-import', 301 );
@@ -470,7 +478,8 @@ function sd_school_import_page(){
     <p>
       Your File should include the following headings:
       <ul>
-        <li>district_post_id</li>
+        <li>district_post_id (can be blank)</li>
+        <li>post_id (can be blank)</li>
         <li>name</li>
         <li>address</li>
         <li>city_state_zip</li>
@@ -496,16 +505,6 @@ function sd_school_import_page(){
         </tbody>
       </table>
     </form>
-
-    <script>
-      const form = document.querySelector('.form-table')
-
-      form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        alert('submitting stoed')
-      })
-
-    </script>
   <?php
 }
 
@@ -533,6 +532,7 @@ function sd_import_schools(){
     
     foreach($dataArray as $row){
       $district_post_id = trim($row['district_post_id']);
+      $post_id = trim($row['post_id']);
       $name = trim($row['name']);
       $address = $row['address'];
       $city_state_zip = $row['city_state_zip'];
@@ -554,24 +554,30 @@ function sd_import_schools(){
         $school_personnel[$id]['title'] = $person_split[1];
         $school_personnel[$id]['email'] = $person_split[2];
       }
-      
+
       $postArray = array(
-        'post_title' => $name,
-        'post_content' => '',
-        'post_type' => 'school',
-        'post_status' => 'publish',
-        'meta_input' => array(
-          'address' => $address,
-          'city_state_zip' => $city_state_zip,
-          'phone_number' => $phone_number,
-          'fax_number' => $fax_number,
-          'website' => $website,
-          'school_personnel' => $school_personnel,
-          'district' => $district_post_id
-        )
-      );
+          'post_title' => $name,
+          'post_content' => '',
+          'post_type' => 'school',
+          'post_status' => 'publish',
+          'meta_input' => array(
+            'address' => $address,
+            'city_state_zip' => $city_state_zip,
+            'phone_number' => $phone_number,
+            'fax_number' => $fax_number,
+            'website' => $website,
+            'school_personnel' => $school_personnel,
+            'district' => $district_post_id
+          )
+        );
+
+      if(isset($post_id)){
+        $postArray['ID'] = $post_id;
+        wp_update_post( $postArray );
+      } else {
+        wp_insert_post( $postArray );
+      }
       
-      wp_insert_post( $postArray );
     }
     sd_add_flash_notice( 'Upload Complete', "info");
     wp_redirect( 'edit.php?post_type=district&page=school-import', 301 );
@@ -649,8 +655,11 @@ function sd_export_district_info_json($data){
     $personnel = get_post_meta($district->ID, 'school_personnel', true);
 
     $strung_personnel = array();
-    foreach($personnel as $pkey => $person){
-      $strung_personnel[] = $person['name'] . '|' . $person['title'] . '|' . $person['email'];
+
+    if($personnel){
+      foreach($personnel as $pkey => $person){
+        $strung_personnel[] = $person['name'] . '|' . $person['title'] . '|' . $person['email'];
+      }
     }
 
     $district_data['title'] = $district->post_title;
@@ -686,11 +695,12 @@ function sd_export_school_info_json(){
     $personnel = get_post_meta($school->ID, 'school_personnel', true);
 
     $strung_personnel = array();
-    foreach($personnel as $pkey => $person){
-      $strung_personnel[] = $person['name'] . '|' . $person['title'] . '|' . $person['email'];
-    }
 
-    
+    if($personnel){
+      foreach($personnel as $pkey => $person){
+        $strung_personnel[] = $person['name'] . '|' . $person['title'] . '|' . $person['email'];
+      }
+    }
 
     $district = get_posts( array(
       'connected_type' => 'posts_to_pages',
@@ -701,6 +711,10 @@ function sd_export_school_info_json(){
     
     if($district){
       $school_data['district_post_id'] = $district->ID;
+    }
+
+    if(get_post_meta($school->ID, 'district', true)){
+      $district = get_post_meta($school->ID, 'district', true);
     }
 
     $school_data['name'] = $school->post_title;
@@ -752,6 +766,7 @@ function sd_export_district_buttons(){
           }
 
           function jsonToCSV(data){
+            console.log(data)
             const replacer = (key, value) => value === null ? '' : value // specify how you want to handle null values here
             const header = Object.keys(data[0])
             const csv = [
