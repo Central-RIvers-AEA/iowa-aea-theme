@@ -556,20 +556,20 @@ function sd_import_schools(){
       }
 
       $postArray = array(
-          'post_title' => $name,
-          'post_content' => '',
-          'post_type' => 'school',
-          'post_status' => 'publish',
-          'meta_input' => array(
-            'address' => $address,
-            'city_state_zip' => $city_state_zip,
-            'phone_number' => $phone_number,
-            'fax_number' => $fax_number,
-            'website' => $website,
-            'school_personnel' => $school_personnel,
-            'district' => $district_post_id
-          )
-        );
+        'post_title' => $name,
+        'post_content' => '',
+        'post_type' => 'school',
+        'post_status' => 'publish',
+        'meta_input' => array(
+          'address' => $address,
+          'city_state_zip' => $city_state_zip,
+          'phone_number' => $phone_number,
+          'fax_number' => $fax_number,
+          'website' => $website,
+          'school_personnel' => $school_personnel,
+          'district' => $district_post_id
+        )
+      );
 
       if(isset($post_id)){
         $postArray['ID'] = $post_id;
@@ -580,15 +580,15 @@ function sd_import_schools(){
       
     }
     sd_add_flash_notice( 'Upload Complete', "info");
-    wp_redirect( 'edit.php?post_type=district&page=school-import', 301 );
+    wp_redirect( 'edit.php?post_type=school', 301 );
   } else {
     sd_add_flash_notice( 'Incorrect File Type', "warning");
-    wp_redirect( 'edit.php?post_type=district&page=school-import', 301 );
+    wp_redirect( 'edit.php?post_type=school', 301 );
   }
 }
 
 // TO REMOVE after upload
-// add_action('admin_post_import_schools', 'sd_import_schools');
+add_action('admin_post_import_schools', 'sd_import_schools');
 
 
 function sd_add_flash_notice( $notice = "", $type = "warning", $dismissible = true ) {
@@ -714,7 +714,7 @@ function sd_export_school_info_json(){
     }
 
     if(get_post_meta($school->ID, 'district', true)){
-      $district = get_post_meta($school->ID, 'district', true);
+      $school_data['district_post_id'] = get_post_meta($school->ID, 'district', true);
     }
 
     $school_data['name'] = $school->post_title;
