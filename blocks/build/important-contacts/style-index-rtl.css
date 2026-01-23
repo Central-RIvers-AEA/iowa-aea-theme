@@ -35,7 +35,6 @@
     padding: 1rem 24% 2rem 2rem;
   }
 }
-
 .contacts-block {
   display: flex;
   flex-direction: row;
@@ -43,7 +42,6 @@
   flex-wrap: wrap;
   justify-content: space-between;
 }
-
 .contact-item {
   display: grid;
   justify-content: space-between;

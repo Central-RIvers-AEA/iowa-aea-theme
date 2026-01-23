@@ -10,7 +10,6 @@
   background: transparent;
   display: block;
 }
-
 .impact-tab {
   margin-bottom: 1rem;
   background: var(--tab-background, white);

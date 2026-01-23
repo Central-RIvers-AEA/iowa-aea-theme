@@ -2,21 +2,21 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./src/link-card/block.json":
+/***/ "./src/link-card/block.json"
 /*!**********************************!*\
   !*** ./src/link-card/block.json ***!
   \**********************************/
-/***/ ((module) => {
+(module) {
 
 module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"iowa-aea-theme/link-card","version":"0.1.0","title":"Link Card","category":"widgets","icon":"index-card","attributes":{"linkText":{"type":"string","default":"Link Card"},"svgIcon":{"type":"string","default":"<svg width=\\"63\\" height=\\"74\\" viewBox=\\"0 0 63 74\\" fill=\\"none\\" xmlns=\\"http://www.w3.org/2000/svg\\"><g clip-path=\\"url(#clip0_712_513)\\"><path d=\\"M28.7266 56.3986H15.5693V72.6753H28.7266V56.3986Z\\" stroke-width=\\"3\\" stroke-linecap=\\"round\\" stroke-linejoin=\\"round\\"/><path d=\\"M61.6938 72.6753H4.63247C0.200268 68.18 0.200268 60.8939 4.63247 56.3986H61.7025C57.2703 60.8939 57.2703 68.18 61.7025 72.6753H61.6938Z\\" stroke-width=\\"3\\" stroke-linecap=\\"round\\" stroke-linejoin=\\"round\\"/><path d=\\"M23.2582 23.6952C21.0987 23.598 18.8347 23.7129 16.8929 26.5036C14.3764 30.1158 15.8392 35.1145 17.9987 39.071\\" stroke-width=\\"3\\" stroke-linecap=\\"round\\" stroke-linejoin=\\"round\\"/><path d=\\"M41.1263 1.59851C41.1263 1.59851 35.684 0.105973 31.7395 4.10669C27.9603 7.9396 30.2853 12.5939 30.2853 12.5939C30.2853 12.5939 34.8742 14.9519 38.6534 11.119C42.5979 7.11827 41.1263 1.59851 41.1263 1.59851Z\\" stroke-width=\\"3\\" stroke-linecap=\\"round\\" stroke-linejoin=\\"round\\"/><path d=\\"M31.426 18.2991C31.426 14.0246 29.3797 8.1339 22.8054 4.39813\\" stroke-width=\\"3\\" stroke-linecap=\\"round\\" stroke-linejoin=\\"round\\"/><path d=\\"M51.68 22.2645C45.2015 12.9648 36.5983 18.3256 31.426 18.3256C26.2536 18.3256 17.6505 12.9648 11.1719 22.2645C5.46842 30.4602 12.095 42.9834 17.1715 49.4305C21.5341 54.9767 25.0868 56.381 27.673 56.3898H27.6991C27.7688 56.3898 27.8384 56.3898 27.8994 56.3898H34.9439C35.0136 56.3898 35.0832 56.3898 35.1442 56.3898H35.1703C37.7565 56.381 41.3092 54.9767 45.6717 49.4305C50.7396 42.9834 57.3748 30.4514 51.6713 22.2645H51.68Z\\" stroke-width=\\"3\\" stroke-linecap=\\"round\\" stroke-linejoin=\\"round\\"/></g><defs><clipPath id=\\"clip0_712_513\\"><rect width=\\"63\\" height=\\"74\\" fill=\\"white\\"/></clipPath></defs></svg>"},"linkURL":{"type":"string","default":""},"backgroundColor":{"type":"string","default":""},"textColor":{"type":"string","default":"#333333"},"textHoverColor":{"type":"string","default":"#FFFFFF"}},"description":"A block for displaying important contacts.","example":{},"supports":{"html":false},"textdomain":"link-card","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","viewScript":"file:./view.js"}');
 
-/***/ }),
+/***/ },
 
-/***/ "./src/link-card/edit.js":
+/***/ "./src/link-card/edit.js"
 /*!*******************************!*\
   !*** ./src/link-card/edit.js ***!
   \*******************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -216,25 +216,25 @@ function Edit(props) {
   });
 }
 
-/***/ }),
+/***/ },
 
-/***/ "./src/link-card/editor.scss":
+/***/ "./src/link-card/editor.scss"
 /*!***********************************!*\
   !*** ./src/link-card/editor.scss ***!
   \***********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/link-card/index.js":
+/***/ "./src/link-card/index.js"
 /*!********************************!*\
   !*** ./src/link-card/index.js ***!
   \********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
@@ -279,13 +279,13 @@ __webpack_require__.r(__webpack_exports__);
   save: _save__WEBPACK_IMPORTED_MODULE_3__["default"]
 });
 
-/***/ }),
+/***/ },
 
-/***/ "./src/link-card/save.js":
+/***/ "./src/link-card/save.js"
 /*!*******************************!*\
   !*** ./src/link-card/save.js ***!
   \*******************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -346,69 +346,69 @@ function save({
   });
 }
 
-/***/ }),
+/***/ },
 
-/***/ "./src/link-card/style.scss":
+/***/ "./src/link-card/style.scss"
 /*!**********************************!*\
   !*** ./src/link-card/style.scss ***!
   \**********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
 
-/***/ }),
+/***/ },
 
-/***/ "@wordpress/block-editor":
+/***/ "@wordpress/block-editor"
 /*!*************************************!*\
   !*** external ["wp","blockEditor"] ***!
   \*************************************/
-/***/ ((module) => {
+(module) {
 
 module.exports = window["wp"]["blockEditor"];
 
-/***/ }),
+/***/ },
 
-/***/ "@wordpress/blocks":
+/***/ "@wordpress/blocks"
 /*!********************************!*\
   !*** external ["wp","blocks"] ***!
   \********************************/
-/***/ ((module) => {
+(module) {
 
 module.exports = window["wp"]["blocks"];
 
-/***/ }),
+/***/ },
 
-/***/ "@wordpress/components":
+/***/ "@wordpress/components"
 /*!************************************!*\
   !*** external ["wp","components"] ***!
   \************************************/
-/***/ ((module) => {
+(module) {
 
 module.exports = window["wp"]["components"];
 
-/***/ }),
+/***/ },
 
-/***/ "@wordpress/i18n":
+/***/ "@wordpress/i18n"
 /*!******************************!*\
   !*** external ["wp","i18n"] ***!
   \******************************/
-/***/ ((module) => {
+(module) {
 
 module.exports = window["wp"]["i18n"];
 
-/***/ }),
+/***/ },
 
-/***/ "react/jsx-runtime":
+/***/ "react/jsx-runtime"
 /*!**********************************!*\
   !*** external "ReactJSXRuntime" ***!
   \**********************************/
-/***/ ((module) => {
+(module) {
 
 module.exports = window["ReactJSXRuntime"];
 
-/***/ })
+/***/ }
 
 /******/ 	});
 /************************************************************************/
@@ -421,6 +421,12 @@ module.exports = window["ReactJSXRuntime"];
 /******/ 		var cachedModule = __webpack_module_cache__[moduleId];
 /******/ 		if (cachedModule !== undefined) {
 /******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Check if module exists (development only)
+/******/ 		if (__webpack_modules__[moduleId] === undefined) {
+/******/ 			var e = new Error("Cannot find module '" + moduleId + "'");
+/******/ 			e.code = 'MODULE_NOT_FOUND';
+/******/ 			throw e;
 /******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = __webpack_module_cache__[moduleId] = {

@@ -33,7 +33,6 @@
   right: 1rem;
   z-index: 99;
 }
-
 .accordion-section p {
   padding: 1rem;
   height: auto !important;
@@ -41,7 +40,6 @@
 .accordion-section .accordion-holder {
   margin-inline: 1rem;
 }
-
 .accordion-add-section {
   background-color: var(--wp--preset--color--primary);
   color: white;
