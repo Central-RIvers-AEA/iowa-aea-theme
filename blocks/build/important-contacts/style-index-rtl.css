@@ -55,8 +55,7 @@
   border-bottom-width: 15px;
   position: relative;
   overflow: hidden;
-  width: -moz-fit-content;
-  width: fit-content;
+  width: 600px;
 }
 .contact-item h3 {
   margin: 0 0 1rem 0;
