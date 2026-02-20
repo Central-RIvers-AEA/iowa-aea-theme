@@ -115,15 +115,32 @@ function add_notice_to_front_of_website() {
     ]
   ]);
 
-  if (!empty($alerts)) {
+
+  $feeds = retrieve_weather_feeds();
+
+  $show_alerts = !empty($alerts) || !empty($feeds);
+
+  if($show_alerts){
     echo '<div class="weather-alerts-notices">';
-      foreach ($alerts as $alert) {
-        echo '<div class="weather-alert">';
+
+    foreach ($alerts as $alert) {
+      echo '<div class="weather-alert">';
         echo '<div class="location">' . esc_html(get_post_meta($alert->ID, 'alert_location', true)) . ' Alert</div>';
         echo $alert->post_content;
+      echo '</div>';
+    }
 
+    foreach($feeds as $feed) {
+      $title = $feed['title'];
+      $items = $feed['items'];
+      foreach ($items as $alert) {
+        echo '<div class="weather-alert">';
+          echo '<div class="location">'. $title . ' Alert</div>';
+          echo '<p>' . $alert['descript'] . '</p>';
         echo '</div>';
       }
+    }
+
     echo '</div>';
   }
 }
@@ -161,3 +178,122 @@ function load_custom_columns_content($column, $post_id) {
 }
 
 add_action('manage_weather_alert_posts_custom_column', 'load_custom_columns_content', 10, 2);
+
+/** Load Content From an RSS Feed */
+
+// Read from rssfeed
+function readFeed($feed){
+  $rss = new DOMDocument();
+  if($rss->load($feed) === false){ return array(); }
+
+  $list = array();
+    
+  foreach ($rss->getElementsByTagName('item') as $node) {
+    $item = array ( 
+      'title' => $node->getElementsByTagName('title')->item(0)->nodeValue,
+      'descript' => $node->getElementsByTagName('description')->item(0)->nodeValue,
+      'date' => $node->getElementsByTagName('pubDate')->item(0)->nodeValue,
+    );
+
+    if(time() - strtotime($item['date']) < (20 * 60 * 60) ){
+      $list[] = $item;
+    }
+  }
+
+  return $list;
+}
+
+// shortcode for rss feed
+function retrieve_weather_feeds(){
+  // get list of feeds from weather alerts feeds list
+  $feeds_list = get_option('iaea_weather_alerts_map');
+
+  $feeds = [];
+
+  foreach($feeds_list as $feed_item){
+    if(empty($feed_item['title'])){
+      continue;
+    }
+
+    $list = readFeed($feed_item['feed_url']);
+    $title = $feed_item['title'];
+    
+    if(count($list) > 0){
+      $feeds[] = ["title" => $title, "items" => $list];
+    }
+  }
+
+  return $feeds;
+}
+
+// Add Subpage for Weather Alerts Config
+function iaea_weather_alerts_config_page(){
+  add_submenu_page(
+    'edit.php?post_type=weather_alert', 
+    'alerts_config', 
+    'Alerts Config', 
+    'manage_options', 
+    'alerts-config',
+    'iaea_weather_alerts_config',
+    10
+  );
+}
+
+add_action('admin_menu', 'iaea_weather_alerts_config_page');
+
+function iaea_weather_alerts_settings_init(){
+  register_setting(
+    'iaea_weather_alerts_group',
+    'iaea_weather_alerts_map'
+  );
+}
+
+add_action('admin_init', 'iaea_weather_alerts_settings_init');
+
+function iaea_weather_alerts_config(){
+      if (!current_user_can('manage_options')) {
+      wp_die(__('You do not have sufficient permissions to access this page.'));
+    }
+
+    ?>
+      <div class="wrap">
+        <h1>Weather Alerts Configuration</h1>
+        <p>Configure settings for the Weather Alerts here.</p>
+        <!-- Configuration options can be added here -->
+
+        <form method="post" action="options.php">
+          <?php
+          settings_fields('iaea_weather_alerts_group');
+          do_settings_sections('iaea_weather_alerts_group');
+
+          $initial_mapping = [[ 'title' => '',  'feed_url' => '' ], [ 'title' => '',  'feed_url' => '' ], [ 'title' => '',  'feed_url' => '' ]];
+          $saved_weather_mappings = get_option('iaea_weather_alerts_map', $initial_mapping);
+
+          ?>
+          
+          <table class="form-table">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Feed Url</th>
+              </tr>
+            </thead>
+            <tbody>
+            <?php
+              foreach($saved_weather_mappings as $key => $mapping){
+                echo "<tr>";
+                  echo '<td><input placeholder="AEA Office" type="text" name="iaea_weather_alerts_map[' . esc_attr($key) . '][title]" value="' . esc_attr($mapping['title']) . '" /></td>';
+                  echo '<td><input placeholder="https://api.retrieve.com/something" type="text" name="iaea_weather_alerts_map[' . esc_attr($key) . '][feed_url]" value="' . esc_attr($mapping['feed_url']) . '" /></td>';
+                echo "</tr>";
+              }
+            ?>
+            </tbody>
+          <table>
+
+          <?php
+          submit_button();
+          ?>
+        </form>
+      </div>
+    <?php
+}
