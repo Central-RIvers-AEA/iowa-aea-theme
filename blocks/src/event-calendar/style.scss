@@ -205,28 +205,38 @@
         }
       }
     }
-    .event-calendar-days {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
+    .event-calendar-days{
+  
       gap: 0;
       border: 1px solid var(--wp--preset--color--primary);
       border-radius: 9px;
-      
-      :nth-child(1){
-        border-top-left-radius: 8px;
-      }
 
-      :nth-child(7){
-        border-top-right-radius: 8px;
-      }
+      [role=row]{
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
 
-      :nth-child(36){
-        border-bottom-left-radius: 8px;
+        &:first-child{
+          :nth-child(1){
+            border-top-left-radius: 8px;
+          }
+    
+          :nth-child(7){
+            border-top-right-radius: 8px;
+          }
+        }
+        &:last-child{
+          :nth-child(1){
+            border-bottom-left-radius: 8px;
+          }
+    
+          :nth-child(7){
+            border-bottom-right-radius: 8px;
+          }
+        }
       }
       
-      :nth-child(42){
-        border-bottom-right-radius: 8px;
-      }
+
+      
 
       .calendar-header{
         background: var(--wp--preset--color--primary);

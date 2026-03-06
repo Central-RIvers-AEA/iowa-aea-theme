@@ -279,46 +279,55 @@ const {
         month: 'long'
       })} ${firstOfMonth.getFullYear()}`;
       let calendarDays = calendar.querySelector('.event-calendar-days');
+      calendarDays.role = 'row';
       calendarDays.innerHTML = `
-        <div class='calendar-header' role='columnheader'>Sun</div>
-        <div class='calendar-header' role='columnheader'>Mon</div>
-        <div class='calendar-header' role='columnheader'>Tue</div>
-        <div class='calendar-header' role='columnheader'>Wed</div>
-        <div class='calendar-header' role='columnheader'>Thu</div>
-        <div class='calendar-header' role='columnheader'>Fri</div>
-        <div class='calendar-header' role='columnheader'>Sat</div>
+        <div role='row'>
+          <div class='calendar-header' role='columnheader'>Sun</div>
+          <div class='calendar-header' role='columnheader'>Mon</div>
+          <div class='calendar-header' role='columnheader'>Tue</div>
+          <div class='calendar-header' role='columnheader'>Wed</div>
+          <div class='calendar-header' role='columnheader'>Thu</div>
+          <div class='calendar-header' role='columnheader'>Fri</div>
+          <div class='calendar-header' role='columnheader'>Sat</div>
+        </div>
       `;
-      days.forEach((day, index) => {
-        let dayEl = document.createElement('div');
-        dayEl.classList.add('event-calendar-day');
-        dayEl.setAttribute('role', 'gridcell');
-        if (day) {
-          let date = new Date(state.currentDate + 'T00:00:00');
-          date.setDate(day);
-          const formattedDate = date.toISOString().split('T')[0];
-          const dayOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][date.getDay()];
+      let weeks = chunkArray(days, 7);
+      weeks.forEach(weekDays => {
+        let row = document.createElement('div');
+        row.role = 'row';
+        weekDays.forEach((day, index) => {
+          let dayEl = document.createElement('div');
+          dayEl.classList.add('event-calendar-day');
+          dayEl.setAttribute('role', 'gridcell');
+          if (day) {
+            let date = new Date(state.currentDate + 'T00:00:00');
+            date.setDate(day);
+            const formattedDate = date.toISOString().split('T')[0];
+            const dayOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][date.getDay()];
 
-          // Check for events
-          let eventsForDay = state.events.filter(event => new Date(`${event.event_date}T00:00:00`).toLocaleString() === date.toLocaleString());
-          if (eventsForDay.length > 0) {
-            dayEl.innerHTML = `<a href='/events?date=${formattedDate}' 
-                                  class='event-calendar-day-link' 
-                                  aria-label='${dayOfWeek}, ${firstOfMonth.toLocaleString('default', {
-              month: 'long'
-            })} ${day}, ${firstOfMonth.getFullYear()}. ${eventsForDay.length} event${eventsForDay.length > 1 ? 's' : ''} scheduled.'
-                                  tabindex='0'>${day}</a>`;
-            dayEl.classList.add('has-events');
+            // Check for events
+            let eventsForDay = state.events.filter(event => new Date(`${event.event_date}T00:00:00`).toLocaleString() === date.toLocaleString());
+            if (eventsForDay.length > 0) {
+              dayEl.innerHTML = `<a href='/events?date=${formattedDate}' 
+                                    class='event-calendar-day-link' 
+                                    aria-label='${dayOfWeek}, ${firstOfMonth.toLocaleString('default', {
+                month: 'long'
+              })} ${day}, ${firstOfMonth.getFullYear()}. ${eventsForDay.length} event${eventsForDay.length > 1 ? 's' : ''} scheduled.'
+                                    tabindex='0'>${day}</a>`;
+              dayEl.classList.add('has-events');
+            } else {
+              dayEl.innerHTML = day;
+              dayEl.setAttribute('aria-label', `${dayOfWeek}, ${firstOfMonth.toLocaleString('default', {
+                month: 'long'
+              })} ${day}, ${firstOfMonth.getFullYear()}`);
+            }
           } else {
-            dayEl.innerHTML = day;
-            dayEl.setAttribute('aria-label', `${dayOfWeek}, ${firstOfMonth.toLocaleString('default', {
-              month: 'long'
-            })} ${day}, ${firstOfMonth.getFullYear()}`);
+            dayEl.innerHTML = '';
+            dayEl.setAttribute('aria-hidden', 'true');
           }
-        } else {
-          dayEl.innerHTML = '';
-          dayEl.setAttribute('aria-hidden', 'true');
-        }
-        calendarDays.appendChild(dayEl);
+          row.appendChild(dayEl);
+        });
+        calendarDays.appendChild(row);
       });
       calendar.appendChild(calendarDays);
     },
@@ -371,6 +380,13 @@ const {
     }
   }
 });
+function chunkArray(arr, size) {
+  const chunks = [];
+  for (let i = 0; i < arr.length; i += size) {
+    chunks.push(arr.slice(i, i + size));
+  }
+  return chunks;
+}
 })();
 
 

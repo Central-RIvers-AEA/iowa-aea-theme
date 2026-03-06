@@ -181,22 +181,24 @@
   outline-offset: 2px;
 }
 .wp-block-iowa-aea-theme-event-calendar .event-calendar .event-calendar-days {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
   gap: 0;
   border: 1px solid var(--wp--preset--color--primary);
   border-radius: 9px;
 }
-.wp-block-iowa-aea-theme-event-calendar .event-calendar .event-calendar-days :nth-child(1) {
+.wp-block-iowa-aea-theme-event-calendar .event-calendar .event-calendar-days [role=row] {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+.wp-block-iowa-aea-theme-event-calendar .event-calendar .event-calendar-days [role=row]:first-child :nth-child(1) {
   border-top-left-radius: 8px;
 }
-.wp-block-iowa-aea-theme-event-calendar .event-calendar .event-calendar-days :nth-child(7) {
+.wp-block-iowa-aea-theme-event-calendar .event-calendar .event-calendar-days [role=row]:first-child :nth-child(7) {
   border-top-right-radius: 8px;
 }
-.wp-block-iowa-aea-theme-event-calendar .event-calendar .event-calendar-days :nth-child(36) {
+.wp-block-iowa-aea-theme-event-calendar .event-calendar .event-calendar-days [role=row]:last-child :nth-child(1) {
   border-bottom-left-radius: 8px;
 }
-.wp-block-iowa-aea-theme-event-calendar .event-calendar .event-calendar-days :nth-child(42) {
+.wp-block-iowa-aea-theme-event-calendar .event-calendar .event-calendar-days [role=row]:last-child :nth-child(7) {
   border-bottom-right-radius: 8px;
 }
 .wp-block-iowa-aea-theme-event-calendar .event-calendar .event-calendar-days .calendar-header {
