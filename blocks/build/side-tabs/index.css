@@ -15,14 +15,13 @@
   background: var(--tab-background, white);
   border-radius: 0 19px 19px 0;
   padding: 3rem;
-  width: 100%;
-}
-.impact-tab:nth-child(2), .impact-tab:nth-child(3), .impact-tab:nth-child(4) {
+  width: 100% !important;
   margin-left: 0;
 }
-.impact-tab * {
-  width: 100%;
+.impact-tab *:not(.remove) {
+  width: 100% !important;
   display: block !important;
+  overflow: unset !important;
 }
 
 /*# sourceMappingURL=index.css.map*/

@@ -223,6 +223,7 @@ function Edit(props) {
           top: '10px',
           right: '10px'
         },
+        className: "remove",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("small", {
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("strong", {
             children: ["Tab ", tabIndex]

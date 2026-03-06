@@ -159,7 +159,7 @@ export default function Edit(props) {
           width: 'fit-content',
           top: '10px',
           right: '10px'
-				}}>
+				}} className='remove'>
 					<small><strong>Tab {tabIndex}</strong></small>
 					{siblingCount > 1 && (
 						<button 
