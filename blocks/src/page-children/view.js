@@ -29,8 +29,10 @@ document.querySelectorAll(".wp-block-iowa-aea-theme-page-children").forEach(bloc
 
   dropdowns.forEach(dropdown => {
     const button = dropdown.querySelector("button");
+    const link = dropdown.querySelector('.parent-page-link')
 
     if(!button){ return }
+    button.setAttribute('aria-label', `Open Submenu for ${link.innerText}`)
 
     button.addEventListener("click", () => {
       dropdown.classList.toggle("open");
