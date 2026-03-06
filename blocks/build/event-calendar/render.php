@@ -24,7 +24,7 @@ $context = [
       <button data-wp-on--click='actions.previousMonth' 
               aria-label='View previous month' 
               type='button'>Previous</button>
-      <h3 id='calendar-month-year'>Loading Calendar...</h3>
+      <h2 id='calendar-month-year' style='font-size: 1.6rem'>Loading Calendar...</h2>
       <button data-wp-on--click='actions.nextMonth' 
               aria-label='View next month' 
               type='button'>Next</button>

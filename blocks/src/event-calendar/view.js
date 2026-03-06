@@ -232,7 +232,7 @@ const { state, actions, callbacks } = store( 'iowa-aea-theme/events-calendar', {
       let calendar = document.querySelector('.event-calendar');
       if(!calendar) return;
 
-      let calendarHeader = calendar.querySelector('.event-calendar-header h3');
+      let calendarHeader = calendar.querySelector('.event-calendar-header h2');
       calendarHeader.innerHTML = `${firstOfMonth.toLocaleString('default', { month: 'long' })} ${firstOfMonth.getFullYear()}`;
       
       let calendarDays = calendar.querySelector('.event-calendar-days');
