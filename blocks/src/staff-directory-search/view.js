@@ -132,7 +132,7 @@ const { actions, callbacks } = store( 'iowa-aea-theme/staff-directory-search', {
               <img src='${ member.image }' width='135' height='154' alt='${ member.full_name }' />
             </figure>
             <div class='staff-info'>
-              <h3 class='staff-name'>${member.full_name}</h3>
+              <h2 class='staff-name'>${member.full_name}</h2>
               <div class='staff-position'>${member.position}</div>
               <div class='staff-email'>${member.email}</div>
               <div class='staff-phone'>${member.phone}</div>
