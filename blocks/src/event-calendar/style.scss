@@ -19,10 +19,16 @@
 }
 
 .wp-block-iowa-aea-theme-event-calendar {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
+  // display: flex;
+  // flex-wrap: wrap;
+  // flex-direction: row;
+  display: grid;
+  grid-template-columns: 1fr auto;
   gap: 2rem;
+
+  @media (max-width: 800px) {
+    grid-template-columns: 1fr;
+  }
   
 
   .event-calendar-list {
@@ -34,7 +40,7 @@
     flex-grow: 1;
   }
 
-  @media (max-width: 1056px) {
+  @media (max-width: 800px) {
     justify-content: center;
     align-items: center;
     flex-direction: column-reverse;
