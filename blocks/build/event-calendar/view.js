@@ -279,7 +279,6 @@ const {
         month: 'long'
       })} ${firstOfMonth.getFullYear()}`;
       let calendarDays = calendar.querySelector('.event-calendar-days');
-      calendarDays.role = 'row';
       calendarDays.innerHTML = `
         <div role='row'>
           <div class='calendar-header' role='columnheader'>Sun</div>
