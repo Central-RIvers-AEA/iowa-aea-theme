@@ -87,7 +87,6 @@ const {
       let building = formData.get('school-building');
       if (building) queryObj.building = building;
       let queryString = new URLSearchParams(queryObj).toString();
-      console.log(queryString);
       let staffList = document.querySelector('.staff-directory-results ul');
       staffList.innerHTML = '';
 
@@ -187,6 +186,7 @@ const {
       let context = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.getContext)();
       context.loading = true;
       let form = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.getElement)();
+      console.log(context.districts);
       context.districts.forEach(district => {
         let option = document.createElement('option');
         option.value = district.id;
