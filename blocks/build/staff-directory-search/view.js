@@ -295,17 +295,11 @@ function sortByAssignmentPriority(staff) {
       if (assignmentA == undefined || assignmentB == undefined) {
         return 0;
       }
-      if (!Object.hasOwnProperty(assignmentA, 'search_priority') || assignmentA.search_priority == '') {
-        assignmentA = {
-          ...assignmentA,
-          search_priority: 100
-        };
+      if (assignmentA.search_priority == '') {
+        assignmentA.search_priority = 100;
       }
-      if (!Object.hasOwnProperty(assignmentB, 'search_priority') || assignmentB.search_priority == '') {
-        assignmentB = {
-          ...assignmentB,
-          search_priority: 100
-        };
+      if (assignmentB.search_priority == '') {
+        assignmentB.search_priority = 100;
       }
       return assignmentA.search_priority - assignmentB.search_priority || itemA.last_name.localeCompare(itemB.last_name);
     } else {
