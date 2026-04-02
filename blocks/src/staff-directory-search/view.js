@@ -31,8 +31,6 @@ const { actions, callbacks } = store( 'iowa-aea-theme/staff-directory-search', {
 
       let queryString = new URLSearchParams(queryObj).toString();
 
-      console.log(queryString)
-
       let staffList = document.querySelector('.staff-directory-results ul');
       staffList.innerHTML = '';
 
@@ -156,6 +154,8 @@ const { actions, callbacks } = store( 'iowa-aea-theme/staff-directory-search', {
       context.loading = true;
 
       let form = getElement();
+
+      console.log(context.districts)
 
       context.districts.forEach(district => {
         let option = document.createElement('option');
