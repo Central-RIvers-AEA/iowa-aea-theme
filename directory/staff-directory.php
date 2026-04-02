@@ -1410,7 +1410,7 @@ class StaffDirectory
       foreach($buildings as $key => $building){
         $buildings[$key]->id = $building->ID;
         $buildings[$key]->name = $building->post_title;
-        $buildings[$key]->district_id = get_post_meta($building->ID, 'district_id', true);
+        $buildings[$key]->district_id = get_post_meta($building->ID, 'district', true);
       }
     }
 

@@ -53,6 +53,8 @@ const { actions, callbacks } = store( 'iowa-aea-theme/staff-directory-search', {
       let buildingSelect = form.querySelector('select[name="school-building"]');
       
       let buildings = context.buildings.filter(building => building.district_id == district)
+
+      console.log(context.buildings);
       
       if(district) {
         buildingSelect.innerHTML = '<option value="">Select a Building</option>';

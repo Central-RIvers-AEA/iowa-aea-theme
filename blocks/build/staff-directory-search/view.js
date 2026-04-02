@@ -105,6 +105,7 @@ const {
       let form = districtSelect.ref.closest('form');
       let buildingSelect = form.querySelector('select[name="school-building"]');
       let buildings = context.buildings.filter(building => building.district_id == district);
+      console.log(context.buildings);
       if (district) {
         buildingSelect.innerHTML = '<option value="">Select a Building</option>';
         buildings.forEach(building => {
