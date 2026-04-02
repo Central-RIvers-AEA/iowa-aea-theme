@@ -155,12 +155,21 @@ const { actions, callbacks } = store( 'iowa-aea-theme/staff-directory-search', {
 
       let form = getElement();
 
-      console.log(context.districts)
-
       context.districts.forEach(district => {
         let option = document.createElement('option');
-        option.value = district.id;
-        option.textContent = district.name;
+        
+        if(district.id){
+          option.value = district.id;
+        } else {
+          option.value = district.ID;
+        }
+
+        if(district.name){
+          option.textContent = district.name;
+        } else {
+          option.textContent = district.post_title;
+
+        }
         form.ref.querySelector('select[name="school-district"]').appendChild(option);
       });
       
