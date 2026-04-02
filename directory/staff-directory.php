@@ -1361,6 +1361,11 @@ class StaffDirectory
         'orderby' => 'title',
         'order' => 'ASC'
       ));
+
+      foreach($districts as $key => $district){
+        $districts[$key]['id'] = $district->ID;
+        $districts[$key]['name'] = $district->post_title;
+      }
     }
 
     return $districts;
@@ -1401,6 +1406,12 @@ class StaffDirectory
         'orderby' => 'title',
         'order' => 'ASC'
       ));
+
+      foreach($buildings as $key => $building){
+        $buildings[$key]['id'] = $building->ID;
+        $buildings[$key]['name'] = $building->post_title;
+        $buildings[$key]['district_id'] = get_post_meta($building->ID, 'district_id', true);
+      }
     }
 
     return $buildings;
