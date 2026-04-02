@@ -268,8 +268,8 @@ function sortByAssignmentPriority(staff){
 
   let sortedItems = adjustedItems.sort((itemA, itemB) => {
     if(districtSelect.value != ''){
-      let assignmentA = itemA.assignments_array.find((assignment) => assignment.district == districtSelect.value)
-      let assignmentB = itemB.assignments_array.find((assignment) => assignment.district == districtSelect.value)
+      let assignmentA = itemA.assignments_array.find((assignment) => assignment.district == districtSelect.value || assignment.agency_wide)
+      let assignmentB = itemB.assignments_array.find((assignment) => assignment.district == districtSelect.value || assignment.agency_wide)
   
       if(!Object.hasOwnProperty(assignmentA, 'search_priority') || assignmentA.search_priority == ''){ assignmentA = {...assignmentA, search_priority: 100} }
       if(!Object.hasOwnProperty(assignmentB, 'search_priority') || assignmentB.search_priority == ''){ assignmentB = {...assignmentB, search_priority: 100} }
