@@ -132,7 +132,7 @@ const { actions, callbacks } = store( 'iowa-aea-theme/staff-directory-search', {
           filteredStaff = filteredStaff.filter(employee => {
             return Object.keys(employee.assignments).some((key) => {
               let assign = employee.assignments[key]
-              return assign.district == dist.value
+              return assign.district == dist.value || assign.agency_wide
             })
           })
         }
@@ -142,7 +142,7 @@ const { actions, callbacks } = store( 'iowa-aea-theme/staff-directory-search', {
           filteredStaff = filteredStaff.filter(employee => {
             return Object.keys(employee.assignments).some((key) => {
               let assign = employee.assignments[key]
-              return assign.building == build.value
+              return assign.building == build.value || assign.district_wide || assign.agency_wide
             })
           })
         }
