@@ -1149,7 +1149,7 @@ class StaffDirectory
     
     $args = array(
       'post_type' => 'employee',
-      'posts_per_page' => isset($params['per_page']) ? $params['per_page'] : 100,
+      'numberposts' => -1,
       'post_status' => 'publish',
       'orderby' => 'title',
       'order' => 'ASC',
