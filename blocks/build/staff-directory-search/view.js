@@ -154,9 +154,31 @@ const {
   callbacks: {
     renderStaffList: () => {
       let context = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.getContext)();
+      console.log(context);
       let staffList = document.querySelector('.staff-directory-results ul');
       staffList.innerHTML = '';
       let filteredStaff = context.staff;
+      console.log(context.staff);
+      if (context.internal) {
+        let dist = document.querySelector('#school-district');
+        if (dist.value != '') {
+          filteredStaff = filteredStaff.filter(employee => {
+            return Object.keys(employee.assignments).some(key => {
+              let assign = employee.assignments[key];
+              return assign.district == dist.value;
+            });
+          });
+        }
+        let build = document.querySelector("#school-building");
+        if (build.value != '') {
+          filteredStaff = filteredStaff.filter(employee => {
+            return Object.keys(employee.assignments).some(key => {
+              let assign = employee.assignments[key];
+              return assign.building == build.value;
+            });
+          });
+        }
+      }
       let sortedStaff = sortByAssignmentPriority(filteredStaff);
       sortedStaff.forEach(member => {
         // Render each staff member

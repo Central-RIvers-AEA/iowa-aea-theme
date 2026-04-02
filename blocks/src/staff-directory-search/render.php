@@ -3,6 +3,11 @@
  * @see https://github.com/WordPress/gutenberg/blob/trunk/docs/reference-guides/block-api/block-metadata.md#render
  */
 
+function using_external_api(){
+  $use_api = get_option('staff_directory_use_external_api_enabled', 0);
+  return $use_api == 1;
+}
+
 $context = [
   'staff' => [],
   'staffEndpoint' => '/wp-json/staff-directory/v1/employees',
@@ -12,6 +17,7 @@ $context = [
   'contentAreas' => [],
   'positions' => [],
   'loading' => true,
+  'internal' => !using_external_api(),
 ];
 
 $context['positions'] = StaffDirectory::get_positions();
