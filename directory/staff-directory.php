@@ -1363,8 +1363,8 @@ class StaffDirectory
       ));
 
       foreach($districts as $key => $district){
-        $districts[$key]['id'] = $district->ID;
-        $districts[$key]['name'] = $district->post_title;
+        $districts[$key]->id = $district->ID;
+        $districts[$key]->name = $district->post_title;
       }
     }
 
@@ -1408,9 +1408,9 @@ class StaffDirectory
       ));
 
       foreach($buildings as $key => $building){
-        $buildings[$key]['id'] = $building->ID;
-        $buildings[$key]['name'] = $building->post_title;
-        $buildings[$key]['district_id'] = get_post_meta($building->ID, 'district_id', true);
+        $buildings[$key]->id = $building->ID;
+        $buildings[$key]->name = $building->post_title;
+        $buildings[$key]->district_id = get_post_meta($building->ID, 'district_id', true);
       }
     }
 
