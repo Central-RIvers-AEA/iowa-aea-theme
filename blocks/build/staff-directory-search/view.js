@@ -295,6 +295,12 @@ function sortByAssignmentPriority(staff) {
       if (assignmentA == undefined || assignmentB == undefined) {
         return 0;
       }
+      if (!assignmentA.hasOwnProperty('search_priority')) {
+        assignmentA.search_priority = 100;
+      }
+      if (!assignmentB.hasOwnProperty('search_priority')) {
+        assignmentB.search_priority = 100;
+      }
       if (assignmentA.search_priority == '') {
         assignmentA.search_priority = 100;
       }
