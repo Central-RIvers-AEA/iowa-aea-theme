@@ -129,7 +129,7 @@ const {
         let imageContent = document.createElement('div');
         imageContent.classList.add('image-content');
         imageContent.dataset.slideIndex = index;
-        imageContent.innerHTML = `<img src="${slide.image}" alt="${slide.title}" />`;
+        imageContent.innerHTML = `<img src="${slide.image}" alt="${slide.title}" loading="lazy" />`;
         imageContents.appendChild(imageContent);
       });
       actions.startSlideshow(context);
