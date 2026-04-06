@@ -8,6 +8,20 @@ function using_external_api(){
   return $use_api == 1;
 }
 
+function filter_by_district_build(){
+  $show_dist_build_filter = get_option('staff_directory_show_filter_by_dist_build', 1);
+  return $show_dist_build_filter;
+}
+
+function filter_by_content_area(){
+  $filter_by_content_area_enabled = get_option('staff_directory_show_filter_by_content_area', 1);
+  return $filter_by_content_area_enabled;
+}
+function filter_by_position(){
+  $filter_by_position_enabled = get_option('staff_directory_show_filter_by_position', 1);
+  return $filter_by_position_enabled;
+}
+
 $context = [
   'staff' => [],
   'staffEndpoint' => '/wp-json/staff-directory/v1/employees',
@@ -45,33 +59,40 @@ $context['staff'] = $staff;
       <input type='text' id='staff-name' placeholder='Search staff...' name='staff-name' />
     </div>
 
-    <div class='staff-directory-search-input'>
-      <label for='school-district'>School District</label>
-      <select id='school-district' name='school-district' data-wp-on--change='actions.filterBuildings'>
-        <option value=''>Select a School District...</option>
-      </select>
-    </div>
+    <?php if(filter_by_district_build()): ?>
+      <div class='staff-directory-search-input'>
+        <label for='school-district'>School District</label>
+        <select id='school-district' name='school-district' data-wp-on--change='actions.filterBuildings'>
+          <option value=''>Select a School District...</option>
+        </select>
+      </div>
+    
 
-    <div class='staff-directory-search-input'>
-      <label for='school-building'>School Building</label>
-      <select id='school-building' name='school-building' disabled>
-        <option value=''>Select a District to view Buildings</option>
-      </select>
-    </div>
+      <div class='staff-directory-search-input'>
+        <label for='school-building'>School Building</label>
+        <select id='school-building' name='school-building' disabled>
+          <option value=''>Select a District to view Buildings</option>
+        </select>
+      </div>
+    <?php endif ?>
 
-    <div class='staff-directory-search-input'>
-      <label for='content-area'>Content Area</label>
-      <select id='content-area' name='content-area'>
-        <option value=''>Select a Content Area...</option>
-      </select>
-    </div>
+    <?php if(filter_by_content_area()) : ?>
+      <div class='staff-directory-search-input'>
+        <label for='content-area'>Content Area</label>
+        <select id='content-area' name='content-area'>
+          <option value=''>Select a Content Area...</option>
+        </select>
+      </div>
+    <?php endif ?>
 
-    <div class='staff-directory-search-input'>
-      <label for='position'>Position</label>
-      <select id='position' name='position'>
-        <option value=''>Select a Position...</option>
-      </select>
-    </div>
+    <?php if(filter_by_position()) : ?>
+      <div class='staff-directory-search-input'>
+        <label for='position'>Position</label>
+        <select id='position' name='position'>
+          <option value=''>Select a Position...</option>
+        </select>
+      </div>
+    <?php endif ?>
 
     <div style='display: flex; gap: 1rem; margin-top: 1rem;'>
       <div class='wp-block-button is-style-aea-styled-button'>

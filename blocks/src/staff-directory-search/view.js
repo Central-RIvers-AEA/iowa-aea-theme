@@ -53,8 +53,6 @@ const { actions, callbacks } = store( 'iowa-aea-theme/staff-directory-search', {
       let buildingSelect = form.querySelector('select[name="school-building"]');
       
       let buildings = context.buildings.filter(building => building.district_id == district)
-
-      console.log(context.buildings);
       
       if(district) {
         buildingSelect.innerHTML = '<option value="">Select a Building</option>';
@@ -116,35 +114,33 @@ const { actions, callbacks } = store( 'iowa-aea-theme/staff-directory-search', {
     renderStaffList: () => {
       let context = getContext();
 
-      console.log(context)
-
       let staffList = document.querySelector('.staff-directory-results ul');
       staffList.innerHTML = '';
 
       let filteredStaff = context.staff
 
-      console.log(context.staff)
-
       if(context.internal){
         let dist = document.querySelector('#school-district')
 
-        if(dist.value != ''){
-          filteredStaff = filteredStaff.filter(employee => {
-            return Object.keys(employee.assignments).some((key) => {
-              let assign = employee.assignments[key]
-              return assign.district == dist.value || assign.agency_wide
+        if(dist){
+          if(dist.value != ''){
+            filteredStaff = filteredStaff.filter(employee => {
+              return Object.keys(employee.assignments).some((key) => {
+                let assign = employee.assignments[key]
+                return assign.district == dist.value || assign.agency_wide
+              })
             })
-          })
-        }
-
-        let build = document.querySelector("#school-building")
-        if(build.value != ''){
-          filteredStaff = filteredStaff.filter(employee => {
-            return Object.keys(employee.assignments).some((key) => {
-              let assign = employee.assignments[key]
-              return assign.building == build.value || assign.district_wide || assign.agency_wide
+          }
+  
+          let build = document.querySelector("#school-building")
+          if(build.value != ''){
+            filteredStaff = filteredStaff.filter(employee => {
+              return Object.keys(employee.assignments).some((key) => {
+                let assign = employee.assignments[key]
+                return assign.building == build.value || assign.district_wide || assign.agency_wide
+              })
             })
-          })
+          }
         }
       }
 
@@ -184,51 +180,58 @@ const { actions, callbacks } = store( 'iowa-aea-theme/staff-directory-search', {
 
       let form = getElement();
 
-      context.districts.forEach(district => {
-        let option = document.createElement('option');
-        
-        if(district.id){
-          option.value = district.id;
-        } else {
-          option.value = district.ID;
-        }
+      if(form.ref.querySelector('select[name="school-district"]')){
+        context.districts.forEach(district => {
+          let option = document.createElement('option');
+          
+          if(district.id){
+            option.value = district.id;
+          } else {
+            option.value = district.ID;
+          }
+  
+          if(district.name){
+            option.textContent = district.name;
+          } else {
+            option.textContent = district.post_title;
+  
+          }
+          form.ref.querySelector('select[name="school-district"]').appendChild(option);
+        });
+      }
 
-        if(district.name){
-          option.textContent = district.name;
-        } else {
-          option.textContent = district.post_title;
 
-        }
-        form.ref.querySelector('select[name="school-district"]').appendChild(option);
-      });
+      if(form.ref.querySelector('select[name="position"]')){
+        context.positions.sort().forEach(position => {
+          if(typeof position == 'object'){
+            let option = document.createElement('option');
+            option.value = position.name;
+            option.innerText = position.name;
+            form.ref.querySelector('select[name="position"]').appendChild(option);
+  
+          } else if(position.trim() != '') {
+            let option = document.createElement('option');
+            option.innerText = position.trim();
+            form.ref.querySelector('select[name="position"]').appendChild(option);
+          }
+        })
+      }
       
-      context.positions.sort().forEach(position => {
-        if(typeof position == 'object'){
-          let option = document.createElement('option');
-          option.value = position.name;
-          option.innerText = position.name;
-          form.ref.querySelector('select[name="position"]').appendChild(option);
-
-        } else if(position.trim() != '') {
-          let option = document.createElement('option');
-          option.innerText = position.trim();
-          form.ref.querySelector('select[name="position"]').appendChild(option);
-        }
-      })
-
-      context.contentAreas.sort().forEach(area => {
-        if(typeof area == 'object'){
-          let option = document.createElement('option');
-          option.value = area.id;
-          option.innerText = area.name;
-          form.ref.querySelector('select[name="content-area"]').appendChild(option);
-
-        } else if(area.trim() != '') {
-          let option = document.createElement('option');
-          option.innerText = area.trim();
-          form.ref.querySelector('select[name="content-area"]').appendChild(option);
-        }
-      })
+      if(form.ref.querySelector('select[name="content-area"]')){
+        context.contentAreas.sort().forEach(area => {
+          if(typeof area == 'object'){
+            let option = document.createElement('option');
+            option.value = area.id;
+            option.innerText = area.name;
+            form.ref.querySelector('select[name="content-area"]').appendChild(option);
+  
+          } else if(area.trim() != '') {
+            let option = document.createElement('option');
+            option.innerText = area.trim();
+            form.ref.querySelector('select[name="content-area"]').appendChild(option);
+          }
+        })
+      }
     },
     loadStaffData: () => {
       let context = getContext();
@@ -272,7 +275,6 @@ function sortByAssignmentPriority(staff){
       let assignmentB = itemB.assignments_array.find((assignment) => assignment.district == districtSelect.value || assignment.agency_wide)
 
       if(buildingSelect.value != ''){
-        console.log(buildingSelect.value)
         
         assignmentA = itemA.assignments_array.find((assignment) => assignment.district == districtSelect.value && assignment.building == buildingSelect.value)
         assignmentB = itemB.assignments_array.find((assignment) => assignment.district == districtSelect.value && assignment.building == buildingSelect.value)
