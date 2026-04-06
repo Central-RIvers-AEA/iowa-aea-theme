@@ -9,4 +9,14 @@
   background: var(--wp--preset--color--alt-one);
   color: white;
   min-height: 200px;
+
+  @media (min-width: 900px){
+    height: 400px;
+  }
+
+  @media (min-width: 1280px){
+    height: 600px;
+  }
+
+  
 }

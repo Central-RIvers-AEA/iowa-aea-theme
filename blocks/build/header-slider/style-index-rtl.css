@@ -12,3 +12,13 @@
   color: white;
   min-height: 200px;
 }
+@media (min-width: 900px) {
+  .wp-block-iowa-aea-theme-header-slider {
+    height: 400px;
+  }
+}
+@media (min-width: 1280px) {
+  .wp-block-iowa-aea-theme-header-slider {
+    height: 600px;
+  }
+}
