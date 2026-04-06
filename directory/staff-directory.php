@@ -429,6 +429,16 @@ class StaffDirectory
       'staff_directory_options_group',
       'staff_directory_show_filter_by_position'
     );
+
+    register_setting(
+      'staff_directory_options_group',
+      'staff_directory_notice_text'
+    );
+
+    register_setting(
+      'staff_directory_options_group',
+      'staff_directory_notice_link'
+    );
   }
 
   public function directory_config_page_callback(){
@@ -464,7 +474,7 @@ class StaffDirectory
           <h2>General Settings</h2>
           <table class="form-table">
             <tr>
-              <th><label for="staff_directory_use_external_api">Show Filter by District and Building</label></th>
+              <th><label for="">Show Filter by District and Building</label></th>
               <td>
                 <input placeholder='staff data api' type="checkbox" name="staff_directory_show_filter_by_dist_build" value="1" <?php checked(1, get_option('staff_directory_show_filter_by_dist_build', 1)); ?> />
                 <p class="description">Check this box to show and enable Staff Directory filtering by District and Building.</p>
@@ -472,7 +482,7 @@ class StaffDirectory
             </tr>
 
             <tr>
-              <th><label for="staff_directory_use_external_api">Show Filter by Content Area</label></th>
+              <th><label for="">Show Filter by Content Area</label></th>
               <td>
                 <input placeholder='staff data api' type="checkbox" name="staff_directory_show_filter_by_content_area" value="1" <?php checked(1, get_option('staff_directory_show_filter_by_content_area', 1)); ?> />
                 <p class="description">Check this box to show and enable Staff Directory filtering by Content Area.</p>
@@ -480,10 +490,26 @@ class StaffDirectory
             </tr>
 
             <tr>
-              <th><label for="staff_directory_use_external_api">Show Filter by Employee Position</label></th>
+              <th><label for="">Show Filter by Employee Position</label></th>
               <td>
                 <input placeholder='staff data api' type="checkbox" name="staff_directory_show_filter_by_position" value="1" <?php checked(1, get_option('staff_directory_show_filter_by_position', 1)); ?> />
                 <p class="description">Check this box to show and enable Staff Directory filtering by Employee Position.</p>
+              </td>
+            </tr>
+
+            <tr>
+              <th><label for="">Notice Text</label></th>
+              <td>
+                <input placeholder='Individual Staff Assignments found here...' class="regular-text" type="text" name="staff_directory_notice_text" value="<?php echo get_option('staff_directory_notice_text', '') ?>" />
+                <p class="description">The text that will show up below the search form.</p>
+              </td>
+            </tr>
+
+            <tr>
+              <th><label for="">Notice Link</label></th>
+              <td>
+                <input placeholder='http://mysite.org/assignments' class="regular-text" type="text" name="staff_directory_notice_link" value="<?php echo get_option('staff_directory_notice_link', '') ?>" />
+                <p class="description">The link the notice text will go to below the search form.</p>
               </td>
             </tr>
           </table>

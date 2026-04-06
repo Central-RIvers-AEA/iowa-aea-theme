@@ -22,6 +22,21 @@ function filter_by_position(){
   return $filter_by_position_enabled;
 }
 
+function staff_directory_notice(){
+  $notice_link = get_option('staff_directory_notice_link', '');
+  $notice_text = get_option('staff_directory_notice_text', '');
+
+  if($notice_link == '' || $notice_text == ''){
+    return '';
+  }
+
+  return "
+    <div class='info-box'>
+      <a href='$notice_link'>$notice_text</a>
+    </div>
+  ";
+}
+
 $context = [
   'staff' => [],
   'staffEndpoint' => '/wp-json/staff-directory/v1/employees',
@@ -102,6 +117,8 @@ $context['staff'] = $staff;
         <button type='button' class='staff-directory-search-btn staff-directory-search-reset wp-block-button__link wp-element-button' data-wp-on--click='actions.formReset'>Reset</button>
       </div>
     </div>
+
+    <?php echo staff_directory_notice() ?>
 </form>
 
   <div class='staff-directory-results' data-wp-init='callbacks.initialStaff'>

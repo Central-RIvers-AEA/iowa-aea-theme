@@ -107,5 +107,13 @@
       }
     }
   }
+
+  .info-box{
+    border: 2px solid var(--wp--preset--color--primary);
+    border-top-width: 15px;
+    padding: 1rem;
+    border-radius: 0 0 19px 19px;
+    margin-top: 1rem;
+  }
 }
 

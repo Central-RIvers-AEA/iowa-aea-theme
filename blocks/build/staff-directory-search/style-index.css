@@ -92,5 +92,12 @@
 .wp-block-iowa-aea-theme-staff-directory-search .staff-directory-search-spinner .spinner svg {
   width: 200px;
 }
+.wp-block-iowa-aea-theme-staff-directory-search .info-box {
+  border: 2px solid var(--wp--preset--color--primary);
+  border-top-width: 15px;
+  padding: 1rem;
+  border-radius: 0 0 19px 19px;
+  margin-top: 1rem;
+}
 
 /*# sourceMappingURL=style-index.css.map*/
