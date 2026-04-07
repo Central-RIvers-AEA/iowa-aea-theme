@@ -14,41 +14,50 @@
   border-radius: 19px 19px 0 0;
   border-bottom: none;
 }
-.accordion-section {
+.wp-block-iowa-aea-theme-accordion .accordion-section {
   border-bottom: 15px solid var(--wp--preset--color--primary);
 }
-.accordion-section:nth-child(2n) {
+.wp-block-iowa-aea-theme-accordion .accordion-section:nth-child(2n) {
   border-bottom: 15px solid var(--wp--preset--color--secondary);
 }
-.accordion-section:nth-child(3n) {
+.wp-block-iowa-aea-theme-accordion .accordion-section:nth-child(3n) {
   border-bottom: 15px solid var(--wp--preset--color--alt-one);
 }
-.accordion-section:nth-child(4n) {
+.wp-block-iowa-aea-theme-accordion .accordion-section:nth-child(4n) {
   border-bottom: 15px solid var(--wp--preset--color--alt-two);
 }
-.accordion-section:nth-child(5n) {
+.wp-block-iowa-aea-theme-accordion .accordion-section:nth-child(5n) {
   border-bottom: 15px solid var(--wp--preset--color--alt-three);
 }
-.accordion-section:nth-child(7n) {
+.wp-block-iowa-aea-theme-accordion .accordion-section:nth-child(7n) {
   border-bottom: 15px solid var(--wp--preset--color--alt-four);
 }
-.accordion-section h3 {
+.wp-block-iowa-aea-theme-accordion .accordion-section:not(.wp-block) > *:not(h3, h2, h4, .accordion, .accordion-selection, .wp-block-iowa-aea-theme-accordion) {
+  height: 0;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+.wp-block-iowa-aea-theme-accordion .accordion-section h3, .wp-block-iowa-aea-theme-accordion .accordion-section h2, .wp-block-iowa-aea-theme-accordion .accordion-section h4 {
   font-size: 1.25rem;
   margin: 0;
   padding: 0.5rem 1.25rem;
   color: var(--wp--preset--color--text-color);
   opacity: 0.6;
 }
-.accordion-section .section-content {
-  display: none;
-}
-.accordion-section:hover > h3 {
+.wp-block-iowa-aea-theme-accordion .accordion-section:hover h3, .wp-block-iowa-aea-theme-accordion .accordion-section:hover h2, .wp-block-iowa-aea-theme-accordion .accordion-section:hover h4 {
   opacity: 1;
 }
-.accordion-section.open > h3 {
+.wp-block-iowa-aea-theme-accordion .accordion-section.open > *:not(h3, h2, h4, .accordion-holder, .accordion-selection, .wp-block-iowa-aea-theme-accordion) {
+  height: auto;
+  overflow: visible;
+  margin: 0;
+  padding: 1rem 1.25rem;
+}
+.wp-block-iowa-aea-theme-accordion .accordion-section.open .accordion-holder {
+  margin: 0 1rem 1rem !important;
+}
+.wp-block-iowa-aea-theme-accordion .accordion-section.open h3, .wp-block-iowa-aea-theme-accordion .accordion-section.open h2, .wp-block-iowa-aea-theme-accordion .accordion-section.open h4 {
   opacity: 1;
   font-size: 1.5rem;
-}
-.accordion-section.open .section-content {
-  display: block;
 }
