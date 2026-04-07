@@ -8,6 +8,7 @@
  */
 .wp-block-iowa-aea-theme-header-slider {
   background: #eee;
+  height: auto !important;
 }
 .wp-block-iowa-aea-theme-header-slider .characters-remaining {
   font-size: 12px;
