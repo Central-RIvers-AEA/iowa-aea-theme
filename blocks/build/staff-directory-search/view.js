@@ -255,7 +255,6 @@ const {
         });
       }
       if (form.ref.querySelector('select[name="location"]')) {
-        console.log(context);
         context.locations.sort().forEach(location => {
           if (typeof location == 'object') {
             let option = document.createElement('option');
