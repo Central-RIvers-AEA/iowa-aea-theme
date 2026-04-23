@@ -86,6 +86,8 @@ const {
       if (district) queryObj.district = district;
       let building = formData.get('school-building');
       if (building) queryObj.building = building;
+      let location = formData.get('location');
+      if (location) queryObj.location = location;
       let queryString = new URLSearchParams(queryObj).toString();
       let staffList = document.querySelector('.staff-directory-results ul');
       staffList.innerHTML = '';
@@ -252,6 +254,20 @@ const {
           }
         });
       }
+      if (form.ref.querySelector('select[name="location"]')) {
+        context.locations.sort().forEach(location => {
+          if (typeof location == 'object') {
+            let option = document.createElement('option');
+            option.value = location.id;
+            option.innerText = location.name;
+            form.ref.querySelector('select[name="location"]').appendChild(option);
+          } else if (location.trim() != '') {
+            let option = document.createElement('option');
+            option.innerText = location.trim();
+            form.ref.querySelector('select[name="location"]').appendChild(option);
+          }
+        });
+      }
     },
     loadStaffData: () => {
       let context = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.getContext)();
@@ -283,7 +299,7 @@ function sortByAssignmentPriority(staff) {
     return newItem;
   });
   let sortedItems = adjustedItems.sort((itemA, itemB) => {
-    if (districtSelect.value != '') {
+    if (districtSelect && districtSelect.value != '') {
       let assignmentA = itemA.assignments_array.find(assignment => assignment.district == districtSelect.value || assignment.agency_wide);
       let assignmentB = itemB.assignments_array.find(assignment => assignment.district == districtSelect.value || assignment.agency_wide);
       if (buildingSelect.value != '') {

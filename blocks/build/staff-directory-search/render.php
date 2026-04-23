@@ -22,6 +22,11 @@ function filter_by_position(){
   return $filter_by_position_enabled;
 }
 
+function filter_by_location(){
+  $filter_by_location_enabled = get_option('staff_directory_show_filter_by_location', 1);
+  return $filter_by_location_enabled;
+}
+
 function staff_directory_notice(){
   $notice_link = get_option('staff_directory_notice_link', '');
   $notice_text = get_option('staff_directory_notice_text', '');
@@ -53,6 +58,7 @@ $context['positions'] = StaffDirectory::get_positions();
 $context['contentAreas'] = StaffDirectory::get_content_areas();
 $context['districts'] = StaffDirectory::get_districts();
 $context['buildings'] = StaffDirectory::get_buildings();
+$context['locations'] = StaffDirectory::get_locations();
 
 $staff = [];
 
@@ -105,6 +111,15 @@ $context['staff'] = $staff;
         <label for='position'>Position</label>
         <select id='position' name='position'>
           <option value=''>Select a Position...</option>
+        </select>
+      </div>
+    <?php endif ?>
+
+    <?php if(filter_by_location()) : ?>
+      <div class='staff-directory-search-input'>
+        <label for='location'>Location</label>
+        <select id='location' name='location'>
+          <option value=''>Select a location...</option>
         </select>
       </div>
     <?php endif ?>

@@ -139,8 +139,6 @@ class StaffDirectory
     // Add nonce for security and authentication.
     wp_nonce_field('employee_details_nonce_action', 'employee_details_nonce');
     // Retrieve existing values from the database.
-    $district = get_post_meta($post->ID, 'district', true);
-    $building = get_post_meta($post->ID, 'building', true);
     $area = get_post_meta($post->ID, 'area', true);
     $position = get_post_meta($post->ID, 'position', true);
     $location = get_post_meta($post->ID, 'location', true);
@@ -192,6 +190,22 @@ class StaffDirectory
         <td>
           <input type="tel" id="phone" name="phone" value="<?php echo esc_attr($phone); ?>" class="regular-text" />
           <p class="description">Enter the phone number for this employee.</p>
+        </td>
+      </tr>
+
+      <tr>
+        <th><label for="location">Location</label></th>
+        <td>
+          <input type="tel" id="location" name="location" value="<?php echo esc_attr($location); ?>" class="regular-text" list='locations' autocomplete="off"/>
+          <p class="description">Enter the location for this employee.</p>
+          <?php 
+            $locations = StaffDirectory::get_locations();
+            echo "<datalist id='locations'>";
+            foreach($locations as $location){
+              echo "<option>$location</option>";
+            }
+            echo "</datalist>";
+          ?>
         </td>
       </tr>
       <tr>
@@ -387,6 +401,16 @@ class StaffDirectory
 
     register_setting(
       'staff_directory_options_group',
+      'staff_directory_use_external_location_api'
+    );
+
+    register_setting(
+      'staff_directory_options_group',
+      'staff_directory_use_external_location_api_key'
+    );
+
+    register_setting(
+      'staff_directory_options_group',
       'staff_directory_use_external_positions_api'
     );
 
@@ -428,6 +452,11 @@ class StaffDirectory
     register_setting(
       'staff_directory_options_group',
       'staff_directory_show_filter_by_position'
+    );
+
+    register_setting(
+      'staff_directory_options_group',
+      'staff_directory_show_filter_by_location'
     );
 
     register_setting(
@@ -498,6 +527,14 @@ class StaffDirectory
             </tr>
 
             <tr>
+              <th><label for="">Show Filter by Location</label></th>
+              <td>
+                <input placeholder='staff data api' type="checkbox" name="staff_directory_show_filter_by_location" value="1" <?php checked(1, get_option('staff_directory_show_filter_by_location', 1)); ?> />
+                <p class="description">Check this box to show and enable Staff Directory filtering by Location.</p>
+              </td>
+            </tr>
+
+            <tr>
               <th><label for="">Notice Text</label></th>
               <td>
                 <input placeholder='Individual Staff Assignments found here...' class="regular-text" type="text" name="staff_directory_notice_text" value="<?php echo get_option('staff_directory_notice_text', '') ?>" />
@@ -541,9 +578,13 @@ class StaffDirectory
                 <input  type='text' placeholder='Positions key (leave blank if url returns a list of positions)' value="<?php echo esc_attr(get_option('staff_directory_use_external_positions_api_key', '')); ?>" name='staff_directory_use_external_district_api_key' class='regular-text' />
                 <p class="description">Enter the URL of the external API to use for staff directory position data.</p>
 
+                <input placeholder='Location data api URL' type="text" name="staff_directory_use_external_location_api" value="<?php echo esc_attr(get_option('staff_directory_use_external_location_api', '')); ?>" class="regular-text" />
+                <input  type='text' placeholder='Location key (leave blank if url returns a list of locations)' value="<?php echo esc_attr(get_option('staff_directory_use_external_location_api_key', '')); ?>" name='staff_directory_use_external_district_api_key' class='regular-text' />
+                <p class="description">Enter the URL of the external API to use for staff directory location data.</p>
+
                 <input placeholder='Content Areas data api URL' type="text" name="staff_directory_use_external_content_areas_api" value="<?php echo esc_attr(get_option('staff_directory_use_external_content_areas_api', '')); ?>" class="regular-text" />
                 <input  type='text' placeholder='Content Areas key (leave blank if url returns a list of Content Areas)' value="<?php echo esc_attr(get_option('staff_directory_use_external_content_areas_api_key', '')); ?>" name='staff_directory_use_external_district_api_key' class='regular-text' />
-                <p class="description">Enter the URL of the external API to use for staff directory position data.</p>
+                <p class="description">Enter the URL of the external API to use for staff directory content aread data.</p>
               </td>
             </tr>
             <tr>
@@ -1239,6 +1280,14 @@ class StaffDirectory
       );
     }
 
+    if (!empty($params['location'])) {
+      $meta_query[] = array(
+        'key' => 'location',
+        'value' => $params['location'],
+        'compare' => '='
+      );
+    }
+
     if (!empty($meta_query)) {
       $args['meta_query'] = $meta_query;
     }
@@ -1315,7 +1364,8 @@ class StaffDirectory
 
     // if external api do blah
     $api = get_option('staff_directory_use_external_positions_api', '');
-    if($api != ''){
+    $use_api = get_option('staff_directory_use_external_api_enabled', 0);
+    if($api != '' && $use_api){
       $response = wp_remote_get($api);
 
       if (is_wp_error($response)) {
@@ -1353,7 +1403,8 @@ class StaffDirectory
 
     // if external api do blah
     $api = get_option('staff_directory_use_external_content_areas_api', '');
-    if($api != ''){
+    $use_api = get_option('staff_directory_use_external_api_enabled', 0);
+    if($api != '' && $use_api){
       $response = wp_remote_get($api);
 
       if (is_wp_error($response)) {
@@ -1399,7 +1450,8 @@ class StaffDirectory
 
     // if external api do blah
     $api = get_option('staff_directory_use_external_district_api', '');
-    if($api != ''){
+    $use_api = get_option('staff_directory_use_external_api_enabled', 0);
+    if($api != '' && $use_api){
       $response = wp_remote_get($api);
 
       if (is_wp_error($response)) {
@@ -1445,7 +1497,8 @@ class StaffDirectory
 
     // if external api do blah
     $api = get_option('staff_directory_use_external_building_api', '');
-    if($api != ''){
+    $use_api = get_option('staff_directory_use_external_api_enabled', 0);
+    if($api != '' && $use_api){
       $response = wp_remote_get($api);
 
       if (is_wp_error($response)) {
@@ -1483,6 +1536,52 @@ class StaffDirectory
     }
 
     return $buildings;
+  }
+
+  /** Staff Directory Employee Location*/
+  public static function get_locations() {
+    $locations = array();
+
+    // if external api do blah
+    $api = get_option('staff_directory_use_external_location_api', '');
+    $use_api = get_option('staff_directory_use_external_api_enabled', 0);
+    if($api != '' && $use_api){
+      $response = wp_remote_get($api);
+
+      if (is_wp_error($response)) {
+        return new WP_REST_Response($response, 500);
+        return;
+      }
+
+      $data = wp_remote_retrieve_body($response);
+      $apiKey = get_option('staff_directory_use_external_location_api_key', '');
+
+      if($apiKey != ''){
+        $buildings = json_decode($data, true)[$apiKey];
+      } else {
+        $buildings = json_decode($data, true);
+      }
+
+      if (json_last_error() !== JSON_ERROR_NONE) {
+        wp_send_json_error('Invalid JSON response from API', 500);
+        return;
+      }
+    }
+    else {
+      $employees = get_posts(array(
+        'post_type' => 'employee',
+        'numberposts' => -1,
+        'post_status' => 'publish',
+        'fields' => 'ids',
+      ));
+
+      foreach($employees as $employee_id){
+        $location = get_post_meta($employee_id, 'location', true);
+        $locations[] = $location;
+      }
+    }
+
+    return $locations;
   }
 }
 
