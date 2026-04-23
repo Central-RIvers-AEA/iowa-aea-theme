@@ -1581,7 +1581,9 @@ class StaffDirectory
       }
     }
 
-    return array_unique($locations);
+    $unique = array_unique($locations);
+
+    return $unique;
   }
 }
 
