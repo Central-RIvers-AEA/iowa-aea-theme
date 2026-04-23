@@ -237,7 +237,7 @@ const { actions, callbacks } = store( 'iowa-aea-theme/staff-directory-search', {
       }
 
       if(form.ref.querySelector('select[name="location"]')){
-        console.log(context.locations)
+        console.log(context)
         context.locations.sort().forEach(location => {
           if(typeof location == 'object'){
             let option = document.createElement('option');
