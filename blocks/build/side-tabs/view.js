@@ -34,11 +34,16 @@ const sideTabs = document.querySelector('.wp-block-iowa-aea-theme-side-tabs');
 let tabs = sideTabs.querySelectorAll('.impact-tab');
 if (tabs.length > 0) {
   tabs[0].classList.add('open');
+  tabs.forEach(tab => tab.setAttribute('tabindex', 0));
 }
 
 // Click on tab Open it
 tabs.forEach(tab => {
   tab.addEventListener('click', () => {
+    tabs.forEach(t => t.classList.remove('open'));
+    tab.classList.add('open');
+  });
+  tab.addEventListener('focus', () => {
     tabs.forEach(t => t.classList.remove('open'));
     tab.classList.add('open');
   });
