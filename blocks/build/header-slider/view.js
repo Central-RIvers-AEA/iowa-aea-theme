@@ -70,7 +70,9 @@ const {
   state
 } = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.store)('iowa-aea-theme/header-slider', {
   state: {
-    currentSlide: 0
+    currentSlide: 0,
+    paused: false,
+    interval: null
   },
   actions: {
     nextSlide: context => {
@@ -79,7 +81,6 @@ const {
       if (next >= slidesData.length) {
         next = 0;
       }
-      state.currentSlide = next;
       actions.setVisibleSlide(next);
     },
     loadSlideShow: () => {
@@ -105,6 +106,7 @@ const {
         // slide contents
         let slideContent = document.createElement('div');
         slideContent.classList.add('slide-content');
+        slideContent.setAttribute('tabindex', 0);
         slideContent.innerHTML = `
           <div class='slide-title'>${slide.title}</div>
           <p>${slide.content}</p>
@@ -132,9 +134,10 @@ const {
         imageContent.innerHTML = `<img src="${slide.image}" alt="${slide.title}" loading="lazy" />`;
         imageContents.appendChild(imageContent);
       });
-      actions.startSlideshow(context);
+      actions.startSlideshow();
     },
     setVisibleSlide(index) {
+      state.currentSlide = index;
       let currentHiddenSlides = document.querySelectorAll('[data-slide-index].hide');
       currentHiddenSlides.forEach(currentHiddenSlide => {
         currentHiddenSlide.classList.remove('hide');
@@ -155,11 +158,16 @@ const {
         tab.classList.toggle('active', tab.dataset.slideTabIndex == index);
       });
     },
-    startSlideshow: context => {
-      actions.setVisibleSlide(0);
-      setInterval(() => {
+    startSlideshow: () => {
+      let context = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.getContext)();
+      actions.setVisibleSlide(state.currentSlide);
+      let interval = setInterval(() => {
         actions.nextSlide(context);
-      }, 10000);
+      }, 15000);
+      state.interval = interval;
+    },
+    pauseSlideShow: () => {
+      clearInterval(state.interval);
     }
   },
   init: {
