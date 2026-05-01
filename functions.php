@@ -124,7 +124,7 @@ function hide_unwanted_block_templates( $query_result, $query, $template_type ) 
         'tag',              // Tag template
         'author',           // Author template
         'date',             // Date template
-        'search',           // Search results template
+        // 'search',           // Search results template
         'single',           // Single post template
         // '404',              // 404 error template
         'front-page',       // Front page template
