@@ -102,15 +102,18 @@ const { actions, callbacks } = store( 'iowa-aea-theme/staff-directory-search', {
       return filteredStaff;
     },
     formReset: (e) => {
-      e.preventDefault();
-
+      e.preventDefault()
       let form = e.target.closest('form');
       form.reset();
+
+      actions.searchStaff({ target: form, preventDefault: () => {} })
       
       // Reset building select
       let buildingSelect = form.querySelector('select[name="school-building"]');
-      buildingSelect.innerHTML = '<option value="">Select a District to view Buildings</option>';
-      buildingSelect.disabled = true;
+      if(buildingSelect){
+        buildingSelect.innerHTML = '<option value="">Select a District to view Buildings</option>';
+        buildingSelect.disabled = true;
+      }
     }
   },
   callbacks: {
