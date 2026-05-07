@@ -3,65 +3,69 @@
  * @see https://github.com/WordPress/gutenberg/blob/trunk/docs/reference-guides/block-api/block-metadata.md#render
  */
 
-function get_top_parent_id($post_id) {
-	$ancestors = get_post_ancestors($post_id);
-	if (!empty($ancestors)) {
-		// Return the top-most ancestor (last in the array)
-		return end($ancestors);
+if(!function_exists('get_top_parent_id')){
+	function get_top_parent_id($post_id) {
+		$ancestors = get_post_ancestors($post_id);
+		if (!empty($ancestors)) {
+			// Return the top-most ancestor (last in the array)
+			return end($ancestors);
+		}
+		// If no ancestors, this is the top parent
+		return $post_id;
 	}
-	// If no ancestors, this is the top parent
-	return $post_id;
-}
 
-function is_current_page_in_section($current_post_id, $top_parent_id) {
-	// Check if current page is the top parent
-	if ($current_post_id == $top_parent_id) {
-		return true;
-	}
-	
-	// Get all ancestors of current page
-	$ancestors = get_post_ancestors($current_post_id);
-	
-	// Check if the top parent is in the ancestors
-	return in_array($top_parent_id, $ancestors);
-}
-
-function has_current_page_in_children($children, $current_post_id) {
-	foreach ($children as $child) {
-		if ($child->ID == $current_post_id) {
+	function is_current_page_in_section($current_post_id, $top_parent_id) {
+		// Check if current page is the top parent
+		if ($current_post_id == $top_parent_id) {
 			return true;
 		}
+		
+		// Get all ancestors of current page
+		$ancestors = get_post_ancestors($current_post_id);
+		
+		// Check if the top parent is in the ancestors
+		return in_array($top_parent_id, $ancestors);
 	}
-	return false;
-}
 
-function get_page_current_hierarchy($parent_id) {
-	// Get direct children of the parent
-	$children = get_children(array(
-		'post_parent' => $parent_id,
-		'post_type'   => 'page',
-		'post_status' => 'publish',
-		'orderby'     => 'title',
-		'order'       => 'ASC'
-	));
-	
-	$hierarchy = array();
-	
-	foreach ($children as $child) {
-		$child_data = array(
-			'page' => $child,
-			'children' => get_children(array(
-				'post_parent' => $child->ID,
-				'post_type'   => 'page',
-				'post_status' => 'publish',
-				'orderby'     => 'menu_order',
-				'order'       => 'ASC'
-			))
-		);
-		$hierarchy[] = $child_data;
+	function has_current_page_in_children($children, $current_post_id) {
+		foreach ($children as $child) {
+			if ($child->ID == $current_post_id) {
+				return true;
+			}
+		}
+		return false;
 	}
-	
-	return $hierarchy;
+
+	function get_page_current_hierarchy($parent_id) {
+		// Get direct children of the parent
+		$children = get_children(array(
+			'post_parent' => $parent_id,
+			'post_type'   => 'page',
+			'post_status' => 'publish',
+			'orderby'     => 'title',
+			'order'       => 'ASC'
+		));
+		
+		$hierarchy = array();
+		
+		foreach ($children as $child) {
+			$child_data = array(
+				'page' => $child,
+				'children' => get_children(array(
+					'post_parent' => $child->ID,
+					'post_type'   => 'page',
+					'post_status' => 'publish',
+					'orderby'     => 'menu_order',
+					'order'       => 'ASC'
+				))
+			);
+			$hierarchy[] = $child_data;
+		}
+		
+		return $hierarchy;
+	}
+
+
 }
 
 // Get the current post ID
