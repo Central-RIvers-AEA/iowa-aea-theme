@@ -20,16 +20,12 @@
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-metadata/#view-script
  */
 
-/* eslint-disable no-console */
-console.log( 'Hello World! (from iowa-aea-theme-page-children block)' );
-/* eslint-enable no-console */
-
 document.querySelectorAll(".wp-block-iowa-aea-theme-page-children").forEach(block => {
   const dropdowns = block.querySelectorAll(".parent-dropdown");
 
   dropdowns.forEach(dropdown => {
     const button = dropdown.querySelector("button");
-    const link = dropdown.querySelector('.parent-page-link')
+    let link = dropdown.querySelector('a')
 
     if(!button){ return }
     button.setAttribute('aria-label', `Open Submenu for ${link.innerText}`)
