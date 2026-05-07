@@ -60,6 +60,8 @@ $context['districts'] = StaffDirectory::get_districts();
 $context['buildings'] = StaffDirectory::get_buildings();
 $context['locations'] = StaffDirectory::get_locations();
 
+$context['include_location'] = StaffDirectory::include_location();
+
 $staff = [];
 
 $context['staff'] = $staff;

@@ -181,6 +181,7 @@ const {
         }
       }
       let sortedStaff = sortByAssignmentPriority(filteredStaff);
+      console.log(sortedStaff);
       sortedStaff.forEach(member => {
         // Render each staff member
         let li = document.createElement('li');
@@ -192,8 +193,11 @@ const {
             <div class='staff-info'>
               <h2 class='staff-name'>${member.full_name}</h2>
               <div class='staff-position'>${member.position}</div>
-              <div class='staff-email'>${member.email}</div>
-              <div class='staff-phone'>${member.phone}</div>
+              ${context.include_location ? `<div class='staff-location'>${member.location}</div>` : ''}
+              <div ${context.include_location ? `style='display: flex; gap: 15px'` : ''}>
+                <div class='staff-email'>${member.email}</div>
+                <div class='staff-phone'>${member.phone}</div>
+              </div>
             </div>
           </div>
         `;

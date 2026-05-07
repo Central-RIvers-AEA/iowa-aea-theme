@@ -461,6 +461,11 @@ class StaffDirectory
 
     register_setting(
       'staff_directory_options_group',
+      'staff_directory_show_location_on_card'
+    );
+
+    register_setting(
+      'staff_directory_options_group',
       'staff_directory_notice_text'
     );
 
@@ -531,6 +536,14 @@ class StaffDirectory
               <td>
                 <input placeholder='staff data api' type="checkbox" name="staff_directory_show_filter_by_location" value="1" <?php checked(1, get_option('staff_directory_show_filter_by_location', 1)); ?> />
                 <p class="description">Check this box to show and enable Staff Directory filtering by Location.</p>
+              </td>
+            </tr>
+
+            <tr>
+              <th><label for="">Show Location On Card</label></th>
+              <td>
+                <input placeholder='staff data api' type="checkbox" name="staff_directory_show_location_on_card" value="1" <?php checked(1, get_option('staff_directory_show_location_on_card', 1)); ?> />
+                <p class="description">Check this box to show Location for each employee on their staff name card.</p>
               </td>
             </tr>
 
@@ -1584,6 +1597,11 @@ class StaffDirectory
     $unique = array_values(array_unique($locations));
 
     return $unique;
+  }
+
+  /** Staff Directory Include Location info */
+  public static function include_location(){
+    return get_option('staff_directory_show_location_on_card', 0);
   }
 }
 
