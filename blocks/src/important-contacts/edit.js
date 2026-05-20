@@ -48,7 +48,7 @@ export default function Edit(props) {
 	const addCustomeImportantContact = () => {
 		console.log('adding contact')
 		let updatedContacts = [...contacts];
-		updatedContacts.push({ id: Date.now(), name: '', email: '', phone: '', jobTitle: '', image: '', type: 'custom' });
+		updatedContacts.push({ id: Date.now(), name: '', email: '', phone: '', jobTitle: '', image: '', type: 'custom', bio: '' });
 
 		props.setAttributes({ contacts: updatedContacts });
 	}
@@ -144,6 +144,9 @@ const CustomContactCard = ({ contact, handleContactChange, removeImportantContac
 				</p>
 				<p>
 					<input type="text" placeholder='555-555-5555' value={ contact.phone } onChange={ (e) => handleContactChange( index, e.target.value, 'phone' ) } />	
+				</p>
+				<p>
+					<input type="url" placeholder='https://example.com' value={ contact.bio } onChange={ (e) => handleContactChange( index, e.target.value, 'bio' ) } />	
 				</p>
 				<button onClick={ () => removeImportantContact( index ) } className='btn'>
 					{ __( 'X', 'important-contacts' ) }

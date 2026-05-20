@@ -22,6 +22,10 @@
 							<p><?php echo esc_html( $contact['jobTitle'] ); ?></p>
 							<p><a href="mailto:<?php echo esc_html( $contact['email'] ); ?>"><?php echo esc_html( $contact['email'] ); ?></a></p>
 							<p><a href="tel:<?php echo esc_html( $contact['phone'] ); ?>"><?php echo esc_html( $contact['phone'] ); ?></a></p>
+							<?php if($contact['bio'] && $contact['bio'] != ''): ?>
+								<p><a href="<?php echo esc_html( $contact['bio'] ); ?>"><?php echo esc_html( $contact['name'] ); ?>'s Bio Page</a></p>
+
+							<?php endif ?>
 						</div>
 					</div>
 				<?php

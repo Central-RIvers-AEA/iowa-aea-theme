@@ -97,7 +97,8 @@ function Edit(props) {
       phone: '',
       jobTitle: '',
       image: '',
-      type: 'custom'
+      type: 'custom',
+      bio: ''
     });
     props.setAttributes({
       contacts: updatedContacts
@@ -238,6 +239,13 @@ const CustomContactCard = ({
           placeholder: "555-555-5555",
           value: contact.phone,
           onChange: e => handleContactChange(index, e.target.value, 'phone')
+        })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
+          type: "url",
+          placeholder: "https://example.com",
+          value: contact.bio,
+          onChange: e => handleContactChange(index, e.target.value, 'bio')
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
         onClick: () => removeImportantContact(index),
