@@ -37,7 +37,19 @@ accordions.forEach(accordion => {
       return;
     }
     section.dataset.prepared = 1;
-    section.querySelector('.section-heading').addEventListener('click', e => {
+    let heading = section.querySelector('.section-heading');
+    heading.setAttribute('tabindex', 0);
+    heading.addEventListener('click', e => {
+      if (section.classList.contains('open')) {
+        section.classList.remove('open');
+      } else {
+        section.classList.add('open');
+      }
+    });
+    heading.addEventListener('keyup', e => {
+      if (e.keyCode != 32 && e.keyCode != 13) {
+        return;
+      }
       if (section.classList.contains('open')) {
         section.classList.remove('open');
       } else {
