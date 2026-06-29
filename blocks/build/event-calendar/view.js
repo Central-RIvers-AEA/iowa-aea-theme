@@ -198,8 +198,10 @@ const {
           <div class='event-calendar-list-item-date' aria-hidden='true'>${formatDate(event.event_date)}</div>
           <div class='event-calendar-list-item-details'>
             <strong class='event-calendar-list-item-title'>${event.title.rendered}</strong>
-            <span class='event-calendar-list-item-time'>${formatTime(event.event_time)}</span>
-            ${event.event_end_time ? `- <span class='event-calendar-list-item-end-time'>${formatTime(event.event_end_time)}</span>` : ''}
+            <p class='event-calendar-list-item-time-span'><span class='event-calendar-list-item-time'>${formatTime(event.event_time)}</span>
+            ${event.event_end_time ? `- <span class='event-calendar-list-item-end-time'>${formatTime(event.event_end_time)}</span>` : ''} 
+            ${event.details ? `<button class='event-details-button' aria-label='Click for more details' type='button'>Click for more details</button>` : ``}
+            </p>
             ${event.registration_link ? `<br /><a href='${event.registration_link}' class='event-calendar-list-item-registration' aria-label='Register for ${event.title.rendered}'>Registration Link</a>` : ''}
           </div>
           ${event.details ? `<div class='event-calendar-list-item-details-long' id='event-details-${event.id}' role='region' aria-label='Event details for ${event.title.rendered}'>${event.details}</div>` : ''}

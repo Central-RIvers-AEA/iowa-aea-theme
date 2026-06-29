@@ -98,6 +98,11 @@
 .wp-block-iowa-aea-theme-event-calendar .event-calendar-list-item .event-calendar-list-item-time {
   font-style: italic;
 }
+.wp-block-iowa-aea-theme-event-calendar .event-calendar-list-item .event-calendar-list-item-time-span {
+  padding: 0;
+  margin: 0;
+  display: flex;
+}
 .wp-block-iowa-aea-theme-event-calendar .event-calendar-list-item .event-calendar-list-item-details-long {
   display: none;
   grid-column: span 2;
@@ -120,18 +125,12 @@
   cursor: pointer;
   position: relative;
 }
-.wp-block-iowa-aea-theme-event-calendar .event-calendar-list-item:has(.event-calendar-list-item-details-long):after {
-  position: absolute;
-  content: "Click for more details";
-  top: 50%;
-  left: 1rem;
-  transform: translateY(-50%);
-  background: black;
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  white-space: nowrap;
-  z-index: 10;
+.wp-block-iowa-aea-theme-event-calendar .event-calendar-list-item:has(.event-calendar-list-item-details-long) .event-details-button {
+  border: none;
+  background: none;
+  padding: 0;
+  margin-right: auto;
+  padding-left: 10px;
 }
 .wp-block-iowa-aea-theme-event-calendar .event-calendar-list-item:has(.event-calendar-list-item-details-long)[aria-expanded=true] {
   padding: 12px 0 0;

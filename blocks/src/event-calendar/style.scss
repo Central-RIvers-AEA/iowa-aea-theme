@@ -114,6 +114,12 @@
       font-style: italic;
     }
 
+    .event-calendar-list-item-time-span{
+      padding: 0;
+      margin: 0;
+      display: flex;
+    }
+
     .event-calendar-list-item-details-long {
       display: none;
       grid-column: span 2;
@@ -140,20 +146,15 @@
       cursor: pointer;
       position: relative;
 
-      &:after {
-        position: absolute;
-        content: 'Click for more details';
-        top: 50%;
-        right: 1rem;
-        transform: translateY(-50%);
-        background: black;
-        color: white;
-        padding: 0.5rem 1rem;
-        border-radius: 4px;
-        white-space: nowrap;
-        z-index: 10;
+      .event-details-button{
+        border: none;
+        background: none;
+        padding: 0;
+        margin-left: auto;
+        padding-right: 10px;
       }
     }
+
 
     &:has(.event-calendar-list-item-details-long)[aria-expanded='true'] {
       padding: 12px 0 0;
