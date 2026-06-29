@@ -75,6 +75,8 @@ const fetchGoogleCalendarEvents = async (start_date, end_date) => {
       events = events.concat(calEvents);
     } catch (error) {
       console.error('Error fetching Google Calendar events:', error);
+      events = [];
+      return events;
     }
   }
 
@@ -88,7 +90,7 @@ const fetchEvents = async () => {
   firstOfLastMonth.setMonth(firstOfLastMonth.getMonth() - 1);
 
   let lastOfNextMonth = new Date(state.currentDate);
-  lastOfNextMonth.setMonth(lastOfNextMonth.getMonth() + 2);
+  lastOfNextMonth.setMonth(lastOfNextMonth.getMonth() + 12);
   lastOfNextMonth.setDate(0);
 
   let start_date = firstOfLastMonth.toISOString().split('T')[0];
@@ -152,7 +154,7 @@ const { state, actions, callbacks } = store( 'iowa-aea-theme/events-list', {
 
       // Load chunk of events
       let chunkStart = state.events.map(event => event.id).indexOf(state.topEventId);
-      const chunk = state.events.slice(chunkStart, chunkStart +state.visibleEvents);
+      const chunk = state.events.slice(chunkStart, chunkStart + state.visibleEvents);
 
       eventsList.innerHTML = chunk.map(event => `
         <li>
@@ -165,6 +167,16 @@ const { state, actions, callbacks } = store( 'iowa-aea-theme/events-list', {
           </div>
         </li>
       `).join('');
+
+      if(state.events.length == 0){
+        eventsList.innerHTML = `
+          <li>
+            <div class='event-item'>
+              <div class='event-date'>No Events</div>
+            </div>
+          </li>
+        `
+      }
     }
   },
   callbacks: {
