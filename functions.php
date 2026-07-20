@@ -242,7 +242,7 @@ function iowa_aea_theme_skip_to_content() {
   <?php
 }
 
-add_action('wp_head', 'iowa_aea_theme_skip_to_content', 9);
+// add_action('wp_head', 'iowa_aea_theme_skip_to_content', 9);
 
 /** Google Translation Setup and enqueue */
 function iowa_aea_google_translate_enqueue() {
