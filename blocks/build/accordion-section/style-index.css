@@ -43,10 +43,10 @@
   margin: 0;
   padding: 0.5rem 1.25rem;
   color: var(--wp--preset--color--text-color);
-  opacity: 0.6;
+  cursor: pointer;
 }
 .wp-block-iowa-aea-theme-accordion .accordion-section:hover h3, .wp-block-iowa-aea-theme-accordion .accordion-section:hover h2, .wp-block-iowa-aea-theme-accordion .accordion-section:hover h4 {
-  opacity: 1;
+  text-decoration: underline;
 }
 .wp-block-iowa-aea-theme-accordion .accordion-section.open > *:not(h3, h2, h4, .accordion-holder, .accordion-selection, .wp-block-iowa-aea-theme-accordion) {
   height: auto;

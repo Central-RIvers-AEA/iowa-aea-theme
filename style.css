@@ -5,7 +5,7 @@
     Author: Iowa AEAs
     Author URI: https://example.com/
     Template: twentytwentyfive
-    Version: 1.5.56
+    Version: 1.5.59
     License: GNU General Public License v2 or later
     License URI: http://www.gnu.org/licenses/gpl-2.0.html
     Text Domain: iowa-aea-theme
@@ -653,5 +653,71 @@ table {
 #google_translate_element {
   select {
     font-size: 1.2rem;
+  }
+}
+
+.wp-block-accordion {
+  background-color: transparent;
+  color: var(--wp--preset--color--text-color);
+  border: 1px solid var(--wp--preset--color--primary);
+  border-radius: 19px 19px 0 0;
+  border-bottom: none;
+
+  .wp-block-accordion-item {
+    margin: 0;
+    border-bottom: 15px solid var(--wp--preset--color--primary);
+
+    &:nth-child(2n) {
+      border-bottom: 15px solid var(--wp--preset--color--secondary);
+    }
+
+    &:nth-child(3n) {
+      border-bottom: 15px solid var(--wp--preset--color--alt-one);
+    }
+
+    &:nth-child(4n) {
+      border-bottom: 15px solid var(--wp--preset--color--alt-two);
+    }
+
+    &:nth-child(5n) {
+      border-bottom: 15px solid var(--wp--preset--color--alt-three);
+    }
+
+    &:nth-child(7n) {
+      border-bottom: 15px solid var(--wp--preset--color--alt-four);
+    }
+
+    .wp-block-accordion-heading__toggle-title {
+      font-size: 1.25rem;
+      margin: 0;
+      padding: 0 1.25rem;
+      color: var(--wp--preset--color--text-color);
+      cursor: pointer;
+    }
+
+    .wp-block-accordion-heading__toggle-icon {
+      display: none;
+    }
+
+    &.is-open {
+      .wp-block-accordion-heading__toggle-title {
+        font-size: 1.5rem;
+      }
+
+      &
+        > *:not(
+          h3,
+          h2,
+          h4,
+          .accordion-holder,
+          .accordion-selection,
+          .wp-block-iowa-aea-theme-accordion
+        ) {
+        height: auto;
+        overflow: visible;
+        margin: 0;
+        padding: 1rem 1.25rem;
+      }
+    }
   }
 }
