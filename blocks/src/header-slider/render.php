@@ -34,5 +34,7 @@ foreach ($inner_blocks as $inner_block) {
 
   data-wp-on--mouseover='actions.pauseSlideShow'
   data-wp-on--mouseout='actions.startSlideshow'
+  role='tabllist'
+  aria-labelledby='Header Slider'
 >
 </div>

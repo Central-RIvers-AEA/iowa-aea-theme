@@ -7,7 +7,6 @@ $context = array("attributes" => $attributes);
 
 ?>
 <div <?php echo get_block_wrapper_attributes(); ?> <?php echo wp_interactivity_data_wp_context($context) ?>>
-	Hallo
 	<?php if (!empty($attributes['titleOne'])): ?>
 		<h3><?php echo wp_kses_post($attributes['titleOne']); ?></h3>
 	<?php endif; ?>

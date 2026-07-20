@@ -53,8 +53,12 @@ const { actions, state } = store( 'iowa-aea-theme/header-slider', {
 
         // slide contents
         let slideContent = document.createElement('div');
+        slideContent.id = `tabpanel-${index}`;
         slideContent.classList.add('slide-content');
         slideContent.setAttribute('tabindex', 0);
+        slideContent.setAttribute('role', 'tabpanel');
+        slideContent.setAttribute('aria-labelledby', `tab-${index}`);
+
         slideContent.innerHTML = `
           <div class='slide-title'>${slide.title}</div>
           <p>${slide.content}</p>
@@ -66,12 +70,20 @@ const { actions, state } = store( 'iowa-aea-theme/header-slider', {
         slideContents.appendChild(slideContent);
 
         // tab contents
-        let tabContent = document.createElement('div');
+        let tabContent = document.createElement('button');
         tabContent.classList.add('label-content');
+
+        tabContent.role = 'tab'
+        tabContent.setAttribute('aria-selected', 'false');
+        tabContent.setAttribute('aria-controls', `tabpanel-${index}`);
+        tabContent.setAttribute('aria-selected', 'false');
+        tabContent.setAttribute('id', `tab-${index}`);
+
         tabContent.innerHTML = slide.slideLabel;
         tabContent.dataset.slideTabIndex = index;
         tabContent.addEventListener('click', () => {
           actions.setVisibleSlide(index);
+
         })
         tabContents.appendChild(tabContent);
 
@@ -110,6 +122,7 @@ const { actions, state } = store( 'iowa-aea-theme/header-slider', {
       const slideTabs = document.querySelectorAll('[data-slide-tab-index]');
       slideTabs.forEach((tab) => {
         tab.classList.toggle('active', tab.dataset.slideTabIndex == index);
+        tab.setAttribute('aria-selected', tab.dataset.slideTabIndex == index);
       });
     },
     startSlideshow: () => {
