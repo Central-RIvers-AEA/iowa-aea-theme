@@ -146,6 +146,9 @@
   align-items: flex-end;
   box-sizing: border-box;
 }
+.wp-block-iowa-aea-theme-header-slider .tab-contents button {
+  font-size: 1rem;
+}
 .wp-block-iowa-aea-theme-header-slider .label-content {
   --main-color: var(--wp--preset--color--primary);
   background: white;
