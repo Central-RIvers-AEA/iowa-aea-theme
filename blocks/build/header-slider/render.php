@@ -27,13 +27,9 @@ foreach ($inner_blocks as $inner_block) {
   <?php echo get_block_wrapper_attributes(); ?>
   data-wp-interactive="iowa-aea-theme/header-slider"
   <?php echo wp_interactivity_data_wp_context( $context ); ?>
-  aria-live='off'
+  aria-live='polite'
   data-wp-init='init.setup'
-  data-wp-on--focusin='actions.pauseSlideShow'
-  data-wp-on--focusout='actions.startSlideshow'
-
-  data-wp-on--mouseover='actions.pauseSlideShow'
-  data-wp-on--mouseout='actions.startSlideshow'
-  aria-labelledby='Header Slider'
+  aria-label='Header Slidshow'
+  aria-roledescription="carousel"
 >
 </div>

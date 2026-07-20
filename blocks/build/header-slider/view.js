@@ -83,6 +83,14 @@ const {
       }
       actions.setVisibleSlide(next);
     },
+    prevSlide: context => {
+      let next = state.currentSlide - 1;
+      let slidesData = context.slides || [];
+      if (next < 0) {
+        next = slidesData.length - 1;
+      }
+      actions.setVisibleSlide(next);
+    },
     loadSlideShow: () => {
       const context = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.getContext)();
       const element = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.getElement)();
@@ -99,7 +107,7 @@ const {
       let tabContents = document.createElement('div');
       tabContents.classList.add('tab-contents');
       tabContents.setAttribute('role', 'tablist');
-      tabContents.setAttribute('aria-label', 'Slide Tabs');
+      tabContents.setAttribute('aria-label', 'Slide Navigation');
       contentTabContainer.appendChild(tabContents);
       let imageContents = document.createElement('div');
       imageContents.classList.add('image-contents');
@@ -107,10 +115,10 @@ const {
       slidesData.forEach((slide, index) => {
         // slide contents
         let slideContent = document.createElement('div');
-        slideContent.id = `tabpanel-${index}`;
+        slideContent.id = `slide-${index}`;
         slideContent.classList.add('slide-content');
         slideContent.setAttribute('tabindex', 0);
-        slideContent.setAttribute('role', 'tabpanel');
+        slideContent.setAttribute('aria-roledescription', 'slide');
         slideContent.setAttribute('aria-labelledby', `tab-${index}`);
         slideContent.innerHTML = `
           <div class='slide-title'>${slide.title}</div>
@@ -127,7 +135,7 @@ const {
         tabContent.classList.add('label-content');
         tabContent.role = 'tab';
         tabContent.setAttribute('aria-selected', 'false');
-        tabContent.setAttribute('aria-controls', `tabpanel-${index}`);
+        tabContent.setAttribute('aria-controls', `slide-${index}`);
         tabContent.setAttribute('aria-selected', 'false');
         tabContent.setAttribute('id', `tab-${index}`);
         tabContent.innerHTML = slide.slideLabel;
@@ -144,7 +152,52 @@ const {
         imageContent.innerHTML = `<img src="${slide.image}" alt="${slide.title}" loading="lazy" />`;
         imageContents.appendChild(imageContent);
       });
+      actions.addControls();
       actions.startSlideshow();
+    },
+    addControls: () => {
+      const element = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.getElement)();
+      let context = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.getContext)();
+      let previous = document.createElement('button');
+      previous.innerHTML = '<span class="dashicons dashicons-controls-back"></span>';
+      previous.setAttribute('aria-label', 'Previous Slide');
+      previous.addEventListener('click', () => {
+        actions.prevSlide(context);
+      });
+      let next = document.createElement('button');
+      next.innerHTML = '<span class="dashicons dashicons-controls-forward"></span>';
+      next.setAttribute('aria-label', 'Next Slide');
+      next.addEventListener('click', () => {
+        actions.nextSlide(context);
+      });
+      let pause = document.createElement('button');
+      pause.innerHTML = '<span class="dashicons dashicons-controls-pause"></span>';
+      pause.setAttribute('aria-label', 'Pause Slide');
+      pause.addEventListener('click', () => {
+        actions.pauseSlideShow();
+        play.classList.remove('active');
+        pause.classList.add('active');
+      });
+      let play = document.createElement('button');
+      play.innerHTML = '<span class="dashicons dashicons-controls-play"></span>';
+      play.setAttribute('aria-label', 'Play Slideshow');
+      play.addEventListener('click', () => {
+        actions.startSlideshow(context);
+        play.classList.add('active');
+        pause.classList.remove('active');
+      });
+      previous.classList.add('previous');
+      next.classList.add('next');
+      pause.classList.add('pause');
+      play.classList.add('play');
+      play.classList.add('active');
+      let controls = document.createElement('div');
+      controls.classList.add('controls');
+      controls.appendChild(previous);
+      controls.appendChild(pause);
+      controls.appendChild(play);
+      controls.appendChild(next);
+      element.ref.appendChild(controls);
     },
     setVisibleSlide(index) {
       state.currentSlide = index;
@@ -169,8 +222,8 @@ const {
         tab.setAttribute('aria-selected', tab.dataset.slideTabIndex == index);
       });
     },
-    startSlideshow: () => {
-      let context = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.getContext)();
+    startSlideshow: context => {
+      context || (context = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.getContext)());
       actions.setVisibleSlide(state.currentSlide);
       let interval = setInterval(() => {
         actions.nextSlide(context);

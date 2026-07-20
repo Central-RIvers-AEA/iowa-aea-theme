@@ -14,11 +14,39 @@
 }
 @media (min-width: 900px) {
   .wp-block-iowa-aea-theme-header-slider {
-    height: 400px;
+    min-height: 400px;
   }
 }
 @media (min-width: 1280px) {
   .wp-block-iowa-aea-theme-header-slider {
-    height: 600px;
+    min-height: 600px;
   }
+}
+.wp-block-iowa-aea-theme-header-slider .controls {
+  background: var(--wp--preset--color--primary);
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  justify-content: center;
+}
+.wp-block-iowa-aea-theme-header-slider .controls .previous {
+  margin-left: auto;
+}
+.wp-block-iowa-aea-theme-header-slider .controls .next {
+  margin-right: auto;
+}
+.wp-block-iowa-aea-theme-header-slider .controls button {
+  background: white;
+  border: 2px solid var(--wp--preset--color--primary);
+  color: var(--wp--preset--color--primary);
+  padding: 0.5rem 1rem;
+  border-radius: 15px;
+  cursor: pointer;
+}
+.wp-block-iowa-aea-theme-header-slider .controls button:hover, .wp-block-iowa-aea-theme-header-slider .controls button:focus, .wp-block-iowa-aea-theme-header-slider .controls button.active {
+  background: var(--wp--preset--color--primary);
+  color: white;
+  border-color: white;
 }

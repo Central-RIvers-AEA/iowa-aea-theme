@@ -11,11 +11,44 @@
   min-height: 200px;
 
   @media (min-width: 900px){
-    height: 400px;
+    min-height: 400px;
   }
 
   @media (min-width: 1280px){
-    height: 600px;
+    min-height: 600px;
+  }
+
+  .controls{
+    background: var(--wp--preset--color--primary);
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+    justify-content: center;
+
+    .previous{
+      margin-right: auto;
+    }
+
+    .next{
+      margin-left: auto;
+    }
+
+    button{
+      background: white;
+      border: 2px solid var(--wp--preset--color--primary);
+      color: var(--wp--preset--color--primary);
+      padding: 0.5rem 1rem;
+      border-radius: 15px;
+      cursor: pointer;
+
+      &:hover, &:focus, &.active{
+        background: var(--wp--preset--color--primary);
+        color: white;
+        border-color: white;
+      }
+    }
   }
 
   
