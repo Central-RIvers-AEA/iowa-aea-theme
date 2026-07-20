@@ -98,6 +98,8 @@ const {
       contentTabContainer.appendChild(slideContents);
       let tabContents = document.createElement('div');
       tabContents.classList.add('tab-contents');
+      tabContents.setAttribute('role', 'tablist');
+      tabContents.setAttribute('aria-label', 'Slide Tabs');
       contentTabContainer.appendChild(tabContents);
       let imageContents = document.createElement('div');
       imageContents.classList.add('image-contents');

@@ -42,6 +42,8 @@ const { actions, state } = store( 'iowa-aea-theme/header-slider', {
 
       let tabContents = document.createElement('div');
       tabContents.classList.add('tab-contents');
+      tabContents.setAttribute('role', 'tablist');
+      tabContents.setAttribute('aria-label', 'Slide Tabs')
       contentTabContainer.appendChild(tabContents);
 
       let imageContents = document.createElement('div');
@@ -83,7 +85,6 @@ const { actions, state } = store( 'iowa-aea-theme/header-slider', {
         tabContent.dataset.slideTabIndex = index;
         tabContent.addEventListener('click', () => {
           actions.setVisibleSlide(index);
-
         })
         tabContents.appendChild(tabContent);
 
