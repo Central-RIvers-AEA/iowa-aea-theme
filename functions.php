@@ -246,7 +246,7 @@ function iowa_aea_theme_skip_to_content() {
 
 /** Google Translation Setup and enqueue */
 function iowa_aea_google_translate_enqueue() {
-    wp_enqueue_script( 'google-translate-init', get_stylesheet_directory_uri() . '/assets/js/translate_script.js', array(), null, true );
+    wp_enqueue_script( 'google-translate-init', get_stylesheet_directory_uri() . '/assets/js/translate_script.js', array(), fileatime( get_stylesheet_directory() . '/assets/js/translate_script.js'), true );
     wp_enqueue_script( 'google-translate', '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit', array('google-translate-init'), null, true );
 }
 

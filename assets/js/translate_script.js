@@ -30,7 +30,16 @@ function googleTranslateElementInit() {
   // Modify the default text after widget loads
   setTimeout(() => {
     modifyTranslateText();
+    addAriaLables();
   }, 500);
+}
+
+function addAriaLables() {
+  document.querySelector('#goog-gt-votingInputSrcLang')?.setAttribute('aria-label', 'Source Language')
+  document.querySelector('#goog-gt-votingInputTrgLang')?.setAttribute('aria-label', 'Target Language')
+  document.querySelector('#goog-gt-votingInputSrcText')?.setAttribute('aria-label', 'Source Text')
+  document.querySelector('#goog-gt-votingInputTrgText')?.setAttribute('aria-label', 'Target Text')
+  document.querySelector('#goog-gt-votingInputVote')?.setAttribute('aria-label', 'Vote')
 }
 
 function modifyTranslateText() {
