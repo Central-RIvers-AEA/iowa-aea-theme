@@ -252,5 +252,12 @@ function iowa_aea_google_translate_enqueue() {
 
 add_action( 'wp_enqueue_scripts', 'iowa_aea_google_translate_enqueue' );
 
+/** Google Translation Setup and enqueue */
+function iowa_aea_search_enqueue() {
+    wp_enqueue_script( 'iaea_search', get_stylesheet_directory_uri() . '/assets/js/search.js', array(), fileatime( get_stylesheet_directory() . '/assets/js/search.js'), true );
+}
+
+add_action( 'wp_enqueue_scripts', 'iowa_aea_search_enqueue' );
+
 /* End of functions.php */
 
