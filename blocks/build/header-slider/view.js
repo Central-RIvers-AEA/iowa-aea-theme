@@ -106,7 +106,6 @@ const {
       contentTabContainer.appendChild(slideContents);
       let tabContents = document.createElement('div');
       tabContents.classList.add('tab-contents');
-      tabContents.setAttribute('role', 'tablist');
       tabContents.setAttribute('aria-label', 'Slide Navigation');
       contentTabContainer.appendChild(tabContents);
       let imageContents = document.createElement('div');
@@ -117,9 +116,7 @@ const {
         let slideContent = document.createElement('div');
         slideContent.id = `slide-${index}`;
         slideContent.classList.add('slide-content');
-        slideContent.setAttribute('tabindex', 0);
         slideContent.setAttribute('aria-roledescription', 'slide');
-        slideContent.setAttribute('aria-labelledby', `tab-${index}`);
         slideContent.innerHTML = `
           <div class='slide-title'>${slide.title}</div>
           <p>${slide.content}</p>
@@ -133,10 +130,6 @@ const {
         // tab contents
         let tabContent = document.createElement('button');
         tabContent.classList.add('label-content');
-        tabContent.role = 'tab';
-        tabContent.setAttribute('aria-selected', 'false');
-        tabContent.setAttribute('aria-controls', `slide-${index}`);
-        tabContent.setAttribute('aria-selected', 'false');
         tabContent.setAttribute('id', `tab-${index}`);
         tabContent.innerHTML = slide.slideLabel;
         tabContent.dataset.slideTabIndex = index;

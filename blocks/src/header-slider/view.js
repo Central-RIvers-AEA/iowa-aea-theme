@@ -53,7 +53,6 @@ const { actions, state } = store( 'iowa-aea-theme/header-slider', {
 
       let tabContents = document.createElement('div');
       tabContents.classList.add('tab-contents');
-      tabContents.setAttribute('role', 'tablist');
       tabContents.setAttribute('aria-label', 'Slide Navigation')
       contentTabContainer.appendChild(tabContents);
 
@@ -68,9 +67,7 @@ const { actions, state } = store( 'iowa-aea-theme/header-slider', {
         let slideContent = document.createElement('div');
         slideContent.id = `slide-${index}`;
         slideContent.classList.add('slide-content');
-        slideContent.setAttribute('tabindex', 0);
         slideContent.setAttribute('aria-roledescription', 'slide');
-        slideContent.setAttribute('aria-labelledby', `tab-${index}`);
 
         slideContent.innerHTML = `
           <div class='slide-title'>${slide.title}</div>
@@ -84,12 +81,8 @@ const { actions, state } = store( 'iowa-aea-theme/header-slider', {
 
         // tab contents
         let tabContent = document.createElement('button');
-        tabContent.classList.add('label-content');
+        tabContent.classList.add('label-content')
 
-        tabContent.role = 'tab'
-        tabContent.setAttribute('aria-selected', 'false');
-        tabContent.setAttribute('aria-controls', `slide-${index}`);
-        tabContent.setAttribute('aria-selected', 'false');
         tabContent.setAttribute('id', `tab-${index}`);
 
         tabContent.innerHTML = slide.slideLabel;

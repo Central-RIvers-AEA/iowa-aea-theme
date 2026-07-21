@@ -10,4 +10,11 @@ document.addEventListener('DOMContentLoaded', () => {
   input.setAttribute('aria-label', 'Search')
   input.classList.add('screen-reader-text')
   document.querySelector('form[role="search"]')?.append(input)
+
+
+  // Check current-page announcement
+
+  document.querySelectorAll(`a[href="${location.pathname}"]`).forEach(link => {
+    link.setAttribute('aria-current', 'page')
+  })
 })
