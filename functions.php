@@ -252,12 +252,19 @@ function iowa_aea_google_translate_enqueue() {
 
 add_action( 'wp_enqueue_scripts', 'iowa_aea_google_translate_enqueue' );
 
-/** Google Translation Setup and enqueue */
+/** Search Fix and enqueue */
 function iowa_aea_search_enqueue() {
     wp_enqueue_script( 'iaea_search', get_stylesheet_directory_uri() . '/assets/js/search.js', array(), fileatime( get_stylesheet_directory() . '/assets/js/search.js'), true );
 }
 
 add_action( 'wp_enqueue_scripts', 'iowa_aea_search_enqueue' );
+
+/** Dashicons and enqueue */
+
+add_action( 'wp_enqueue_scripts', 'enqueue_dashicons_frontend' );
+function enqueue_dashicons_frontend() {
+    wp_enqueue_style( 'dashicons' );
+}
 
 /* End of functions.php */
 

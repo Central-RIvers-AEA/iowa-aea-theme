@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
 				</svg>`
 
   input.classNames = 'wp-block-search__button has-icon wp-element-button'
+  input.name = 'search'
+  input.setAttribute('aria-label', 'Search')
   input.classList.add('screen-reader-text')
   document.querySelector('form[role="search"]')?.append(input)
 })

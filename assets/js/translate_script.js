@@ -41,6 +41,14 @@ function addAriaLables() {
   document.querySelector('#goog-gt-votingInputTrgText')?.setAttribute('aria-label', 'Target Text')
   document.querySelector('#goog-gt-votingInputVote')?.setAttribute('aria-label', 'Vote')
   document.querySelector('[name="votingFrame"]')?.setAttribute('title', 'Voting Frame')
+
+  let submit = document.createElement('button')
+  submit.type = 'submit'
+
+  submit.innerText = 'Submit'
+  submit.style='display: none'
+
+  document.querySelector('#goog-gt-votingForm')?.append(submit)
 }
 
 function modifyTranslateText() {
