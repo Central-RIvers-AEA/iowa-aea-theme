@@ -20,5 +20,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.querySelectorAll('svg').forEach(svg => {
     svg.setAttribute('aria-hidden', 'true')
-  }
+  })
 })
