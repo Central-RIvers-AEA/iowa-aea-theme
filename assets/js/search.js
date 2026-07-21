@@ -21,4 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('svg').forEach(svg => {
     svg.setAttribute('aria-hidden', 'true')
   })
+
+  document.querySelector('.secondary-menu')?.setAttribute('aria-label', 'Secondary Menu')
+  document.querySelector('.primary-menu')?.setAttribute('aria-label', 'Primary Menu')
 })
