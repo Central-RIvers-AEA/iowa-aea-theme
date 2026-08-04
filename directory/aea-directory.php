@@ -80,10 +80,31 @@ add_action('rest_api_init', function(){
     register_rest_field('aea', $field_name, array(
       'get_callback' => function($post) use ($field_name) {
         $value = get_post_meta($post['id'], $field_name, true);
-        return $value;
+        // Sanitize output for REST API to prevent XSS if meta data contains malicious content
+        switch ($field_name) {
+          case 'website':
+            return esc_url($value);
+          case 'email':
+            return sanitize_email($value);
+          default:
+            return sanitize_text_field($value);
+        }
       },
       'update_callback' => function($value, $post) use ($field_name) {
-        return update_post_meta($post->ID, $field_name, $value);
+        // Sanitize input before updating post meta
+        $sanitized_value = '';
+        switch ($field_name) {
+          case 'website':
+            $sanitized_value = esc_url_raw($value);
+            break;
+          case 'email':
+            $sanitized_value = sanitize_email($value);
+            break;
+          default:
+            $sanitized_value = sanitize_text_field($value);
+            break;
+        }
+        return update_post_meta($post->ID, $field_name, $sanitized_value);
       },
       'schema' => array(
         'description' => $description,
@@ -91,4 +112,39 @@ add_action('rest_api_init', function(){
       )
     ));
   }
+
+  // Register a permission callback for the entire 'aea' post type REST API base
+  // This ensures that only authorized users can access AEA data via the REST API
+  register_rest_route( 'wp/v2', '/aea', array(
+    'methods' => 'GET',
+    'callback' => 'get_posts', // Default callback for post types
+    'permission_callback' => function() {
+      // For AEA data, requiring 'edit_posts' is a reasonable default for sensitive data.
+      // Adjust capability as needed based on who should view AEA data via REST.
+      return current_user_can( 'edit_posts' );
+    },
+    'args' => array(
+      // Inherit default args from register_post_type
+    ),
+  ) );
+
+  register_rest_route( 'wp/v2', '/aea/(?P<id>\d+)', array(
+    'methods' => 'GET',
+    'callback' => 'get_post', // Default callback for single post
+    'permission_callback' => function($request) {
+      // Ensure user can read the specific AEA post
+      $post = get_post( $request['id'] );
+      if ( ! $post || $post->post_type !== 'aea' ) {
+        return new WP_Error( 'rest_post_invalid_id', __( 'Invalid AEA ID.', 'textdomain' ), array( 'status' => 404 ) );
+      }
+      return current_user_can( 'read_post', $post->ID );
+    },
+    'args' => array(
+      'id' => array(
+        'validate_callback' => function($param, $request, $key) {
+          return is_numeric($param);
+        }
+      ),
+    ),
+  ) );
 });

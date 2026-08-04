@@ -238,6 +238,7 @@ function sd_enqueue_admin_css_js(){
   }
 
   wp_enqueue_script( 'sd-admin-js', get_stylesheet_directory_uri() . '/assets/js/school-directory-admin.js', array(), '1.1', true );
+  wp_enqueue_script( 'wp-api' ); // Enqueue wp-api here
   wp_enqueue_style( 'sd-admin-css', get_stylesheet_directory_uri() . '/assets/css/school-directory-admin.css', array(), '1.0' );
 }
 
@@ -273,18 +274,56 @@ function sd_handle_save($post_id){
     return;
 
   if(!isset($_POST['school_directory_nonce'])) {
+    error_log('School directory nonce missing for post ID: ' . $post_id);
     return;
   }
 
   if(!wp_verify_nonce( $_POST['school_directory_nonce'], basename( __FILE__ ) )){ 
+    error_log('School directory nonce verification failed for post ID: ' . $post_id);
+    return; 
+  }
+
+  // Check user capabilities
+  if ( ! current_user_can( 'edit_post', $post_id ) ) {
+    error_log('Unauthorized attempt to save school/district details for post ID: ' . $post_id . ' by user ID: ' . get_current_user_id());
     return; 
   }
 
   $fields = array('address', 'city_state_zip', 'phone_number', 'website', 'building_level', 'unique_id', 'school_personnel', 'fax_number', 'aea', 'district');
 
   foreach($fields as $field){
-    if(isset($_POST[$field]) && $_POST[$field] != ''){
-      update_post_meta( $post_id, $field, $_POST[$field] );
+    if(isset($_POST[$field])){
+      if ($field === 'school_personnel') {
+        $sanitized_personnel = [];
+        if (is_array($_POST[$field])) {
+          foreach ($_POST[$field] as $id => $person) {
+            $sanitized_personnel[$id] = [
+              'name' => sanitize_text_field($person['name'] ?? ''),
+              'title' => sanitize_text_field($person['title'] ?? ''),
+              'email' => sanitize_email($person['email'] ?? ''),
+            ];
+          }
+        }
+        update_post_meta($post_id, $field, $sanitized_personnel);
+      } else {
+        $value = '';
+        switch ($field) {
+          case 'website':
+            $value = esc_url_raw($_POST[$field]);
+            break;
+          case 'phone_number':
+          case 'fax_number':
+            $value = sanitize_text_field($_POST[$field]); // Basic sanitization for phone/fax
+            break;
+          case 'email': // Although not in $fields, good to have a case for it
+            $value = sanitize_email($_POST[$field]);
+            break;
+          default:
+            $value = sanitize_text_field($_POST[$field]);
+            break;
+        }
+        update_post_meta( $post_id, $field, $value );
+      }
     } else {
       delete_post_meta( $post_id, $field );
     }
@@ -357,6 +396,7 @@ function sd_district_import_page(){
       <form class='form-table' role='presentation' method='post' action='<?= admin_url( 'admin-post.php' ); ?>' enctype='multipart/form-data'>
         <!-- action post -->
         <input type='hidden' name='action' value='import_districts' />
+        <?php wp_nonce_field( 'import_districts_nonce_action', 'import_districts_nonce' ); ?>
         <table>
           <tbody>
             <tr>
@@ -373,6 +413,16 @@ function sd_district_import_page(){
 }
 
 function sd_import_districts(){
+  if ( ! isset( $_POST['import_districts_nonce'] ) || ! wp_verify_nonce( $_POST['import_districts_nonce'], 'import_districts_nonce_action' ) ) {
+    sd_add_flash_notice( 'Security check failed.', "error");
+    wp_redirect( 'edit.php?post_type=employee&page=district-import', 301 );
+    exit;
+  }
+  
+  if(!current_user_can('manage_options')){
+    die('You are not authorized to perform this action.');
+  }
+
   $post = $_POST;
   $extension = pathinfo($_FILES['district_import_file']['name'], PATHINFO_EXTENSION);
 
@@ -394,18 +444,18 @@ function sd_import_districts(){
     }
     
     foreach($dataArray as $row){
-      $old_post_id = trim($row['old_post_id']);
-      $post_id = trim($row['post_id']);
-      $name = trim($row['name']);
-      $address = $row['address'];
-      $city_state_zip = $row['city_state_zip'];
-      $aea = $row['aea'];
+      $old_post_id = sanitize_text_field(trim($row['old_post_id'] ?? ''));
+      $post_id = sanitize_text_field(trim($row['post_id'] ?? ''));
+      $name = sanitize_text_field(trim($row['name'] ?? ''));
+      $address = sanitize_text_field($row['address'] ?? '');
+      $city_state_zip = sanitize_text_field($row['city_state_zip'] ?? '');
+      $aea = sanitize_text_field($row['aea'] ?? '');
 
-      $phone_number = $row['phone_number'];
-      $fax_number = $row['fax_number'];
+      $phone_number = sanitize_text_field($row['phone_number'] ?? '');
+      $fax_number = sanitize_text_field($row['fax_number'] ?? '');
 
-      $website = $row['website'];
-      $personnel = $row['personnel'];
+      $website = esc_url_raw($row['website'] ?? '');
+      $personnel = $row['personnel'] ?? '';
 
       if(!empty($personnel)){
         $school_personnel = array();
@@ -413,28 +463,28 @@ function sd_import_districts(){
           $id = gettimeofday()['sec'];
           $school_personnel[$id] = array();
 
-          $person_split = explode('|', $person);
+          $person_split = array_map('trim', explode('|', $person));
 
-          $school_personnel[$id]['name'] = $person_split[0];
-          $school_personnel[$id]['title'] = $person_split[1];
-          $school_personnel[$id]['email'] = $person_split[2];
+          $school_personnel[$id]['name'] = sanitize_text_field($person_split[0] ?? '');
+          $school_personnel[$id]['title'] = sanitize_text_field($person_split[1] ?? '');
+          $school_personnel[$id]['email'] = sanitize_email($person_split[2] ?? '');
         }
       }
         
       $postArray = array(
-        'post_title' => $name,
+        'post_title' => sanitize_text_field($name),
         'post_content' => '',
         'post_type' => 'district',
         'post_status' => 'publish',
         'meta_input' => array(
-          'address' => $address,
-          'city_state_zip' => $city_state_zip,
-          'phone_number' => $phone_number,
-          'fax_number' => $fax_number,
-          'website' => $website,
+          'address' => sanitize_text_field($address),
+          'city_state_zip' => sanitize_text_field($city_state_zip),
+          'phone_number' => sanitize_text_field($phone_number),
+          'fax_number' => sanitize_text_field($fax_number),
+          'website' => esc_url_raw($website),
           'school_personnel' => $school_personnel,
-          'old_post_id' => $old_post_id,
-          'aea' => $aea
+          'old_post_id' => sanitize_text_field($old_post_id),
+          'aea' => sanitize_text_field($aea)
         )
       );
 
@@ -492,7 +542,8 @@ function sd_school_import_page(){
     <p>If any doubt of missing info, export your list of schools first before importing them</p>
     <form class='form-table' role='presentation' method='post' action='<?= admin_url( 'admin-post.php' ); ?>' enctype='multipart/form-data'>
       <!-- action post -->
-      <input type='hidden' name='action' value='import_schools' />
+       
+      <input type='hidden' name='action' value='import_schools' /><?php wp_nonce_field( 'import_schools_nonce_action', 'import_schools_nonce' ); ?>
       <table>
         <tbody>
           <tr>
@@ -509,6 +560,15 @@ function sd_school_import_page(){
 }
 
 function sd_import_schools(){
+  if ( ! isset( $_POST['import_schools_nonce'] ) || ! wp_verify_nonce( $_POST['import_schools_nonce'], 'import_schools_nonce_action' ) ) {
+    sd_add_flash_notice( 'Security check failed.', "error");
+    wp_redirect( 'edit.php?post_type=employee&page=school-import', 301 );
+    exit;
+  }
+  if(!current_user_can('manage_options')){
+    die('You are not authorized to perform this action.');
+  }
+
   $post = $_POST;
   $extension = pathinfo($_FILES['school_import_file']['name'], PATHINFO_EXTENSION);
   // echo 'hello';
@@ -531,17 +591,17 @@ function sd_import_schools(){
     }
     
     foreach($dataArray as $row){
-      $district_post_id = trim($row['district_post_id']);
-      $post_id = trim($row['post_id']);
-      $name = trim($row['name']);
-      $address = $row['address'];
-      $city_state_zip = $row['city_state_zip'];
+      $district_post_id = sanitize_text_field(trim($row['district_post_id'] ?? ''));
+      $post_id = sanitize_text_field(trim($row['post_id'] ?? ''));
+      $name = sanitize_text_field(trim($row['name'] ?? ''));
+      $address = sanitize_text_field($row['address'] ?? '');
+      $city_state_zip = sanitize_text_field($row['city_state_zip'] ?? '');
 
-      $phone_number = $row['phone_number'];
-      $fax_number = $row['fax_number'];
+      $phone_number = sanitize_text_field($row['phone_number'] ?? '');
+      $fax_number = sanitize_text_field($row['fax_number'] ?? '');
 
-      $website = $row['website'];
-      $personnel = $row['personnel'];
+      $website = esc_url_raw($row['website'] ?? '');
+      $personnel = $row['personnel'] ?? '';
 
       $school_personnel = array();
       foreach(explode(';', $personnel) as $person){
@@ -549,25 +609,25 @@ function sd_import_schools(){
         $school_personnel[$id] = array();
 
         $person_split = explode('|', $person);
-
-        $school_personnel[$id]['name'] = $person_split[0];
-        $school_personnel[$id]['title'] = $person_split[1];
-        $school_personnel[$id]['email'] = $person_split[2];
+        
+        $school_personnel[$id]['name'] = sanitize_text_field($person_split[0] ?? '');
+        $school_personnel[$id]['title'] = sanitize_text_field($person_split[1] ?? '');
+        $school_personnel[$id]['email'] = sanitize_email($person_split[2] ?? '');
       }
 
       $postArray = array(
-        'post_title' => $name,
+        'post_title' => sanitize_text_field($name),
         'post_content' => '',
         'post_type' => 'school',
         'post_status' => 'publish',
         'meta_input' => array(
-          'address' => $address,
-          'city_state_zip' => $city_state_zip,
-          'phone_number' => $phone_number,
-          'fax_number' => $fax_number,
-          'website' => $website,
+          'address' => sanitize_text_field($address),
+          'city_state_zip' => sanitize_text_field($city_state_zip),
+          'phone_number' => sanitize_text_field($phone_number),
+          'fax_number' => sanitize_text_field($fax_number),
+          'website' => esc_url_raw($website),
           'school_personnel' => $school_personnel,
-          'district' => $district_post_id
+          'district' => sanitize_text_field($district_post_id)
         )
       );
 
@@ -627,12 +687,26 @@ function sd_add_flash_notice( $notice = "", $type = "warning", $dismissible = tr
 add_action('rest_api_init', function(){
   register_rest_route( 'schooldirectory/v1', '/districts/export', array(
     'methods' => 'GET',
-    'callback' => 'sd_export_district_info_json'
+    'callback' => 'sd_export_district_info_json',
+    'permission_callback' => function() {
+      // Only allow users with 'manage_options' capability to export sensitive data
+      return current_user_can( 'manage_options' );
+    },
+    'args' => array(
+      // No specific args for this export, but good to have the array
+    ),
   ));
 
   register_rest_route( 'schooldirectory/v1', '/schools/export', array(
     'methods' => 'GET',
-    'callback' => 'sd_export_school_info_json'
+    'callback' => 'sd_export_school_info_json',
+    'permission_callback' => function() {
+      // Only allow users with 'manage_options' capability to export sensitive data
+      return current_user_can( 'manage_options' );
+    },
+    'args' => array(
+      // No specific args for this export, but good to have the array
+    ),
   ));
 });
 
@@ -662,7 +736,7 @@ function sd_export_district_info_json($data){
       }
     }
 
-    $district_data['title'] = $district->post_title;
+    $district_data['name'] = $district->post_title;
     $district_data['address'] = get_post_meta($district->ID, 'address', true);
     $district_data['city_state_zip'] = get_post_meta($district->ID, 'city_state_zip', true);
     $district_data['phone_number'] = get_post_meta($district->ID, 'phone_number', true);
@@ -760,8 +834,10 @@ function sd_export_district_buttons(){
           })
 
           function getDistrictDataCreateCSV(){
-            fetch('<?php echo site_url() . '/wp-json/schooldirectory/v1/districts/export' ?>')
-              .then(data => data.json())
+            wp.apiFetch({
+              path: '/schooldirectory/v1/districts/export',
+              method: 'GET', // GET is default, but explicit is fine
+            })
               .then(jsonToCSV)
           }
 
@@ -822,9 +898,10 @@ function sd_export_schools_button(){
           })
 
           function getSchoolsDataCreateCSV(){
-            fetch('<?php echo site_url() . '/wp-json/schooldirectory/v1/schools/export' ?>')
-              .then(data => data.json())
-              .then(jsonToCSV)
+            wp.apiFetch({
+              path: '/schooldirectory/v1/schools/export',
+              method: 'GET',
+            }).then(jsonToCSV)
           }
 
           function jsonToCSV(data){

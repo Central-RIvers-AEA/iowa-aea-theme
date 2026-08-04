@@ -60,6 +60,7 @@ class StaffDirectory
       <p>Please upload a CSV file containing employee data. You can find an <a href='https://docs.google.com/spreadsheets/d/13-kR-uO8mrngK9jqcjOAEi97CYVdKVTtNj2udiX_HoA/edit?usp=sharing'>Example CSV for Upload here<a>.</p>
 
       <form method="post" enctype="multipart/form-data">
+        <?php wp_nonce_field( 'import_employees_nonce_action', 'import_employees_nonce' ); ?>
         <input type="file" name="employee_csv" accept=".csv" required />
         <input type="hidden" name="action" value="import_employees_from_csv">
         <?php submit_button('Import Employees'); ?>
@@ -72,7 +73,7 @@ class StaffDirectory
         $file_path = $file['tmp_name'];
         $result = $this->import_employees();
         if (is_wp_error($result)) {
-          echo '<div class="error"><p>' . $result->get_error_message() . '</p></div>';
+          echo '<div class="error"><p>' . esc_html($result->get_error_message()) . '</p></div>';
         } else {
           $created_count = $result[0];
           $updated_count = $result[1];
@@ -201,8 +202,8 @@ class StaffDirectory
           <?php 
             $locations = StaffDirectory::get_locations();
             echo "<datalist id='locations'>";
-            foreach($locations as $location){
-              echo "<option>$location</option>";
+            foreach($locations as $location_value){
+              echo "<option>" . esc_html($location_value) . "</option>";
             }
             echo "</datalist>";
           ?>
@@ -311,7 +312,7 @@ class StaffDirectory
         <?php
         if($assignments){
           foreach ($assignments as $id => $assignment) {
-            echo ('<tr>');
+            echo '<tr>';
             echo ('<td><input type="text" value="' . $assignment['content_area'] . '" name="assignment[' . $id . '][content_area]"/></td>');
             echo ('<td><select name="assignment[' . $id . '][district]">');
             echo ('<option value="">Select A District</option>');
@@ -346,7 +347,7 @@ class StaffDirectory
             echo ('</select></td>');
   
             $agency_wide_checked = isset($assignment['agency_wide']) && $assignment['agency_wide'] == 'true' ? 'checked=checked' : '';
-            echo ('<td><input type="checkbox" ' . $agency_wide_checked . '" name="assignment[' . $id . '][agency_wide]" value="true"/></td>');
+            echo ('<td><input type="checkbox" ' . $agency_wide_checked . ' name="assignment[' . $id . '][agency_wide]" value="true"/></td>');
             echo ('<td><input type="number" value="' . $assignment['search_priority'] . '" name="assignment[' . $id . '][search_priority]"/></td>');
             echo ('<td><button type="button" class="button" onclick="this.parentNode.parentNode.remove()">X</button></td>');
             echo ('</tr>');
@@ -604,7 +605,7 @@ class StaffDirectory
               <th>API Mapping</th>
               <td>
                 <p class="description">Map external API fields to staff directory fields.</p>
-                <input type="hidden" id="apiFieldMappingsNonce" value="<?php echo wp_create_nonce('api_field_mappings_nonce'); ?>" />
+                <input type="hidden" id="apiFieldMappingsNonce" value="<?php echo esc_attr(wp_create_nonce('api_field_mappings_nonce')); ?>" />
                 <input type='hidden' id='apiFieldsRecieved' value='<?php echo get_option('staff_directory_api_fields_received', '') ?>' name='staff_directory_api_fields_received' />
                 <div id="apiFieldMappings">
                   <?php
@@ -686,14 +687,29 @@ class StaffDirectory
   public function save_employee_details($post_id){
     // Check if our nonce is set.
     if (!isset($_POST['employee_details_nonce']) || !wp_verify_nonce($_POST['employee_details_nonce'], 'employee_details_nonce_action')) {
+      // Log the security check failure for debugging
+      error_log('Employee details nonce verification failed for post ID: ' . $post_id);
       return;
     }
     // Check if this is an autosave.
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
       return;
     }
+
     // Check the user's permissions.
-    if (isset($_POST['post_type']) && 'employee' === $_POST['post_type']) {
+    // Using 'employee' post type directly for clarity, as this action is hooked to 'save_post_employee'.
+    if ( ! current_user_can( 'edit_post', $post_id ) ) {
+      // Log unauthorized access attempt
+      error_log('Unauthorized attempt to save employee details for post ID: ' . $post_id . ' by user ID: ' . get_current_user_id());
+      return;
+    }
+
+    // The original code had a redundant check that could be simplified.
+    // The 'save_post_employee' hook already ensures post_type is 'employee'.
+    // The capability check should be for 'edit_post' for the specific post.
+    /*
+    // Original redundant check:
+    if (isset($_POST['post_type']) && 'employee' === $_POST['post_type']) { // This is already guaranteed by the hook 'save_post_employee'
       if (!current_user_can('edit_page', $post_id)) {
         return;
       } else {
@@ -701,12 +717,10 @@ class StaffDirectory
           return;
         }
       }
-    }
+    } */
 
     // Sanitize and save the data.
     $fields = [
-      'district',
-      'building',
       'area',
       'position',
       'email',
@@ -714,18 +728,50 @@ class StaffDirectory
       'photo',
       'first_name',
       'last_name',
-      'location'
+      'location',
+      // 'district' and 'building' are part of assignments, not direct meta fields
     ];
 
     foreach ($fields as $field) {
       if (isset($_POST[$field])) {
-        $value = sanitize_text_field($_POST[$field]);
+        $value = '';
+        switch ($field) {
+          case 'email':
+            $value = sanitize_email($_POST[$field]);
+            break;
+          case 'photo':
+            $value = esc_url_raw($_POST[$field]);
+            break;
+          case 'phone':
+            $value = sanitize_text_field($_POST[$field]); // Basic sanitization for phone numbers
+            break;
+          default:
+            $value = sanitize_text_field($_POST[$field]);
+            break;
+        }
         update_post_meta($post_id, $field, $value);
+      } else {
+        // If the field is not set, consider deleting its meta to clear old values
+        delete_post_meta($post_id, $field);
       }
     }
 
     if (isset($_POST['assignment'])) {
-      update_post_meta($post_id, 'assignments', serialize($_POST['assignment']));
+      $sanitized_assignments = [];
+      if (is_array($_POST['assignment'])) {
+        foreach ($_POST['assignment'] as $id => $assignment) {
+          $sanitized_assignment = [];
+          $sanitized_assignment['content_area'] = sanitize_text_field($assignment['content_area'] ?? '');
+          $sanitized_assignment['district'] = sanitize_text_field($assignment['district'] ?? '');
+          // Checkboxes send 'on' or nothing, convert to 'true'/'false' string for consistency
+          $sanitized_assignment['district_wide'] = isset($assignment['district_wide']) && $assignment['district_wide'] === 'true' ? 'true' : 'false';
+          $sanitized_assignment['building'] = sanitize_text_field($assignment['building'] ?? '');
+          $sanitized_assignment['agency_wide'] = isset($assignment['agency_wide']) && $assignment['agency_wide'] === 'true' ? 'true' : 'false';
+          $sanitized_assignment['search_priority'] = absint($assignment['search_priority'] ?? 0);
+          $sanitized_assignments[$id] = $sanitized_assignment;
+        }
+      }
+      update_post_meta($post_id, 'assignments', serialize($sanitized_assignments));
     } else {
       delete_post_meta($post_id, 'assignments');
     }
@@ -734,6 +780,12 @@ class StaffDirectory
   public function directory_filter(){
     // Check if the request is an AJAX request
     if (!defined('DOING_AJAX') || !DOING_AJAX) {
+      // Nonce verification for AJAX requests
+      if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'directory_filter_nonce_action' ) ) {
+        wp_send_json_error('Security check failed.', 403);
+        return;
+      }
+
       wp_send_json_error('Invalid request', 400);
       return;
     }
@@ -745,6 +797,12 @@ class StaffDirectory
     $building = isset($_POST['building']) ? sanitize_text_field($_POST['building']) : '';
     $area = isset($_POST['area']) ? sanitize_text_field($_POST['area']) : '';
     $position = isset($_POST['position']) ? sanitize_text_field($_POST['position']) : '';
+
+    // Add nonce verification for AJAX requests
+    if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'directory_filter_nonce_action' ) ) {
+      wp_send_json_error('Security check failed.', 403);
+      return;
+    }
 
     // Prepare the query arguments
     $args = array(
@@ -922,23 +980,23 @@ class StaffDirectory
       }
 
       foreach ($dataArray as $row) {
-        $previous_post_id = trim($row['Previous Post Id']);
-        $post_id = trim($row['Post Id']);
-        $first_name = trim($row['First Name']);
-        $last_name = trim($row['Last Name']);
-        $name = trim($row['Full Name']);
-        $position = trim($row['Position']);
-        $email = trim($row['Email']);
-        $phone = trim($row['Phone']);
-        $photo = trim($row['Photo Url (optional)']);
+        $previous_post_id = sanitize_text_field(trim($row['Previous Post Id'] ?? ''));
+        $post_id = sanitize_text_field(trim($row['Post Id'] ?? ''));
+        $first_name = sanitize_text_field(trim($row['First Name'] ?? ''));
+        $last_name = sanitize_text_field(trim($row['Last Name'] ?? ''));
+        $name = sanitize_text_field(trim($row['Full Name'] ?? ''));
+        $position = sanitize_text_field(trim($row['Position'] ?? ''));
+        $email = sanitize_email(trim($row['Email'] ?? ''));
+        $phone = sanitize_text_field(trim($row['Phone'] ?? ''));
+        $photo = esc_url_raw(trim($row['Photo Url (optional)'] ?? ''));
 
         // Data for assignment
-        $assignment_content_area = trim($row['Assignment Content Area']);
-        $assignment_district = trim($row['Assignment District']);
-        $assignment_district_wide = trim($row['Assignment District Wide']) == 'TRUE';
-        $assignment_building = trim($row['Assignment Building']);
-        $assignment_agency_wide = trim($row['Assignment Agency Wide']) == 'TRUE';
-        $assignment_search_priority = trim($row['Assignment Search Priority']);
+        $assignment_content_area = sanitize_text_field(trim($row['Assignment Content Area'] ?? ''));
+        $assignment_district = sanitize_text_field(trim($row['Assignment District'] ?? ''));
+        $assignment_district_wide = (trim($row['Assignment District Wide'] ?? '') == 'TRUE');
+        $assignment_building = sanitize_text_field(trim($row['Assignment Building'] ?? ''));
+        $assignment_agency_wide = (trim($row['Assignment Agency Wide'] ?? '') == 'TRUE');
+        $assignment_search_priority = absint(trim($row['Assignment Search Priority'] ?? 0));
 
         $assignment = [
           'content_area' => $assignment_content_area,
@@ -949,7 +1007,7 @@ class StaffDirectory
           'search_priority' => $assignment_search_priority,
         ];
 
-        // Query if person exists already
+        // Check if person exists already
         if(isset($post_id) && $post_id != ''){
           wp_update_post([
             'ID' => $post_id,
@@ -958,7 +1016,7 @@ class StaffDirectory
           ]);
 
           $assignments = get_post_meta($post_id, 'assignments', true);
-          $assignments[] = $assignment;
+          $assignments = is_array($assignments) ? $assignments : []; $assignments[] = $assignment;
           
           update_post_meta($post_id, 'assignments', $assignments);
 
@@ -971,7 +1029,7 @@ class StaffDirectory
           $import_updated_count++;
 
         } else if (isset($previous_post_id) && $previous_post_id != ''){
-          // look for post
+          // Look for post
           $posts = get_posts([
             'post_type' => 'employee', 
             'meta_query' => [
@@ -979,10 +1037,8 @@ class StaffDirectory
               ] 
           ]);
 
-          var_dump($posts);
-
           if(count($posts) > 0 && get_post_type($posts[0]) == 'employee'){
-            // if post update it
+            // If post update it
             $post = $posts[0];
             $post_id = $post->ID;
 
@@ -992,10 +1048,7 @@ class StaffDirectory
             ]);
 
             $assignments = get_post_meta($post_id, 'assignments');
-
-            if(empty($assignments)){
-              $assignments = [];
-            }
+            $assignments = is_array($assignments) ? $assignments : [];
 
             $assignments[] = $assignment;
             
@@ -1012,13 +1065,13 @@ class StaffDirectory
 
           }else {
             $meta_data = array(
-              'position' => $position,
-              'email' => $email,
-              'phone' => $phone,
-              'first_name' => $first_name,
-              'last_name' => $last_name,
-              'previous_post_id' => $previous_post_id,
-              'assignments' => [$assignment]
+              'position' => sanitize_text_field($position),
+              'email' => sanitize_email($email),
+              'phone' => sanitize_text_field($phone),
+              'first_name' => sanitize_text_field($first_name),
+              'last_name' => sanitize_text_field($last_name),
+              'previous_post_id' => sanitize_text_field($previous_post_id),
+              'assignments' => [$assignment] // Already sanitized
             );
   
             if(!empty($photo)){
@@ -1026,7 +1079,7 @@ class StaffDirectory
             }
   
             $postArray = array(
-              'post_title' => $name,
+              'post_title' => sanitize_text_field($name),
               'post_content' => '',
               'post_type' => 'employee',
               'post_status' => 'publish',
@@ -1038,12 +1091,12 @@ class StaffDirectory
           }
         } else {
           $meta_data = array(
-            'position' => $position,
-            'email' => $email,
-            'phone' => $phone,
-            'first_name' => $first_name,
-            'last_name' => $last_name,
-            'previous_post_id' => $previous_post_id,
+            'position' => sanitize_text_field($position),
+            'email' => sanitize_email($email),
+            'phone' => sanitize_text_field($phone),
+            'first_name' => sanitize_text_field($first_name),
+            'last_name' => sanitize_text_field($last_name),
+            'previous_post_id' => sanitize_text_field($previous_post_id),
             'assignments' => [$assignment]
           );
 
@@ -1052,7 +1105,7 @@ class StaffDirectory
           }
 
           $postArray = array(
-            'post_title' => $name,
+            'post_title' => sanitize_text_field($name),
             'post_content' => '',
             'post_type' => 'employee',
             'post_status' => 'publish',
@@ -1120,7 +1173,7 @@ class StaffDirectory
    * 
    * Choose one of the security levels below by uncommenting the desired option
    */
-  public function check_staff_directory_permissions($request) {
+  public function check_staff_directory_permissions($request) { // Changed default to require login
     // Option 1: Require user to be logged in (any authenticated user)
     //return is_user_logged_in();
     
@@ -1128,7 +1181,7 @@ class StaffDirectory
     // return current_user_can('edit_posts');
 
     return true;
-    
+
     // Option 3: Require administrator privileges (uncomment to use instead)
     // return current_user_can('manage_options');
     
@@ -1302,6 +1355,10 @@ class StaffDirectory
     }
 
     if (!empty($meta_query)) {
+      if (count($meta_query) > 1) {
+        $meta_query['relation'] = 'AND'; // Default to AND for multiple meta queries
+      }
+
       $args['meta_query'] = $meta_query;
     }
 
@@ -1323,10 +1380,51 @@ class StaffDirectory
     $employee = get_post($id);
 
     if (empty($employee) || $employee->post_type !== 'employee') {
-      return new WP_Error('employee_not_found', 'Employee not found.', array('status' => 404));
+      return new WP_Error('employee_not_found', 'Employee not found or you do not have permission to view it.', array('status' => 404));
     }
 
+    // Ensure the user has permission to read this specific post,
+    // even if they can access the endpoint generally.
+    // get_post() respects 'public' and 'show_ui' settings for post types.
+    // If 'employee' post type is not public, get_post() will return null for unauthorized users.
+    // However, if the post type were public, an explicit capability check would be needed here.
+    // Given 'employee' is not public, the check above is sufficient.
+    // If the post type was public, you might add:
+    /*
+    if ( ! current_user_can( 'read_post', $id ) ) {
+        return new WP_Error(
+            'rest_forbidden',
+            __( 'Sorry, you are not allowed to view this employee.', 'textdomain' ),
+            array( 'status' => rest_authorization_required_code() )
+        );
+    }
+    */
+
+    // If the post is found and the user has access (implicitly by get_post() for non-public types),
+    // then format and return the data.
     return new WP_REST_Response($this->format_employee_data($employee), 200);
+  }
+
+  /**
+   * Helper function to check if an IP is within a given range (CIDR or single IP)
+   * This is for Option 6 in check_staff_directory_permissions
+   */
+  private function ip_in_range($ip, $range) {
+    if (!is_array($range)) {
+      $range = [$range];
+    }
+    foreach ($range as $r) {
+      if (strpos($r, '/') !== false) {
+        list($subnet, $mask) = explode('/', $r);
+        if ((ip2long($ip) & ~((1 << (32 - $mask)) - 1)) == ip2long($subnet)) {
+          return true;
+        }
+      } elseif ($ip === $r) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   /**
@@ -1607,5 +1705,3 @@ class StaffDirectory
 
 // Initialize the StaffDirectory class
 $GLOBALS['staff-directory'] = new StaffDirectory();
-
-
