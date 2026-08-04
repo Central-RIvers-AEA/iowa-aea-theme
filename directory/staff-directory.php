@@ -313,7 +313,7 @@ class StaffDirectory
         if($assignments){
           foreach ($assignments as $id => $assignment) {
             echo '<tr>';
-            echo ('<td><input type="text" value="' . $assignment['content_area'] . '" name="assignment[' . $id . '][content_area]"/></td>');
+            echo ('<td><input type="text" value="' . esc_html($assignment['content_area']) . '" name="assignment[' . $id . '][content_area]"/></td>');
             echo ('<td><select name="assignment[' . $id . '][district]">');
             echo ('<option value="">Select A District</option>');
             foreach ($districts as $district) {

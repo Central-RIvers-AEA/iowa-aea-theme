@@ -135,8 +135,8 @@ function add_notice_to_front_of_website() {
       $items = $feed['items'];
       foreach ($items as $alert) {
         echo '<div class="weather-alert">';
-          echo '<div class="location">'. $title . ' Alert</div>';
-          echo '<p>' . $alert['descript'] . '</p>';
+          echo '<div class="location">'. esc_html($title) . ' Alert</div>';
+          echo '<p>' . esc_html($alert['descript']) . '</p>';
         echo '</div>';
       }
     }
