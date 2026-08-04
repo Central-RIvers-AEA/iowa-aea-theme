@@ -107,7 +107,6 @@ const fetchGoogleCalendarEvents = async (start_date, end_date, google_calendar_i
     // Fetch events from Google Calendar API
     const response = await fetch(calendarURL);
     const data = await response.json();
-    console.log(data.items);
     if (!data.items) {
       return;
     }
@@ -142,7 +141,6 @@ const fetchEvents = async (google_calendar_ids, google_calendar_api_key) => {
   let end_date = lastOfMonth.toISOString().split('T')[0];
   const response = await fetch(`/wp-json/wp/v2/event?event_date_after=${start_date}&event_date_before=${end_date}`);
   const localEvents = await response.json();
-  console.log(localEvents);
   let fixedEvents = localEvents.map(event => {
     return {
       ...event,
@@ -376,9 +374,7 @@ const {
     }
   },
   init: {
-    setup: () => {
-      console.log('Events List block initialized');
-    }
+    setup: () => {}
   }
 });
 function chunkArray(arr, size) {

@@ -187,7 +187,6 @@ const {
         }
       }
       let sortedStaff = sortByAssignmentPriority(filteredStaff);
-      console.log(sortedStaff);
       sortedStaff.forEach(member => {
         // Render each staff member
         let li = document.createElement('li');

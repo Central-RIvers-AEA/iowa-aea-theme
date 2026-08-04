@@ -106,7 +106,6 @@ const fetchGoogleCalendarEvents = async (start_date, end_date) => {
     return [];
   }
   for (let calendarID of calendarIDs) {
-    console.log(calendarID);
     if (!calendarID || calendarID.trim() === '') {
       return [];
     }

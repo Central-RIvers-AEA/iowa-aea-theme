@@ -40,8 +40,6 @@ const fetchGoogleCalendarEvents = async (start_date, end_date, google_calendar_i
     const response = await fetch(calendarURL);
     const data = await response.json();
 
-    console.log(data.items)
-
     if(!data.items){
       return
     }
@@ -81,8 +79,6 @@ const fetchEvents = async (google_calendar_ids, google_calendar_api_key) => {
 
   const response = await fetch(`/wp-json/wp/v2/event?event_date_after=${start_date}&event_date_before=${end_date}`);
   const localEvents = await response.json();
-
-  console.log(localEvents);
 
   let fixedEvents = localEvents.map(event => {
     return {
@@ -345,7 +341,7 @@ const { state, actions, callbacks } = store( 'iowa-aea-theme/events-calendar', {
   },
   init: {
     setup: () => {
-      console.log('Events List block initialized');
+      
     }
   }
 });

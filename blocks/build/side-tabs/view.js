@@ -25,10 +25,9 @@
  */
 
 /* eslint-disable no-console */
-// console.log( 'Hello World! (from iowa-aea-theme-side-tabs block)' );
+
 /* eslint-enable no-console */
 
-console.log('DOM fully loaded and parsed');
 const sideTabs = document.querySelector('.wp-block-iowa-aea-theme-side-tabs');
 // Add open to first tab
 let tabs = sideTabs.querySelectorAll('.impact-tab');

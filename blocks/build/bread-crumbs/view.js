@@ -25,7 +25,7 @@
  */
 
 /* eslint-disable no-console */
-console.log('Hello World! (from iowa-aea-theme-interactive-map block)');
+
 /* eslint-enable no-console */
 /******/ })()
 ;

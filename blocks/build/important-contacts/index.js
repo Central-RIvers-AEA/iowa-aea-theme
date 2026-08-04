@@ -72,7 +72,7 @@ function Edit(props) {
   let contacts = props.attributes.contacts || [];
   const addImportantContact = () => {
     // Logic to add an important contact
-    console.log('adding contact');
+
     let updatedContacts = [...contacts];
     updatedContacts.push({
       id: Date.now(),
@@ -88,7 +88,6 @@ function Edit(props) {
     });
   };
   const addCustomeImportantContact = () => {
-    console.log('adding contact');
     let updatedContacts = [...contacts];
     updatedContacts.push({
       id: Date.now(),
@@ -118,7 +117,6 @@ function Edit(props) {
       path: '/staff-directory/v1/employees'
     }).then(data => {
       setFullContactsList(data);
-      console.log('Fetched staff data:', data);
     }).catch(error => {
       console.error('Error fetching staff directory:', error);
       // Fallback: if staff directory isn't available, continue without it

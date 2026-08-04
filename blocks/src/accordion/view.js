@@ -21,7 +21,7 @@
  */
 
 /* eslint-disable no-console */
-console.log( 'Hello World! (from iowa-aea-accordion block)' );
+
 /* eslint-enable no-console */
 
 // Grab accordions and only affect the accordion

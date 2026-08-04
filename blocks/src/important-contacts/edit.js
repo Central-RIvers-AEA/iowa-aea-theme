@@ -38,7 +38,7 @@ export default function Edit(props) {
 
 	const addImportantContact = () => {
 		// Logic to add an important contact
-		console.log('adding contact')
+
 		let updatedContacts = [...contacts];
 		updatedContacts.push({ id: Date.now(), name: 'Select a Contact', email: 'new.contact@example.com', phone: '123-456-7890', jobTitle: 'New Job Title', image: '', type: 'selectable' });
 
@@ -46,7 +46,7 @@ export default function Edit(props) {
 	};
 
 	const addCustomeImportantContact = () => {
-		console.log('adding contact')
+
 		let updatedContacts = [...contacts];
 		updatedContacts.push({ id: Date.now(), name: '', email: '', phone: '', jobTitle: '', image: '', type: 'custom', bio: '' });
 
@@ -64,7 +64,6 @@ export default function Edit(props) {
 		apiFetch( { path: '/staff-directory/v1/employees' } )
 			.then( ( data ) => {
 				setFullContactsList( data );
-				console.log('Fetched staff data:', data);
 			} )
 			.catch( ( error ) => {
 				console.error( 'Error fetching staff directory:', error );
