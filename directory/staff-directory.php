@@ -378,6 +378,10 @@ class StaffDirectory
       'staff_directory_use_external_api'
     );
 
+    register_setting(
+      'staff_directory_options_group',
+      'sd_api_key'
+    );
 
     register_setting(
       'staff_directory_options_group',
@@ -579,6 +583,9 @@ class StaffDirectory
               <td>
                 <input placeholder='Staff data api URL' type="text" name="staff_directory_use_external_api" value="<?php echo esc_attr(get_option('staff_directory_use_external_api', '')); ?>" class="regular-text" />
                 <p class="description">Enter the URL of the external API to use for staff directory Staff data.</p>
+
+                <input placeholder='Staff data API Key' type="text" name="sd_api_key" value="<?php echo esc_attr(get_option('sd_api_key', '')); ?>" class="regular-text" />
+                <p class="description">If the URL of the external API needs an API key, enter it here.</p>
 
                 <input placeholder='Districts data api URL' type="text" name="staff_directory_use_external_district_api" value="<?php echo esc_attr(get_option('staff_directory_use_external_district_api', '')); ?>" class="regular-text" />
                 <input  type='text' placeholder='Districts key (leave blank if url returns a list of districts)' value="<?php echo esc_attr(get_option('staff_directory_use_external_district_api_key', '')); ?>" name='staff_directory_use_external_district_api_key' class='regular-text' />
@@ -1220,6 +1227,7 @@ class StaffDirectory
     $search_mappings = get_option('staff_directory_api_search_mappings', array());
 
     $search = isset($request['search']) ? sanitize_text_field($request['search']) : '';
+    $get_all = isset($request['get_all']) ? sanitize_text_field($request['get_all']) : '';
 
     $school_district = isset($request['district']) ? sanitize_text_field($request['district']) : '';
     $school_building = isset($request['building']) ? sanitize_text_field($request['building']) : '';
@@ -1256,6 +1264,12 @@ class StaffDirectory
       $search_string .= '&';
     }
 
+    $api_key = get_option('sd_api_key', '');
+    
+    if(!empty($api_key)){
+      $search_string .= 'api_key=' . $api_key;
+    }
+
     $api_url = get_option('staff_directory_use_external_api', '');
 
     if (empty($api_url)) {
@@ -1269,7 +1283,6 @@ class StaffDirectory
 
     if (is_wp_error($response)) {
       return new WP_REST_Response($response, 500);
-      return;
     }
 
     $data = wp_remote_retrieve_body($response);
@@ -1285,14 +1298,7 @@ class StaffDirectory
       $formatted_employees[] = $this->reformat_employee_data_from_external_api($employee);
     }
 
-    $returns = array(
-      'search_string' => $search_string,
-      'search_terms' => $search_terms,
-      'source' => 'external_api',
-      'employees' => $formatted_employees,
-    );
-
-    if($search == '' && $school_district == '' && $school_building == '' && $position == '' && $content_area == ''){
+    if($search == '' && $school_district == '' && $school_building == '' && $position == '' && $content_area == '' && $get_all == ''){
       $formatted_employees = array_slice($formatted_employees, 0, 10);
     }
 

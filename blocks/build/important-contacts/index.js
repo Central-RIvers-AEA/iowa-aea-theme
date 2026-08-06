@@ -114,9 +114,21 @@ function Edit(props) {
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
     // Use WordPress apiFetch which handles authentication automatically
     _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_2___default()({
-      path: '/staff-directory/v1/employees'
+      path: '/staff-directory/v1/employees?get_all=true'
     }).then(data => {
-      setFullContactsList(data);
+      if (data[0].id) {
+        setFullContactsList(data);
+      } else {
+        let dataWithId = data.map((datum, index) => {
+          return {
+            ...datum,
+            id: datum.email,
+            name: datum.full_name,
+            jobTitle: datum.position
+          };
+        });
+        setFullContactsList(dataWithId);
+      }
     }).catch(error => {
       console.error('Error fetching staff directory:', error);
       // Fallback: if staff directory isn't available, continue without it
@@ -260,11 +272,13 @@ const ContactCard = ({
   index,
   full_contacts_list
 }) => {
+  console.log(contact);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
     className: "contact-item",
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("img", {
       src: contact.image,
-      alt: contact.name
+      alt: contact.name,
+      height: "160"
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
       className: "contact-info",
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("h3", {
@@ -276,11 +290,11 @@ const ContactCard = ({
           }), full_contacts_list.map(full_contact => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("option", {
             value: full_contact.id,
             selected: full_contact.id === contact.id,
-            children: full_contact.name
+            children: full_contact.name || full_contact.full_name
           }, full_contact.id))]
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
-        children: contact.jobTitle
+        children: contact.jobTitle || contact.position
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
         children: contact.email
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {

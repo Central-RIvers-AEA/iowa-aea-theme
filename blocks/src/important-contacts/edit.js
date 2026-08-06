@@ -61,9 +61,16 @@ export default function Edit(props) {
 	// on mount query existing contacts
 	useEffect( () => {
 		// Use WordPress apiFetch which handles authentication automatically
-		apiFetch( { path: '/staff-directory/v1/employees' } )
+		apiFetch( { path: '/staff-directory/v1/employees?get_all=true' } )
 			.then( ( data ) => {
-				setFullContactsList( data );
+				if(data[0].id){
+					setFullContactsList( data );
+				} else {
+					let dataWithId = data.map( (datum, index) => {
+						return { ...datum, id: datum.email, name: datum.full_name, jobTitle: datum.position }
+					} );
+					setFullContactsList( dataWithId );
+				}
 			} )
 			.catch( ( error ) => {
 				console.error( 'Error fetching staff directory:', error );
@@ -157,21 +164,22 @@ const CustomContactCard = ({ contact, handleContactChange, removeImportantContac
 
 
 const ContactCard = ({ contact, handleContactChange, removeImportantContact, index, full_contacts_list }) => {
+	console.log(contact)
 	return (
 		<div key={ index } className="contact-item">
-			<img src={ contact.image } alt={ contact.name } />
+			<img src={ contact.image } alt={ contact.name } height='160'/>
 			<div className="contact-info">
 				<h3>
 					<select onChange={ (e) => handleContactChange( index, e.target.value ) }>
 						<option value=''>Select a Contact</option>
 						{ full_contacts_list.map( ( full_contact ) => (
 							<option key={ full_contact.id } value={ full_contact.id } selected={ full_contact.id === contact.id }>
-								{ full_contact.name }
+								{ full_contact.name || full_contact.full_name }
 							</option>
 						) ) }
 					</select>
 				</h3>
-				<p>{ contact.jobTitle }</p>
+				<p>{ contact.jobTitle || contact.position }</p>
 				<p>{ contact.email }</p>
 				<p>{ contact.phone }</p>
 				<button onClick={ () => removeImportantContact( index ) } className='btn'>
