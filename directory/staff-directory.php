@@ -1270,6 +1270,10 @@ class StaffDirectory
       $search_string .= 'api_key=' . $api_key;
     }
 
+    if(!empty($get_all)){
+      $search_string .= '&get_all=true';
+    }
+
     $api_url = get_option('staff_directory_use_external_api', '');
 
     if (empty($api_url)) {
