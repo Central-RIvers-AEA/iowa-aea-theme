@@ -225,7 +225,7 @@ class StaffDirectory
   }
 
   public function employee_districts_callback($post){
-    $assignments = unserialize(get_post_meta($post->ID, 'assignments', true));
+    $assignments = maybe_unserialize(get_post_meta($post->ID, 'assignments', true));
 
     $districts = get_posts(array(
       'post_type' => 'district',
@@ -1069,8 +1069,43 @@ class StaffDirectory
             update_post_meta($post_id, 'photo', $photo);
 
             $import_updated_count++;
+          }
+        } else if (isset($email) && $email != ''){
+          // Look for post
+          $posts = get_posts([
+            'post_type' => 'employee', 
+            'meta_query' => [
+                [ 'key' => 'email', 'value' => $email, 'compare' => '=' ]
+              ] 
+          ]);
 
-          }else {
+          if(count($posts) > 0 && get_post_type($posts[0]) == 'employee'){
+            // If post update it
+            $post = $posts[0];
+            $post_id = $post->ID;
+
+            wp_update_post([
+              'ID' => $post_id,
+              'post_title' => $name,
+            ]);
+
+            $assignments = get_post_meta($post_id, 'assignments');
+            $assignments = is_array($assignments) ? $assignments : [];
+
+            $assignments[] = $assignment;
+            
+            update_post_meta($post_id, 'assignments', $assignments);
+
+            update_post_meta($post_id, 'email', $email);
+            update_post_meta($post_id, 'first_name', $first_name);
+            update_post_meta($post_id, 'last_name', $last_name);
+            update_post_meta($post_id, 'position', $position);
+            update_post_meta($post_id, 'phone', $phone);
+            update_post_meta($post_id, 'photo', $photo);
+
+            $import_updated_count++;
+
+          } else {
             $meta_data = array(
               'position' => sanitize_text_field($position),
               'email' => sanitize_email($email),
@@ -1078,13 +1113,13 @@ class StaffDirectory
               'first_name' => sanitize_text_field($first_name),
               'last_name' => sanitize_text_field($last_name),
               'previous_post_id' => sanitize_text_field($previous_post_id),
-              'assignments' => [$assignment] // Already sanitized
+              'assignments' => [$assignment]
             );
-  
+
             if(!empty($photo)){
               $meta_data['photo'] = $photo;
             }
-  
+
             $postArray = array(
               'post_title' => sanitize_text_field($name),
               'post_content' => '',
@@ -1092,10 +1127,11 @@ class StaffDirectory
               'post_status' => 'publish',
               'meta_input' => $meta_data
             );
-  
+
             wp_insert_post($postArray);
             $import_created_count++;
           }
+        
         } else {
           $meta_data = array(
             'position' => sanitize_text_field($position),
