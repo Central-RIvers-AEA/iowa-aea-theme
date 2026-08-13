@@ -238,6 +238,21 @@
             }
           }
         }
+      },
+      "core/heading": {
+        "spacing": {
+          "margin": {
+            "top": "2rem"
+          }
+        }
+      },
+      "core/separator": {
+        "spacing": {
+          "margin": {
+            "top": "2rem",
+            "bottom": "2rem"
+          }
+        }
       }
     }
   },

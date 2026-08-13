@@ -5,7 +5,7 @@
     Author: Iowa AEAs
     Author URI: https://example.com/
     Template: twentytwentyfive
-    Version: 1.5.79
+    Version: 1.5.81
     License: GNU General Public License v2 or later
     License URI: http://www.gnu.org/licenses/gpl-2.0.html
     Text Domain: iowa-aea-theme
@@ -33,7 +33,7 @@ body {
 
 .has-bottom-dots {
   position: relative;
-  z-index: 10;
+  z-index: 20;
   & > * {
     position: relative;
     z-index: 1;
@@ -62,8 +62,10 @@ body {
   }
 
   &.shift-dots-down {
+    z-index: -1;
     &::after {
       bottom: -1rem;
+      z-index: -1;
     }
   }
 }
