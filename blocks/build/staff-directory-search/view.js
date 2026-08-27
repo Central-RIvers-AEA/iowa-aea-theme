@@ -164,7 +164,6 @@ const {
       let staffList = document.querySelector('.staff-directory-results ul');
       staffList.innerHTML = '';
       let filteredStaff = context.staff;
-      console.log(filteredStaff);
       if (context.internal) {
         let dist = document.querySelector('#school-district');
         if (dist) {

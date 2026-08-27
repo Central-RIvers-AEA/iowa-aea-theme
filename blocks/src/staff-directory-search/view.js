@@ -125,8 +125,6 @@ const { actions, callbacks } = store( 'iowa-aea-theme/staff-directory-search', {
 
       let filteredStaff = context.staff
 
-      console.log(filteredStaff)
-
       if(context.internal){
         let dist = document.querySelector('#school-district')
 
