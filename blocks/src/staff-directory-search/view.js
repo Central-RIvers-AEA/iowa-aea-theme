@@ -125,6 +125,8 @@ const { actions, callbacks } = store( 'iowa-aea-theme/staff-directory-search', {
 
       let filteredStaff = context.staff
 
+      console.log(filteredStaff)
+
       if(context.internal){
         let dist = document.querySelector('#school-district')
 
@@ -133,7 +135,7 @@ const { actions, callbacks } = store( 'iowa-aea-theme/staff-directory-search', {
             filteredStaff = filteredStaff.filter(employee => {
               return Object.keys(employee.assignments).some((key) => {
                 let assign = employee.assignments[key]
-                return assign.district == dist.value || assign.agency_wide
+                return assign.district == dist.value || assign.agency_wide == 'true'
               })
             })
           }
@@ -143,7 +145,7 @@ const { actions, callbacks } = store( 'iowa-aea-theme/staff-directory-search', {
             filteredStaff = filteredStaff.filter(employee => {
               return Object.keys(employee.assignments).some((key) => {
                 let assign = employee.assignments[key]
-                return assign.building == build.value || assign.district_wide || assign.agency_wide
+                return assign.building == build.value || assign.district_wide == 'true' || assign.agency_wide == 'true'
               })
             })
           }
