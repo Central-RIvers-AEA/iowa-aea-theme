@@ -60,6 +60,9 @@ add_action( 'admin_menu', 'add_events_config_page' );
 function render_events_config_page() {
    $calendar_ids = get_option('google_calendar_ids', array());
    $gcal_api_key = get_option('google_calendar_api_key', '');
+
+   $override_events = get_option('override_events', 0);
+   $override_url = get_option('events_override_redirect', '');
   ?>
     <script>
       document.addEventListener('DOMContentLoaded', function() {
@@ -120,6 +123,21 @@ function render_events_config_page() {
             </td>
           </tr>
         </table>
+
+        <hr>
+
+        <h2>Events Override</h2>
+        <table class="form-table">
+          <tr valign="top">
+            <th scope="row">Override Events Page</th>
+            <td><input type="checkbox" name="override_events" value="1" <?php echo $override_events == 1 ? 'checked' : '' ?> /></td>
+          </tr>
+          <tr valign="top">
+            <th scope="row">Events Page To Redirect To</th>
+            <td><input type="text" name="events_override_redirect" value="<?php echo esc_attr( $override_url ); ?>" /></td>
+          </tr>
+        </table>
+
         <?php submit_button(); ?>
       </form>
     </div>
@@ -130,9 +148,27 @@ function render_events_config_page() {
 function register_events_settings() {
   register_setting('events_config_group', 'google_calendar_api_key');
   register_setting('events_config_group', 'google_calendar_ids');
+  register_setting('events_config_group', 'override_events');
+  register_setting('events_config_group', 'events_override_redirect');
 }
 
 add_action('admin_init', 'register_events_settings');
+
+add_action( 'template_redirect', 'my_custom_archive_redirect' );
+function my_custom_archive_redirect() {
+  $override_events = get_option('override_events', 0);
+  $disable_and_redirect = $override_events == 1; 
+
+  $post_type_slug = 'event'; 
+  
+  // Replace with your target redirect URL (slug or full URL)
+  $redirect_url = get_option('events_override_redirect', home_url());
+
+  if ( $disable_and_redirect && is_post_type_archive( $post_type_slug ) ) {
+    wp_redirect( $redirect_url, 301 );
+    exit;
+  }
+}
 
 // Add metaboxes for events
 function add_events_metaboxes() {
