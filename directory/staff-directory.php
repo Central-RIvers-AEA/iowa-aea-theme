@@ -5,6 +5,7 @@
 // Include School Directory & AEA directories
 include_once __DIR__ . '/aea-directory.php';
 include_once __DIR__ . '/school-directory.php';
+// include_once __DIR__ . '/contact-form.php';
 
 class StaffDirectory
 {
@@ -967,7 +968,9 @@ class StaffDirectory
 
     $import_created_count = 0;
     $import_updated_count = 0;
-    // echo 'hello';
+    
+    echo !empty($_FILES['employee_csv']['name']) && $extension == 'csv';
+
     // echo var_dump($_FILES['district_import_file']);
     if (!empty($_FILES['employee_csv']['name']) && $extension == 'csv') {
       $csvFile = fopen($_FILES['employee_csv']['tmp_name'], 'r');
@@ -986,6 +989,8 @@ class StaffDirectory
         array_push($dataArray, $rowData);
       }
 
+      echo var_dump($dataArray);
+
       foreach ($dataArray as $row) {
         $previous_post_id = sanitize_text_field(trim($row['Previous Post Id'] ?? ''));
         $post_id = sanitize_text_field(trim($row['Post Id'] ?? ''));
@@ -996,6 +1001,8 @@ class StaffDirectory
         $email = sanitize_email(trim($row['Email'] ?? ''));
         $phone = sanitize_text_field(trim($row['Phone'] ?? ''));
         $photo = esc_url_raw(trim($row['Photo Url (optional)'] ?? ''));
+        $location = sanitize_text_field(trim($row['AEA Office Location'] ?? ''));
+
 
         // Data for assignment
         $assignment_content_area = sanitize_text_field(trim($row['Assignment Content Area'] ?? ''));
@@ -1033,6 +1040,7 @@ class StaffDirectory
           update_post_meta($post_id, 'position', $position);
           update_post_meta($post_id, 'phone', $phone);
           update_post_meta($post_id, 'photo', $photo);
+          update_post_meta($post_id, 'location', $location);
           $import_updated_count++;
 
         } else if (isset($previous_post_id) && $previous_post_id != ''){
@@ -1067,9 +1075,37 @@ class StaffDirectory
             update_post_meta($post_id, 'position', $position);
             update_post_meta($post_id, 'phone', $phone);
             update_post_meta($post_id, 'photo', $photo);
+            update_post_meta($post_id, 'location', $location);
 
             $import_updated_count++;
+          } else {
+            $meta_data = array(
+              'position' => sanitize_text_field($position),
+              'email' => sanitize_email($email),
+              'phone' => sanitize_text_field($phone),
+              'first_name' => sanitize_text_field($first_name),
+              'last_name' => sanitize_text_field($last_name),
+              'previous_post_id' => sanitize_text_field($previous_post_id),
+              'location' => $location,
+              'assignments' => [$assignment]
+            );
+
+            if(!empty($photo)){
+              $meta_data['photo'] = $photo;
+            }
+
+            $postArray = array(
+              'post_title' => sanitize_text_field($name),
+              'post_content' => '',
+              'post_type' => 'employee',
+              'post_status' => 'publish',
+              'meta_input' => $meta_data
+            );
+
+            wp_insert_post($postArray);
+            $import_created_count++;
           }
+
         } else if (isset($email) && $email != ''){
           // Look for post
           $posts = get_posts([
@@ -1102,6 +1138,7 @@ class StaffDirectory
             update_post_meta($post_id, 'position', $position);
             update_post_meta($post_id, 'phone', $phone);
             update_post_meta($post_id, 'photo', $photo);
+            update_post_meta($post_id, 'location', $location);
 
             $import_updated_count++;
 
@@ -1113,6 +1150,7 @@ class StaffDirectory
               'first_name' => sanitize_text_field($first_name),
               'last_name' => sanitize_text_field($last_name),
               'previous_post_id' => sanitize_text_field($previous_post_id),
+              'location' => $location,
               'assignments' => [$assignment]
             );
 
@@ -1140,6 +1178,7 @@ class StaffDirectory
             'first_name' => sanitize_text_field($first_name),
             'last_name' => sanitize_text_field($last_name),
             'previous_post_id' => sanitize_text_field($previous_post_id),
+            'location' => $location,
             'assignments' => [$assignment]
           );
 
