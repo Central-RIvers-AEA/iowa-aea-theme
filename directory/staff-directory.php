@@ -144,6 +144,7 @@ class StaffDirectory
     $area = get_post_meta($post->ID, 'area', true);
     $position = get_post_meta($post->ID, 'position', true);
     $location = get_post_meta($post->ID, 'location', true);
+    $office_location = get_post_meta($post->ID, 'office_location', true);
     $email = get_post_meta($post->ID, 'email', true);
     $phone = get_post_meta($post->ID, 'phone', true);
     $photo = get_post_meta($post->ID, 'photo', true);
@@ -208,6 +209,14 @@ class StaffDirectory
             }
             echo "</datalist>";
           ?>
+        </td>
+      </tr>
+
+      <tr>
+        <th><label for="location">Office Location</label></th>
+        <td>
+          <input type="tel" id="office_location" name="office_location" value="<?php echo esc_attr($office_location); ?>" class="regular-text" autocomplete="off"/>
+          <p class="description">Enter the Office location for this employee.</p>
         </td>
       </tr>
       <tr>
@@ -968,8 +977,6 @@ class StaffDirectory
 
     $import_created_count = 0;
     $import_updated_count = 0;
-    
-    echo !empty($_FILES['employee_csv']['name']) && $extension == 'csv';
 
     // echo var_dump($_FILES['district_import_file']);
     if (!empty($_FILES['employee_csv']['name']) && $extension == 'csv') {
@@ -989,8 +996,6 @@ class StaffDirectory
         array_push($dataArray, $rowData);
       }
 
-      echo var_dump($dataArray);
-
       foreach ($dataArray as $row) {
         $previous_post_id = sanitize_text_field(trim($row['Previous Post Id'] ?? ''));
         $post_id = sanitize_text_field(trim($row['Post Id'] ?? ''));
@@ -1001,16 +1006,80 @@ class StaffDirectory
         $email = sanitize_email(trim($row['Email'] ?? ''));
         $phone = sanitize_text_field(trim($row['Phone'] ?? ''));
         $photo = esc_url_raw(trim($row['Photo Url (optional)'] ?? ''));
-        $location = sanitize_text_field(trim($row['AEA Office Location'] ?? ''));
+        $location = sanitize_text_field(trim($row['Location'] ?? ''));
+        $office_location = sanitize_text_field(trim($row['AEA Office Location'] ?? ''));
 
 
         // Data for assignment
         $assignment_content_area = sanitize_text_field(trim($row['Assignment Content Area'] ?? ''));
-        $assignment_district = sanitize_text_field(trim($row['Assignment District'] ?? ''));
+        $adistrict = sanitize_text_field(trim($row['Assignment District'] ?? ''));
+        $assignment_district = '';
         $assignment_district_wide = (trim($row['Assignment District Wide'] ?? '') == 'TRUE');
-        $assignment_building = sanitize_text_field(trim($row['Assignment Building'] ?? ''));
+        $abuilding = sanitize_text_field(trim($row['Assignment Building'] ?? ''));
+        $assignment_building = '';
         $assignment_agency_wide = (trim($row['Assignment Agency Wide'] ?? '') == 'TRUE');
         $assignment_search_priority = absint(trim($row['Assignment Search Priority'] ?? 0));
+        
+        if($adistrict != ''){
+          // search or create district
+          $districts = get_posts(
+            array(
+              'title'          => $adistrict,
+              'post_type'      => 'district', 
+              'posts_per_page' => 1,
+              'post_status'    => 'publish',
+            )
+          );
+  
+          if ( ! empty( $districts ) ) {
+            $assignment_district = $districts[0]->ID;
+          } else {
+            $postArray = array(
+              'post_title' => sanitize_text_field($adistrict),
+              'post_content' => '',
+              'post_type' => 'district',
+              'post_status' => 'publish'
+            );
+  
+            $assignment_district = wp_insert_post($postArray);
+
+            if (is_wp_error($assignment_district)) {
+                $assignment_district = 0; // or skip/log
+            }
+          }
+          
+          if($abuilding != ''){
+            // search or create building
+            $buildings = get_posts(
+              array(
+                'title'          => $abuilding,
+                'post_type'      => 'school', 
+                'posts_per_page' => 1,
+                'post_status'    => 'publish',
+                'meta_key'       => 'district',
+                'meta_value'     => $assignment_district
+              )
+            );
+      
+            if ( ! empty( $buildings ) ) {
+              $assignment_building = $buildings[0]->ID;
+            } else {
+              $postArray = array(
+                'post_title' => sanitize_text_field($abuilding),
+                'post_content' => '',
+                'post_type' => 'school',
+                'post_status' => 'publish',
+                'meta_input' => array( 'district' => $assignment_district )
+              );
+    
+              $assignment_building = wp_insert_post($postArray);
+
+              if (is_wp_error($assignment_building)) {
+                $assignment_building = 0; // or skip/log
+              }
+            }
+          }
+        }
 
         $assignment = [
           'content_area' => $assignment_content_area,
@@ -1022,7 +1091,8 @@ class StaffDirectory
         ];
 
         // Check if person exists already
-        if(isset($post_id) && $post_id != ''){
+        $post_id = absint($post_id);
+        if($post_id && get_post_type($post_id) === 'employee'){
           wp_update_post([
             'ID' => $post_id,
             'post_title' => $name,
@@ -1041,6 +1111,7 @@ class StaffDirectory
           update_post_meta($post_id, 'phone', $phone);
           update_post_meta($post_id, 'photo', $photo);
           update_post_meta($post_id, 'location', $location);
+          update_post_meta($post_id, 'office_location', $office_location);
           $import_updated_count++;
 
         } else if (isset($previous_post_id) && $previous_post_id != ''){
@@ -1062,7 +1133,7 @@ class StaffDirectory
               'post_title' => $name,
             ]);
 
-            $assignments = get_post_meta($post_id, 'assignments');
+            $assignments = get_post_meta($post_id, 'assignments', true);
             $assignments = is_array($assignments) ? $assignments : [];
 
             $assignments[] = $assignment;
@@ -1076,6 +1147,7 @@ class StaffDirectory
             update_post_meta($post_id, 'phone', $phone);
             update_post_meta($post_id, 'photo', $photo);
             update_post_meta($post_id, 'location', $location);
+            update_post_meta($post_id, 'office_location', $office_location);
 
             $import_updated_count++;
           } else {
@@ -1087,6 +1159,7 @@ class StaffDirectory
               'last_name' => sanitize_text_field($last_name),
               'previous_post_id' => sanitize_text_field($previous_post_id),
               'location' => $location,
+              'office_location' => $office_location,
               'assignments' => [$assignment]
             );
 
@@ -1125,7 +1198,7 @@ class StaffDirectory
               'post_title' => $name,
             ]);
 
-            $assignments = get_post_meta($post_id, 'assignments');
+            $assignments = get_post_meta($post_id, 'assignments', true);
             $assignments = is_array($assignments) ? $assignments : [];
 
             $assignments[] = $assignment;
@@ -1139,6 +1212,7 @@ class StaffDirectory
             update_post_meta($post_id, 'phone', $phone);
             update_post_meta($post_id, 'photo', $photo);
             update_post_meta($post_id, 'location', $location);
+            update_post_meta($post_id, 'office_location', $office_location);
 
             $import_updated_count++;
 
@@ -1151,6 +1225,7 @@ class StaffDirectory
               'last_name' => sanitize_text_field($last_name),
               'previous_post_id' => sanitize_text_field($previous_post_id),
               'location' => $location,
+              'office_location' => $office_location,
               'assignments' => [$assignment]
             );
 
@@ -1179,6 +1254,7 @@ class StaffDirectory
             'last_name' => sanitize_text_field($last_name),
             'previous_post_id' => sanitize_text_field($previous_post_id),
             'location' => $location,
+            'office_location' => $office_location,
             'assignments' => [$assignment]
           );
 
