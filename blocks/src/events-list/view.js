@@ -61,7 +61,7 @@ const fetchGoogleCalendarEvents = async (start_date, end_date) => {
       const data = await response.json();
 
       // Convert Google Calendar events to local format
-      let calEvents = data.items.map(gEvent => {
+      let calEvents = data.items.filter(gEvent => gEvent.status !== 'cancelled').map(gEvent => {
         let event = {
           id: gEvent.id,
           title: { rendered: gEvent.summary },
