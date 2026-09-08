@@ -110,10 +110,7 @@ const fetchGoogleCalendarEvents = async (start_date, end_date, google_calendar_i
     if (!data.items) {
       return;
     }
-    data.items.forEach(gEvent => {
-      if (gEvent.status == 'cancelled') {
-        return;
-      }
+    data.items.filter(gEvent => gEvent.status !== 'cancelled').forEach(gEvent => {
       let event = {
         id: gEvent.id,
         title: {
