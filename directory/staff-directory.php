@@ -1393,10 +1393,10 @@ class StaffDirectory
     $search = isset($request['search']) ? sanitize_text_field($request['search']) : '';
     $get_all = isset($request['get_all']) ? sanitize_text_field($request['get_all']) : '';
 
-    $school_district = isset($request['district']) ? sanitize_text_field($request['district']) : '';
-    $school_building = isset($request['building']) ? sanitize_text_field($request['building']) : '';
+    $school_district = isset($request['school-district']) ? sanitize_text_field($request['school-district']) : '';
+    $school_building = isset($request['school-building']) ? sanitize_text_field($request['school-building']) : '';
     $position = isset($request['position']) ? sanitize_text_field($request['position']) : '';
-    $content_area = isset($request['content_area']) ? sanitize_text_field($request['content_area']) : '';
+    $content_area = isset($request['content-area']) ? sanitize_text_field($request['content-area']) : '';
 
     if(empty($search_mappings)){
       wp_send_json_error('API Search Mappings not configured', 500);

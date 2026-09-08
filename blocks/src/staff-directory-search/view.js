@@ -39,16 +39,16 @@ const { actions, callbacks } = store( 'iowa-aea-theme/staff-directory-search', {
 
       let district = formData.get('school-district')
       if(district) {
-        url.searchParams.has('district') ? url.searchParams.set('district', district) : url.searchParams.append('district', district);
+        url.searchParams.has('school-district') ? url.searchParams.set('school-district', district) : url.searchParams.append('school-district', district);
       } else {
-        url.searchParams.delete('district');
+        url.searchParams.delete('school-district');
       }
 
       let building = formData.get('school-building')
       if(building) {
-        url.searchParams.has('building') ? url.searchParams.set('building', building) : url.searchParams.append('building', building);
+        url.searchParams.has('school-building') ? url.searchParams.set('school-building', building) : url.searchParams.append('school-building', building);
       } else {
-        url.searchParams.delete('building');
+        url.searchParams.delete('school-building');
       }
 
       let location = formData.get('location')
@@ -236,6 +236,7 @@ const { actions, callbacks } = store( 'iowa-aea-theme/staff-directory-search', {
 
       let url = new URLSearchParams(window.location.search);
       let schoolDistrictValue = url.get('school-district');
+      console.log(schoolDistrictValue)
       let schoolBuildingValue = url.get('school-building');
       let positionValue = url.get('position');
       let locationValue = url.get('location');
@@ -256,8 +257,14 @@ const { actions, callbacks } = store( 'iowa-aea-theme/staff-directory-search', {
           } else {
             option.textContent = district.post_title;
           }
+          
 
-          if(district.ID == schoolDistrictValue){
+          let district_id = district.ID
+          district_id ||= district.id
+
+          console.log(district)
+
+          if(district_id == parseInt(schoolDistrictValue)){
             option.selected = true
           }
 
