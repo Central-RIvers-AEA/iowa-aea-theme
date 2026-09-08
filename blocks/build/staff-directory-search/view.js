@@ -75,28 +75,55 @@ const {
       let context = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.getContext)();
       context.loading = true;
       let formData = new FormData(e.target);
-      let queryObj = {};
+      const url = new URL(window.location.href);
+      url.searchParams.delete('currentPage');
       let query = formData.get('staff-name');
-      if (query) queryObj.search = query;
+      if (query) {
+        url.searchParams.has('search') ? url.searchParams.set('search', query) : url.searchParams.append('search', query);
+      } else {
+        url.searchParams.delete('search');
+      }
       let contentArea = formData.get('content-area');
-      if (contentArea) queryObj.content_area = contentArea;
+      if (contentArea) {
+        url.searchParams.has('content-area') ? url.searchParams.set('content-area', contentArea) : url.searchParams.append('content-area', contentArea);
+      } else {
+        url.searchParams.delete('content-area');
+      }
       let position = formData.get('position');
-      if (position) queryObj.position = position;
+      if (position) {
+        url.searchParams.has('position') ? url.searchParams.set('position', position) : url.searchParams.append('position', position);
+      } else {
+        url.searchParams.delete('position');
+      }
       let district = formData.get('school-district');
-      if (district) queryObj.district = district;
+      if (district) {
+        url.searchParams.has('district') ? url.searchParams.set('district', district) : url.searchParams.append('district', district);
+      } else {
+        url.searchParams.delete('district');
+      }
       let building = formData.get('school-building');
-      if (building) queryObj.building = building;
+      if (building) {
+        url.searchParams.has('building') ? url.searchParams.set('building', building) : url.searchParams.append('building', building);
+      } else {
+        url.searchParams.delete('building');
+      }
       let location = formData.get('location');
-      if (location) queryObj.location = location;
-      let queryString = new URLSearchParams(queryObj).toString();
+      if (location) {
+        url.searchParams.has('location') ? url.searchParams.set('location', location) : url.searchParams.append('location', location);
+      } else {
+        url.searchParams.delete('location');
+      }
       let staffList = document.querySelector('.staff-directory-results ul');
       staffList.innerHTML = '';
+      window.location.href = url.href;
 
       // Query Employee Endpoint
-      fetch(`${context.staffEndpoint}?${queryString}`).then(response => response.json()).then(data => {
-        context.staff = data;
-        context.loading = false;
-      });
+      // fetch(`${context.staffEndpoint}?${queryString}`)
+      //   .then(response => response.json())
+      //   .then(data => {
+      //     context.staff = data;
+      //     context.loading = false;
+      //   });
     },
     filterBuildings: () => {
       let context = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.getContext)();
@@ -187,29 +214,43 @@ const {
         }
       }
       let sortedStaff = sortByAssignmentPriority(filteredStaff);
-      sortedStaff.forEach(member => {
-        // Render each staff member
-        let li = document.createElement('li');
-        let staffMemberTemplate = `
-          <div class='staff-member'>
-            <figure class='staff-image'>
-              <img src='${member.image}' width='135' height='154' alt='${member.full_name}' />
-            </figure>
-            <div class='staff-info'>
-              <h2 class='staff-name'>${member.full_name}</h2>
-              <div class='staff-position'>${member.position}</div>
-              ${context.include_location ? `<div class='staff-location'>${member.location}</div>` : ''}
-              <div ${context.include_location ? `style='display: flex; gap: 15px'` : ''}>
-                <div class='staff-email'>${member.email}</div>
-                <div class='staff-phone'>${member.phone}</div>
+      let pageStaff = sortedStaff;
+      if (sortedStaff.length > 0) {
+        let paginatedStaff = [];
+        for (let i = 0; i < sortedStaff.length; i += parseInt(context.perPage)) {
+          paginatedStaff.push(sortedStaff.slice(i, i + parseInt(context.perPage)));
+        }
+        pageStaff = paginatedStaff[context.currentPage - 1];
+        if (!pageStaff) {
+          pageStaff = paginatedStaff[paginatedStaff.length - 1];
+          context.currentPage = paginatedStaff.length - 1;
+        }
+      }
+      if (pageStaff) {
+        pageStaff.forEach(member => {
+          // Render each staff member
+          let li = document.createElement('li');
+          let staffMemberTemplate = `
+            <div class='staff-member'>
+              <figure class='staff-image'>
+                <img src='${member.image}' width='135' height='154' alt='${member.full_name}' loading="lazy" />
+              </figure>
+              <div class='staff-info'>
+                <h2 class='staff-name'>${member.full_name}</h2>
+                <div class='staff-position'>${member.position}</div>
+                ${context.include_location ? `<div class='staff-location'>${member.location}</div>` : ''}
+                <div ${context.include_location ? `style='display: flex; gap: 15px'` : ''}>
+                  <div class='staff-email'>${member.email}</div>
+                  <div class='staff-phone'>${member.phone}</div>
+                </div>
               </div>
             </div>
-          </div>
-        `;
-        li.innerHTML = staffMemberTemplate;
-        staffList.appendChild(li);
-      });
-      if (sortedStaff.length === 0 && !context.loading) {
+          `;
+          li.innerHTML = staffMemberTemplate;
+          staffList.appendChild(li);
+        });
+      }
+      if (!pageStaff || pageStaff.length === 0 && !context.loading) {
         let li = document.createElement('li');
         li.innerHTML = `<p>No staff members found matching your criteria. Please try adjusting your search.</p>`;
         staffList.appendChild(li);
@@ -219,6 +260,12 @@ const {
       let context = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.getContext)();
       context.loading = true;
       let form = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.getElement)();
+      let url = new URLSearchParams(window.location.search);
+      let schoolDistrictValue = url.get('school-district');
+      let schoolBuildingValue = url.get('school-building');
+      let positionValue = url.get('position');
+      let locationValue = url.get('location');
+      let contentAreaValue = url.get('content-area');
       if (form.ref.querySelector('select[name="school-district"]')) {
         context.districts.forEach(district => {
           let option = document.createElement('option');
@@ -232,48 +279,57 @@ const {
           } else {
             option.textContent = district.post_title;
           }
+          if (district.ID == schoolDistrictValue) {
+            option.selected = true;
+          }
           form.ref.querySelector('select[name="school-district"]').appendChild(option);
         });
       }
       if (form.ref.querySelector('select[name="position"]')) {
         context.positions.sort().forEach(position => {
+          let option = document.createElement('option');
           if (typeof position == 'object') {
-            let option = document.createElement('option');
             option.value = position.name;
             option.innerText = position.name;
             form.ref.querySelector('select[name="position"]').appendChild(option);
           } else if (position.trim() != '') {
-            let option = document.createElement('option');
             option.innerText = position.trim();
             form.ref.querySelector('select[name="position"]').appendChild(option);
+          }
+          if (option.value == positionValue) {
+            option.selected = true;
           }
         });
       }
       if (form.ref.querySelector('select[name="content-area"]')) {
         context.contentAreas.sort().forEach(area => {
+          let option = document.createElement('option');
           if (typeof area == 'object') {
-            let option = document.createElement('option');
             option.value = area.id;
             option.innerText = area.name;
             form.ref.querySelector('select[name="content-area"]').appendChild(option);
           } else if (area.trim() != '') {
-            let option = document.createElement('option');
             option.innerText = area.trim();
             form.ref.querySelector('select[name="content-area"]').appendChild(option);
+          }
+          if (option.value == contentAreaValue) {
+            option.selected = true;
           }
         });
       }
       if (form.ref.querySelector('select[name="location"]')) {
         context.locations.sort().forEach(location => {
+          let option = document.createElement('option');
           if (typeof location == 'object') {
-            let option = document.createElement('option');
             option.value = location.id;
             option.innerText = location.name;
             form.ref.querySelector('select[name="location"]').appendChild(option);
           } else if (location.trim() != '') {
-            let option = document.createElement('option');
             option.innerText = location.trim();
             form.ref.querySelector('select[name="location"]').appendChild(option);
+          }
+          if (option.value == locationValue) {
+            option.selected = true;
           }
         });
       }
@@ -281,13 +337,75 @@ const {
     loadStaffData: () => {
       let context = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.getContext)();
       context.loading = true;
+      let url = new URL(window.location.href);
+      let queryParams = url.searchParams;
 
       // Initial fetch of all staff
-      fetch(`${context.staffEndpoint}`).then(response => response.json()).then(data => {
+      fetch(`${context.staffEndpoint}?${queryParams.toString()}`).then(response => response.json()).then(data => {
         context.staff = data;
       }).finally(() => {
         context.loading = false;
       });
+    },
+    setupPagination: () => {
+      let context = (0,_wordpress_interactivity__WEBPACK_IMPORTED_MODULE_0__.getContext)();
+      let directoryResults = document.querySelector('.staff-directory-results');
+      let pagination = directoryResults.querySelector('.pagination-links');
+      if (pagination) {
+        let filteredStaff = context.staff;
+        pagination.innerHTML = '';
+        let pageCount = Math.ceil(filteredStaff.length / context.perPage);
+        if (pageCount > 1) {
+          let previousLink = document.createElement('a');
+          previousLink.innerText = 'Previous';
+          if (parseInt(context.currentPage) > 1) {
+            previousLink.addEventListener('click', () => {
+              const perviousUrl = new URL(window.location.href);
+              context.currentPage = parseInt(context.currentPage) - 1;
+              perviousUrl.searchParams.set(context.pageParam, context.currentPage);
+              window.history.pushState({
+                currentPage: context.currentPage
+              }, '', perviousUrl.href);
+            });
+          } else {
+            previousLink.setAttribute('disabled', 'true');
+          }
+          pagination.appendChild(previousLink);
+          for (let i = 0; i < pageCount; i++) {
+            let pageLink = document.createElement('a');
+            pageLink.innerText = i + 1;
+            pagination.appendChild(pageLink);
+            let pageUrl = new URL(window.location.href);
+            pageUrl.searchParams.set(context.pageParam, i + 1);
+            pageLink.addEventListener('click', () => {
+              const perviousUrl = new URL(window.location.href);
+              context.currentPage = i + 1;
+              perviousUrl.searchParams.set(context.pageParam, context.currentPage);
+              window.history.pushState({
+                currentPage: context.currentPage
+              }, '', pageUrl.href);
+            });
+            if (i === parseInt(context.currentPage) - 1) {
+              pageLink.ariaCurrent = 'page';
+            }
+          }
+          let nextLink = document.createElement('a');
+          nextLink.innerText = 'Next';
+          if (parseInt(context.currentPage) < pageCount) {
+            nextLink.addEventListener('click', () => {
+              const nextUrl = new URL(window.location.href);
+              context.currentPage = parseInt(context.currentPage) + 1;
+              nextUrl.searchParams.set(context.pageParam, context.currentPage);
+              window.history.pushState({
+                currentPage: context.currentPage
+              }, '', nextUrl.href);
+            });
+          } else {
+            nextLink.setAttribute('disabled', 'true');
+          }
+          pagination.appendChild(nextLink);
+        }
+      }
     }
   }
 });

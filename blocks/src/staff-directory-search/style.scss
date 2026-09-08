@@ -8,6 +8,7 @@
 .wp-block-iowa-aea-theme-staff-directory-search {
   display: grid;
   grid-template-columns: 400px 1fr;
+  gap: 1rem;
 
   .staff-directory-search-input{
     margin-bottom: 1rem;
@@ -49,6 +50,8 @@
       display: grid;
       gap: 1rem;
       list-style: none;
+      margin: 0;
+      padding: 0;
     }
 
     .staff-member{
@@ -89,6 +92,37 @@
       .staff-info{
         padding: 1rem 1.5rem 0;
         border-left-color: #ccc;
+      }
+    }
+  }
+
+  .pagination-links{
+    a {
+      display: inline-block;
+      padding: 0.5rem 1.2rem;
+      border: 1px solid var(--wp--preset--color--primary);
+      margin: 0 0 1rem 0;
+      color: var(--wp--preset--color--primary);
+
+      &:first-child{
+        border-top-left-radius: 19px;
+        border-bottom-left-radius: 19px;      
+      }
+
+      &:last-child{
+        border-top-right-radius: 19px;
+        border-bottom-right-radius: 19px;      
+      }
+
+      &[disabled] {
+        background: oklch(from black l c h / 0.1);
+        color: var(--wp--preset--color--primary);
+        cursor: not-allowed;
+      }
+
+      &[aria-current='page']{
+        background: var(--wp--preset--color--primary);
+        color: white;
       }
     }
   }

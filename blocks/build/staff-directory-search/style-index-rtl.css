@@ -10,6 +10,7 @@
 .wp-block-iowa-aea-theme-staff-directory-search {
   display: grid;
   grid-template-columns: 400px 1fr;
+  gap: 1rem;
 }
 .wp-block-iowa-aea-theme-staff-directory-search .staff-directory-search-input {
   margin-bottom: 1rem;
@@ -46,6 +47,8 @@
   display: grid;
   gap: 1rem;
   list-style: none;
+  margin: 0;
+  padding: 0;
 }
 .wp-block-iowa-aea-theme-staff-directory-search .staff-directory-results .staff-member {
   display: grid;
@@ -81,6 +84,30 @@
 .wp-block-iowa-aea-theme-staff-directory-search .staff-directory-results .staff-member .staff-info {
   padding: 1rem 1.5rem 0;
   border-right-color: #ccc;
+}
+.wp-block-iowa-aea-theme-staff-directory-search .pagination-links a {
+  display: inline-block;
+  padding: 0.5rem 1.2rem;
+  border: 1px solid var(--wp--preset--color--primary);
+  margin: 0 0 1rem 0;
+  color: var(--wp--preset--color--primary);
+}
+.wp-block-iowa-aea-theme-staff-directory-search .pagination-links a:first-child {
+  border-top-right-radius: 19px;
+  border-bottom-right-radius: 19px;
+}
+.wp-block-iowa-aea-theme-staff-directory-search .pagination-links a:last-child {
+  border-top-left-radius: 19px;
+  border-bottom-left-radius: 19px;
+}
+.wp-block-iowa-aea-theme-staff-directory-search .pagination-links a[disabled] {
+  background: oklch(from black l c h/0.1);
+  color: var(--wp--preset--color--primary);
+  cursor: not-allowed;
+}
+.wp-block-iowa-aea-theme-staff-directory-search .pagination-links a[aria-current=page] {
+  background: var(--wp--preset--color--primary);
+  color: white;
 }
 .wp-block-iowa-aea-theme-staff-directory-search .staff-directory-search-spinner.hidden {
   display: none;

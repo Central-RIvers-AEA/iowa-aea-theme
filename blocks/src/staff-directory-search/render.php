@@ -65,6 +65,11 @@ $context['include_location'] = StaffDirectory::include_location();
 $staff = [];
 
 $context['staff'] = $staff;
+$context['perPage'] = get_option('staff_directory_per_page', 10);
+$context['pageParam'] = 'currentPage';
+$context['currentPage'] = $_REQUEST['currentPage'] ? esc_attr($_REQUEST['currentPage']) : 1;
+
+$search = esc_attr($_GET['search'] ?? '');
 
 ?>
 
@@ -73,13 +78,12 @@ $context['staff'] = $staff;
   data-wp-interactive="iowa-aea-theme/staff-directory-search"
   <?php echo wp_interactivity_data_wp_context( $context ); ?>
   aria-live='polite'
-  data-wp-watch="callbacks.renderStaffList"
   data-wp-init="callbacks.loadStaffData"
 >
   <form class='staff-directory-search' data-wp-on--submit='actions.searchStaff' data-wp-init='callbacks.fillFormOptions'>
     <div class='staff-directory-search-input'>
       <label for='staff-name'>Name</label>
-      <input type='text' id='staff-name' placeholder='Search staff...' name='staff-name' />
+      <input type='text' id='staff-name' placeholder='Search staff...' name='staff-name' value="<?php echo $search; ?>" />
     </div>
 
     <?php if(filter_by_district_build()): ?>
@@ -138,8 +142,9 @@ $context['staff'] = $staff;
     <?php echo staff_directory_notice() ?>
 </form>
 
-  <div class='staff-directory-results' data-wp-init='callbacks.initialStaff'>
-    <ul aria-live='polite'></ul>
+  <div class='staff-directory-results'>
+    <div class='pagination-links' data-wp-watch='callbacks.setupPagination'></div>
+    <ul aria-live='polite' data-wp-watch='callbacks.renderStaffList'></ul>
     <div class='staff-directory-search-spinner' data-wp-class--hidden="!context.loading">
       <span class='spinner'>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle fill="var(--wp--preset--color--primary)" stroke="var(--wp--preset--color--primary)" stroke-width="15" r="15" cx="40" cy="65"><animate attributeName="cy" calcMode="spline" dur="2" values="65;135;65;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="-.4"></animate></circle><circle fill="var(--wp--preset--color--primary)" stroke="var(--wp--preset--color--primary)" stroke-width="15" r="15" cx="100" cy="65"><animate attributeName="cy" calcMode="spline" dur="2" values="65;135;65;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="-.2"></animate></circle><circle fill="var(--wp--preset--color--primary)" stroke="var(--wp--preset--color--primary)" stroke-width="15" r="15" cx="160" cy="65"><animate attributeName="cy" calcMode="spline" dur="2" values="65;135;65;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="0"></animate></circle></svg>

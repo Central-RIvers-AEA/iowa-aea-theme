@@ -481,6 +481,11 @@ class StaffDirectory
 
     register_setting(
       'staff_directory_options_group',
+      'staff_directory_per_page'
+    );
+
+    register_setting(
+      'staff_directory_options_group',
       'staff_directory_notice_text'
     );
 
@@ -559,6 +564,14 @@ class StaffDirectory
               <td>
                 <input placeholder='staff data api' type="checkbox" name="staff_directory_show_location_on_card" value="1" <?php checked(1, get_option('staff_directory_show_location_on_card', 1)); ?> />
                 <p class="description">Check this box to show Location for each employee on their staff name card.</p>
+              </td>
+            </tr>
+
+            <tr>
+              <th><label for="">Directory Pagination</label></th>
+              <td>
+                <input placeholder='# of Staff Per Page' class="regular-text" type="number" name="staff_directory_per_page" value="<?php echo get_option('staff_directory_per_page', 10) ?>" />
+                <p class="description">This is the number of Staff visible per page in staff directory</p>
               </td>
             </tr>
 
