@@ -130,13 +130,7 @@ if ($is_current_page_in_section) {
 <div <?php echo get_block_wrapper_attributes(); ?>>
 	<?php if ($page_hierarchy): ?>
 		<nav class="page-hierarchy" aria-label="Page Navigation">
-				<?php render_page_hierarchy($page_hierarchy, $current_post_id); ?>
+			<?php render_page_hierarchy($page_hierarchy, $current_post_id); ?>
 		</nav>
-	<?php else: ?>
-		<?php if (!$is_current_page_in_section): ?>
-			<p class="no-children">This page is not part of a navigation section.</p>
-		<?php else: ?>
-			<p class="no-children">No pages found in this section.</p>
-		<?php endif; ?>
 	<?php endif; ?>
 </div>
