@@ -375,7 +375,35 @@ const {
             previousLink.setAttribute('disabled', 'true');
           }
           pagination.appendChild(previousLink);
-          for (let i = 0; i < pageCount; i++) {
+
+          // starting point
+
+          let start = 0;
+          let end = pageCount;
+          let offset = 2;
+          if (context.currentPage > 2 + offset) {
+            let pageLink = document.createElement('a');
+            pageLink.innerText = 1;
+            pagination.appendChild(pageLink);
+            let pageUrl = new URL(window.location.href);
+            pageUrl.searchParams.set(context.pageParam, 1);
+            pageLink.addEventListener('click', () => {
+              const perviousUrl = new URL(window.location.href);
+              context.currentPage = 1;
+              perviousUrl.searchParams.set(context.pageParam, context.currentPage);
+              window.history.pushState({
+                currentPage: context.currentPage
+              }, '', pageUrl.href);
+            });
+            start = parseInt(context.currentPage) - (offset + 1);
+            let spacer = document.createElement('span');
+            spacer.innerText = '...';
+            pagination.appendChild(spacer);
+          }
+          if (parseInt(context.currentPage) < pageCount - (offset + 1)) {
+            end = parseInt(context.currentPage) + offset;
+          }
+          for (let i = start; i < end; i++) {
             let pageLink = document.createElement('a');
             pageLink.innerText = i + 1;
             pagination.appendChild(pageLink);
@@ -392,6 +420,24 @@ const {
             if (i === parseInt(context.currentPage) - 1) {
               pageLink.ariaCurrent = 'page';
             }
+          }
+          if (parseInt(context.currentPage) < pageCount - (offset + 1)) {
+            let spacer = document.createElement('span');
+            spacer.innerText = '...';
+            pagination.appendChild(spacer);
+            let pageLink = document.createElement('a');
+            pageLink.innerText = pageCount;
+            pagination.appendChild(pageLink);
+            let pageUrl = new URL(window.location.href);
+            pageUrl.searchParams.set(context.pageParam, pageCount);
+            pageLink.addEventListener('click', () => {
+              const perviousUrl = new URL(window.location.href);
+              context.currentPage = pageCount;
+              perviousUrl.searchParams.set(context.pageParam, context.currentPage);
+              window.history.pushState({
+                currentPage: context.currentPage
+              }, '', pageUrl.href);
+            });
           }
           let nextLink = document.createElement('a');
           nextLink.innerText = 'Next';
