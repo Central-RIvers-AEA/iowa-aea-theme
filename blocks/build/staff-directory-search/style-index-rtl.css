@@ -85,7 +85,14 @@
   padding: 1rem 1.5rem 0;
   border-right-color: #ccc;
 }
-.wp-block-iowa-aea-theme-staff-directory-search .pagination-links a, .wp-block-iowa-aea-theme-staff-directory-search .pagination-links span {
+.wp-block-iowa-aea-theme-staff-directory-search .pagination-links span {
+  display: inline-block;
+  padding: 0.5rem 1.2rem;
+  border: 1px solid var(--wp--preset--color--primary);
+  margin: 0 0 1rem 0;
+  color: var(--wp--preset--color--primary);
+}
+.wp-block-iowa-aea-theme-staff-directory-search .pagination-links a {
   display: inline-block;
   padding: 0.5rem 1.2rem;
   border: 1px solid var(--wp--preset--color--primary);
