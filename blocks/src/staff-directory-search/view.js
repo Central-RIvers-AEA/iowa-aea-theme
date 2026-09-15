@@ -236,7 +236,6 @@ const { actions, callbacks } = store( 'iowa-aea-theme/staff-directory-search', {
 
       let url = new URLSearchParams(window.location.search);
       let schoolDistrictValue = url.get('school-district');
-      console.log(schoolDistrictValue)
       let schoolBuildingValue = url.get('school-building');
       let positionValue = url.get('position');
       let locationValue = url.get('location');
@@ -261,8 +260,6 @@ const { actions, callbacks } = store( 'iowa-aea-theme/staff-directory-search', {
 
           let district_id = district.ID
           district_id ||= district.id
-
-          console.log(district)
 
           if(district_id == parseInt(schoolDistrictValue)){
             option.selected = true
