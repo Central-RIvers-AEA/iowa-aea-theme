@@ -1122,7 +1122,9 @@ class StaffDirectory
           update_post_meta($post_id, 'last_name', $last_name);
           update_post_meta($post_id, 'position', $position);
           update_post_meta($post_id, 'phone', $phone);
-          update_post_meta($post_id, 'photo', $photo);
+          if(!empty($photo)){
+            update_post_meta($post_id, 'photo', $photo);
+          }
           update_post_meta($post_id, 'location', $location);
           update_post_meta($post_id, 'office_location', $office_location);
           $import_updated_count++;
@@ -1158,7 +1160,9 @@ class StaffDirectory
             update_post_meta($post_id, 'last_name', $last_name);
             update_post_meta($post_id, 'position', $position);
             update_post_meta($post_id, 'phone', $phone);
-            update_post_meta($post_id, 'photo', $photo);
+            if(!empty($photo)){
+              update_post_meta($post_id, 'photo', $photo);
+            }
             update_post_meta($post_id, 'location', $location);
             update_post_meta($post_id, 'office_location', $office_location);
 
@@ -1223,7 +1227,9 @@ class StaffDirectory
             update_post_meta($post_id, 'last_name', $last_name);
             update_post_meta($post_id, 'position', $position);
             update_post_meta($post_id, 'phone', $phone);
-            update_post_meta($post_id, 'photo', $photo);
+            if(!empty($photo)){
+              update_post_meta($post_id, 'photo', $photo);
+            }
             update_post_meta($post_id, 'location', $location);
             update_post_meta($post_id, 'office_location', $office_location);
 
