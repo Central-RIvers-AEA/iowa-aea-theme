@@ -380,7 +380,7 @@ function sd_district_import_page(){
       <p>
         Your File should include the following headings:
         <ul>
-          <li>old_post_id</li>
+          <li>old_post_id (can be Blank)</li>
           <li>post_id (can be Blank)</li>
           <li>name</li>
           <li>address</li>
@@ -393,7 +393,7 @@ function sd_district_import_page(){
         </ul>
       </p>
       <p>If any doubt of missing info, export your list of districts first before importing them</p>
-      <form class='form-table' role='presentation' method='post' action='<?= admin_url( 'admin-post.php' ); ?>' enctype='multipart/form-data'>
+      <form class='form-table' role='presentation' method="post" enctype="multipart/form-data">
         <!-- action post -->
         <input type='hidden' name='action' value='import_districts' />
         <?php wp_nonce_field( 'import_districts_nonce_action', 'import_districts_nonce' ); ?>
@@ -410,18 +410,27 @@ function sd_district_import_page(){
         </table>
       </form>
     <?php
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['district_import_file'])) {
+      $file = $_FILES['district_import_file'];
+      if ($file['error'] === UPLOAD_ERR_OK) {
+        $file_path = $file['tmp_name'];
+        $result = sd_import_districts();
+        if (is_wp_error($result)) {
+          echo '<div class="error"><p>' . esc_html($result->get_error_message()) . '</p></div>';
+        } else {
+          $created_count = $result[0];
+          $updated_count = $result[1];
+          echo "<div class='updated'><p>$created_count Employees imported & $updated_count updated successfully!</p></div>";
+        }
+      } else {
+        echo '<div class="error"><p>Error uploading file: ' . $file["error"] . '</p></div>';
+      }
+    }
 }
 
 function sd_import_districts(){
-  if ( ! isset( $_POST['import_districts_nonce'] ) || ! wp_verify_nonce( $_POST['import_districts_nonce'], 'import_districts_nonce_action' ) ) {
-    sd_add_flash_notice( 'Security check failed.', "error");
-    wp_redirect( 'edit.php?post_type=employee&page=district-import', 301 );
-    exit;
-  }
-  
-  if(!current_user_can('manage_options')){
-    die('You are not authorized to perform this action.');
-  }
+  $import_created_count = 0;
+  $import_updated_count = 0;
 
   $post = $_POST;
   $extension = pathinfo($_FILES['district_import_file']['name'], PATHINFO_EXTENSION);
@@ -488,18 +497,19 @@ function sd_import_districts(){
         )
       );
 
-      if(isset($post_id)){
+      if(isset($post_id) && $post_id != ''){
         $postArray['ID'] = $post_id;
         wp_update_post( $postArray );
+        $import_updated_count += 1;
       } else {
         wp_insert_post( $postArray );
+        $import_created_count += 1;
       }
     }
-    sd_add_flash_notice( 'Upload Complete', "info");
-    wp_redirect( 'edit.php?post_type=employee&page=district-import', 301 );
+
+    return [$import_created_count, $import_updated_count];
   } else {
-    sd_add_flash_notice( 'Incorrect File Type', "warning");
-    wp_redirect( 'edit.php?post_type=employee&page=district-import', 301 );
+    return new WP_Error('invalid_file', 'Please upload a valid CSV file.');
   }
 }
 
@@ -540,7 +550,7 @@ function sd_school_import_page(){
       </ul>
     </p>
     <p>If any doubt of missing info, export your list of schools first before importing them</p>
-    <form class='form-table' role='presentation' method='post' action='<?= admin_url( 'admin-post.php' ); ?>' enctype='multipart/form-data'>
+    <form class='form-table' role='presentation' method="post" enctype="multipart/form-data">
       <!-- action post -->
        
       <input type='hidden' name='action' value='import_schools' /><?php wp_nonce_field( 'import_schools_nonce_action', 'import_schools_nonce' ); ?>
@@ -557,17 +567,27 @@ function sd_school_import_page(){
       </table>
     </form>
   <?php
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['school_import_file'])) {
+      $file = $_FILES['school_import_file'];
+      if ($file['error'] === UPLOAD_ERR_OK) {
+        $file_path = $file['tmp_name'];
+        $result = sd_import_schools();
+        if (is_wp_error($result)) {
+          echo '<div class="error"><p>' . esc_html($result->get_error_message()) . '</p></div>';
+        } else {
+          $created_count = $result[0];
+          $updated_count = $result[1];
+          echo "<div class='updated'><p>$created_count Employees imported & $updated_count updated successfully!</p></div>";
+        }
+      } else {
+        echo '<div class="error"><p>Error uploading file: ' . $file["error"] . '</p></div>';
+      }
+    }
 }
 
 function sd_import_schools(){
-  if ( ! isset( $_POST['import_schools_nonce'] ) || ! wp_verify_nonce( $_POST['import_schools_nonce'], 'import_schools_nonce_action' ) ) {
-    sd_add_flash_notice( 'Security check failed.', "error");
-    wp_redirect( 'edit.php?post_type=employee&page=school-import', 301 );
-    exit;
-  }
-  if(!current_user_can('manage_options')){
-    die('You are not authorized to perform this action.');
-  }
+  $import_created_count = 0;
+  $import_updated_count = 0;
 
   $post = $_POST;
   $extension = pathinfo($_FILES['school_import_file']['name'], PATHINFO_EXTENSION);
@@ -592,6 +612,20 @@ function sd_import_schools(){
     
     foreach($dataArray as $row){
       $district_post_id = sanitize_text_field(trim($row['district_post_id'] ?? ''));
+      $district = sanitize_text_field(trim($row['district_name'] ?? ''));
+      
+      if($district_post_id != '' && $district != ''){
+        $district_entry = get_posts([
+          'title' => $district,
+          'type' => 'district',
+          'posts_per_page' => 1
+        ]);
+
+        if(!empty($distrct_entry)){
+          $district_post_id = $district_entry[0]->ID;
+        }
+      }
+
       $post_id = sanitize_text_field(trim($row['post_id'] ?? ''));
       $name = sanitize_text_field(trim($row['name'] ?? ''));
       $address = sanitize_text_field($row['address'] ?? '');
@@ -634,16 +668,16 @@ function sd_import_schools(){
       if(isset($post_id)){
         $postArray['ID'] = $post_id;
         wp_update_post( $postArray );
+        $import_updated_count += 1;
       } else {
         wp_insert_post( $postArray );
+        $import_created_count += 1;
       }
       
     }
-    sd_add_flash_notice( 'Upload Complete', "info");
-    wp_redirect( 'edit.php?post_type=school', 301 );
+    return [$import_created_count, $import_updated_count];
   } else {
-    sd_add_flash_notice( 'Incorrect File Type', "warning");
-    wp_redirect( 'edit.php?post_type=school', 301 );
+    return new WP_Error('invalid_file', 'Please upload a valid CSV file.');
   }
 }
 
