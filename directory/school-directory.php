@@ -539,6 +539,7 @@ function sd_school_import_page(){
       Your File should include the following headings:
       <ul>
         <li>district_post_id (can be blank)</li>
+        <li>disrict_name (can be blank, or must match the name of the district in the system)</li>
         <li>post_id (can be blank)</li>
         <li>name</li>
         <li>address</li>
