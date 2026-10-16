@@ -420,7 +420,7 @@ function sd_district_import_page(){
         } else {
           $created_count = $result[0];
           $updated_count = $result[1];
-          echo "<div class='updated'><p>$created_count Employees imported & $updated_count updated successfully!</p></div>";
+          echo "<div class='updated'><p>$created_count Districts imported & $updated_count updated successfully!</p></div>";
         }
       } else {
         echo '<div class="error"><p>Error uploading file: ' . $file["error"] . '</p></div>';
@@ -578,7 +578,7 @@ function sd_school_import_page(){
         } else {
           $created_count = $result[0];
           $updated_count = $result[1];
-          echo "<div class='updated'><p>$created_count Employees imported & $updated_count updated successfully!</p></div>";
+          echo "<div class='updated'><p>$created_count Buildings imported & $updated_count updated successfully!</p></div>";
         }
       } else {
         echo '<div class="error"><p>Error uploading file: ' . $file["error"] . '</p></div>';
