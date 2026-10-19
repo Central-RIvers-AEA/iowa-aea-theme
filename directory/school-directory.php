@@ -666,7 +666,7 @@ function sd_import_schools(){
         )
       );
 
-      if(isset($post_id)){
+      if(isset($post_id) && $post_id != ''){
         $postArray['ID'] = $post_id;
         wp_update_post( $postArray );
         $import_updated_count += 1;
