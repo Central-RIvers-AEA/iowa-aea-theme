@@ -1628,6 +1628,10 @@ class StaffDirectory
       $employee_data[$field] = get_post_meta($employee->ID, $field, true);
     }
 
+    if($employee_data['location'] == ''){
+      $employee_data['location'] = get_post_meta($employee->ID, 'office_location', true);
+    }
+
     // Get assignments (if any)
     $assignments = get_post_meta($employee->ID, 'assignments', true);
     if ($assignments) {
