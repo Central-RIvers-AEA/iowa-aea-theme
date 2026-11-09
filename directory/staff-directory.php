@@ -461,6 +461,11 @@ class StaffDirectory
 
     register_setting(
       'staff_directory_options_group',
+      'staff_directory_show_filter_by_building'
+    );
+
+    register_setting(
+      'staff_directory_options_group',
       'staff_directory_show_filter_by_content_area'
     );
 
@@ -528,10 +533,18 @@ class StaffDirectory
           <h2>General Settings</h2>
           <table class="form-table">
             <tr>
-              <th><label for="">Show Filter by District and Building</label></th>
+              <th><label for="">Show Filter by District</label></th>
               <td>
                 <input placeholder='staff data api' type="checkbox" name="staff_directory_show_filter_by_dist_build" value="1" <?php checked(1, get_option('staff_directory_show_filter_by_dist_build', 1)); ?> />
                 <p class="description">Check this box to show and enable Staff Directory filtering by District and Building.</p>
+              </td>
+            </tr>
+
+            <tr>
+              <th><label for="">Show Filter by Building </label></th>
+              <td>
+                <input placeholder='staff data api' type="checkbox" name="staff_directory_show_filter_by_building" value="1" <?php checked(1, get_option('staff_directory_show_filter_by_building', 1)); ?> />
+                <p class="description">Check this box to show and enable Staff Directory filtering by Buildings. (Only available if filter by Distict is also visible)</p>
               </td>
             </tr>
 

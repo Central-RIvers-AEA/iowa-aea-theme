@@ -13,6 +13,11 @@ function filter_by_district_build(){
   return $show_dist_build_filter;
 }
 
+function filter_by_building(){
+  $show_build_filter = get_option('staff_directory_show_filter_by_building', 1);
+  return $show_build_filter;
+}
+
 function filter_by_content_area(){
   $filter_by_content_area_enabled = get_option('staff_directory_show_filter_by_content_area', 1);
   return $filter_by_content_area_enabled;
@@ -94,13 +99,14 @@ $search = esc_attr($_GET['search'] ?? '');
         </select>
       </div>
     
-
-      <div class='staff-directory-search-input'>
-        <label for='school-building'>School Building</label>
-        <select id='school-building' name='school-building' disabled>
-          <option value=''>Select a District to view Buildings</option>
-        </select>
-      </div>
+      <?php if(filter_by_building()): ?>
+        <div class='staff-directory-search-input'>
+          <label for='school-building'>School Building</label>
+          <select id='school-building' name='school-building' disabled>
+            <option value=''>Select a District to view Buildings</option>
+          </select>
+        </div>
+      <?php endif ?>
     <?php endif ?>
 
     <?php if(filter_by_content_area()) : ?>

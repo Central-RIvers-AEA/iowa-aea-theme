@@ -203,7 +203,7 @@ const {
             });
           }
           let build = document.querySelector("#school-building");
-          if (build.value != '') {
+          if (build && build.value != '') {
             filteredStaff = filteredStaff.filter(employee => {
               return Object.keys(employee.assignments).some(key => {
                 let assign = employee.assignments[key];
